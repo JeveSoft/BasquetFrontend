@@ -1,5 +1,5 @@
 import React from 'react'
-import { Nav,NavLink,NavMenu,NavBtn,NavBtnLink } from './Nav'
+import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink } from './Nav'
 
 export default function Equipo() {
 
@@ -21,7 +21,10 @@ export default function Equipo() {
           </NavLink>
         </NavMenu>
         <NavBtn>
-          <NavBtnLink to = '/prueba'>INICIAR SESION</NavBtnLink>
+
+          <NavBtnLink to='/iniciarSesion'>
+            <img src={require('../Imagenes/menu.png')} />
+          </NavBtnLink>
         </NavBtn>
       </Nav>
       <div>equipo</div>

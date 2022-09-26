@@ -6,7 +6,7 @@ import {
 import Fixture from "./component/Fixture"
 import Equipo from "./component/Equipo.jsx"
 import Tabla from "./component/Tabla"
-import Prueba from "./component/prueba"
+import IniciarSesion from "./component/IniciarSesion"
 
 export function App() {
     return (
@@ -16,7 +16,7 @@ export function App() {
                 <Route path='/fixture' component={Fixture} />
                 <Route path='/equipo' component={Equipo} />
                 <Route path='/tabla' component={Tabla} />
-                <Route path='/prueba' component={Prueba} />
+                <Route path='/iniciarSesion' component={IniciarSesion}/>
             </Switch>
         </Router>
 

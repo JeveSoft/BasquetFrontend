@@ -18,7 +18,7 @@ export const NavLink = styled(Link)`
     height: 100%;
     cursor: pointer;
     &.active{
-        color: #15cdfc;
+        color: #fc4415;
     }
 `
 export const NavMenu = styled.div`
@@ -39,17 +39,10 @@ export const NavBtn = styled.nav`
 `
 export const NavBtnLink = styled(Link)`
     border-radius:4px;
-    background: #256ce1;
     padding:10px 22px;
-    color:#fff;
     border:none;
     outline:none;
     cursor:pointer;
     transition: all 0.2s ease-in-out;
     text-decoration:none;
-    &:hover{
-        transition: all 0.2s ease-in-out;
-        background:#fff;
-        color:#010606;
-    }
 `
