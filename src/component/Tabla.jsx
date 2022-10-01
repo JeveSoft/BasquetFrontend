@@ -23,7 +23,7 @@ export default function Tabla() {
         <NavBtn>
 
           <NavBtnLink to='/iniciarSesion'>
-            <img src={require('../Imagenes/menu.png')} />
+          <img src={require('../Imagenes/menu.png')} />
           </NavBtnLink>
         </NavBtn>
       </Nav>

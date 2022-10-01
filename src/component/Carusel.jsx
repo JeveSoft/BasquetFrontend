@@ -2,8 +2,8 @@ import styled, { createGlobalStyle, css } from 'styled-components';
 
 export const Container = styled.div`
     width: 100%;
-    height: 87.8vh;
-    position: relative;
+    height: 100%;
+    position: absolute;
 `
 export const ImageContainer = styled.img`
     width: 100%;
@@ -25,7 +25,7 @@ export const NavBoton = styled.button`
     cursor: pointer;
     padding: 0;
     position: absolute;
-    top: 40%;
+    top: 50%;
     border-radius: 50%;
     color: white;
     box-shadow: 0px 4px 60px 20px rgba(3,3,3,0,9), inset 0 --3em 3em rgba(3,3,3,0,5);
@@ -36,7 +36,7 @@ export const NavBoton = styled.button`
         background: #fff;
         color: #010606;
         
-      }
+    }
 `
 
 export const DotContainer = styled.div`

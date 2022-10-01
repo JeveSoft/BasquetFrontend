@@ -1,11 +1,66 @@
 import React from 'react'
-import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink } from './Nav'
 import { Dot, Container, ImageContainer, NavBoton, DotContainer } from './Carusel'
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { useEffect } from 'react'
+import styled from 'styled-components';
+import { NavLink as Link } from 'react-router-dom';
+
+export const Nav = styled.nav`
+    background: transparent;   
+    height:80px;
+    width: 100%;
+    display:flex;
+    justify-content:flex-start;;
+    padding:0.5rem calc((100vw-1000px)/2);
+    z-index:10;
+    position: absolute;
+`
+export const NavLink = styled(Link)`
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
+    cursor: pointer;
+    font-size: 20px;
+    &.active{
+        color: #fc4415;
+    }
+    &:hover {
+        transition: all 0.2s ease-in-out;
+        color: #fc4415;
+        
+    }
+`
+export const NavMenu = styled.div`
+    display:flex;
+    align-items:center;
+    margin-right:-24px;
+    width: 100vw;
+    white-space: nowrap;
+    
+`
+export const NavBtn = styled.nav`
+    display:flex;
+    align-items:center;
+    margin-right:24px;
+    justify-content: flex-end;
+    width: 100vw;
+    
+`
+export const NavBtnLink = styled(Link)`
+    border-radius:4px;
+    padding:10px 22px;
+    border:none;
+    outline:none;
+    cursor:pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration:none;
+`
 
 export default function Inicio() {
   const [imageIndex, setImageIndex] = useState(0)
@@ -56,8 +111,8 @@ export default function Inicio() {
           </NavLink>
         </NavMenu>
         <NavBtn>
-          <NavBtnLink to='/iniciarSesion'>
-            <img src={require('../Imagenes/menu.png')} />
+          <NavBtnLink to='/registro'>
+          <img src={require('../Imagenes/menu.png')} />
           </NavBtnLink>
         </NavBtn>
       </Nav>
