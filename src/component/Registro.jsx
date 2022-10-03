@@ -64,7 +64,6 @@ export default function Registro() {
     }
 
     const generarJugadores = () => {
-
         if (cantidadJugadores != "") {
             if (cantidadJugadores >= 10) {
                 var i = 10;
