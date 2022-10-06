@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import { right } from '@popperjs/core';
+import styled, { css } from 'styled-components';
 
 export const Nav = styled.nav`
     background: #000;   
@@ -9,6 +10,25 @@ export const Nav = styled.nav`
     padding:0.5rem calc((100vw-1000px)/2);
     z-index:10;
     position: relative;
+`
+export const ImagenPago = styled.img`
+    height: 300px;
+    width: 300px;
+`
+export const DetalleUsuarioPago = styled.div`
+    margin-left: 25%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    justify-content:center;
+    align-content: center;
+`
+export const CategoryPago = styled.div`
+    display: flex;
+    width: 50%;
+    margin-left: 20%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    justify-content: space-between;
 `
 export const GlobalStyles = styled.div`
     display: flex;
@@ -112,7 +132,26 @@ export const NavBoton = styled.button`
     top: 40%;
     border-radius: 50%;
     color: black;
-    left:95%;
+    ${(props) => props.left === true ? css`right:0%;` : css`left:89%;`}
+    &:hover {
+        transition: all 0.2s ease-in-out;
+        background: #ff7c01;
+        
+    }
+`
+export const NavBoton1 = styled.button`
+    width: 35px;
+    height: 35px;
+    outline: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    top: 40%;
+    border-radius: 50%;
+    color: black;
+    left: 95%;
     &:hover {
         transition: all 0.2s ease-in-out;
         background: #ff7c01;
@@ -145,4 +184,7 @@ export const BotonNavegacion = styled.button`
         color: #fc4415;
         
     }
+`
+export const ContenedorBotones = styled.div`
+    margin-top: 10px;
 `
