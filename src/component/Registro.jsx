@@ -1,11 +1,11 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashCan, faPlus, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
-import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink } from './Nav'
 import toast, { Toaster } from 'react-hot-toast';
 import { useHistory } from 'react-router-dom'
-import {  BotonGenerar, GlobalStyles, ContenedorRegistro, Titulo, DetalleUsuario, BoxCampo, TextBox, InputBox, Category, Label, Radio, NavBoton } from './EstiloRegistro'
+import { NavMenu, BotonNavegacion, Nav, GlobalStyles, ContenedorRegistro, Titulo, DetalleUsuario, BoxCampo, TextBox, InputBox, Category, Label, Radio, NavBoton } from './EstiloRegistro'
+import Modal from './Modal';
 
 export default function Registro() {
     const [genero, setGenero] = useState("")
@@ -15,85 +15,18 @@ export default function Registro() {
     var [correo, setCorreo] = useState("")
     var [numeroCel, setNumeroCel] = useState("")
     var [fechaNacimiento, setFechaNacimiento] = useState("")
-    var [equipo, setEquipo] = useState("")
     var [nacionalidad, setNacionalidad] = useState("")
-    var [cantidadJugadores, setCantidadJugadores] = useState("")
-    const [actualizo, setActualizo] = useState(false);
-    const [jugadores, setJugadores] = useState([
-        { Jugador: "1" },
-        { Jugador: "2" },
-        { Jugador: "3" },
-        { Jugador: "4" },
-        { Jugador: "5" },
-        { Jugador: "6" },
-        { Jugador: "7" },
-        { Jugador: "8" },
-        { Jugador: "9" }
-    ])
+    const [modal, setModal] = useState(false)
+    document.title = "Registro"
 
     const cambioGenero = e => {
         setGenero(e.target.value)
     }
 
-    const eliminarJugadores = () => {
-        if (actualizo) {
-            setJugadores([
-                { Jugador: "1" },
-                { Jugador: "2" },
-                { Jugador: "3" },
-                { Jugador: "4" },
-                { Jugador: "5" },
-                { Jugador: "6" },
-                { Jugador: "7" },
-                { Jugador: "8" },
-                { Jugador: "9" }])
-            document.getElementById("nroJugadores").value = ""
-            setCantidadJugadores("")
-            setActualizo(false)
-        } else {
-            toast("Generar Lista de Jugadores", {
-                icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
-                    padding: '10px',
-                    color: '#fff',
-                    background: '#000',
-                    borderRadius: '25%',
-                },
-            });
-        }
-    }
-
-    const generarJugadores = () => {
-        if (cantidadJugadores != "") {
-            if (cantidadJugadores >= 10) {
-                var i = 10;
-                while (i <= cantidadJugadores) {
-                    jugadores.push({ Jugador: i })
-                    i++
-                }
-                setActualizo(true)
-            } else {
-                setActualizo(true)
-            }
-        } else {
-            toast("Ingesar Cantidad Jugadores", {
-                icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
-                    padding: '10px',
-                    color: '#fff',
-                    background: '#000',
-                    borderRadius: '25%',
-                },
-            });
-        }
-
-    }
-
     function esValido() {
         var valido = true
-        console.log(nombre)
         if (nombre === "") {
-            toast("Ingesar Nombre Usuario", {
+            toast("Ingesar Nombre Completo", {
                 icon: "⚠️", duration: 3000, style: {
                     border: '3px solid #ff7c01',
                     padding: '10px',
@@ -195,33 +128,19 @@ export default function Registro() {
 
     const registroJugadores = () => {
         if (esValido()) {
-            historial.push('/registroJugadores')
+            setModal(!modal)
         }
-
     }
 
     return (
         <>
             <Nav>
-                <NavLink to="/">
-                    <h1>logo</h1>
-                </NavLink>
+                <BotonNavegacion onClick={() => { historial.replace('/') }}><h1>logo</h1></BotonNavegacion>
                 <NavMenu>
-                    <NavLink to='/fixture' activeStyle>
-                        FIXTURE
-                    </NavLink>
-                    <NavLink to='/equipo' activeStyle>
-                        EQUIPOS
-                    </NavLink>
-                    <NavLink to='/tabla' activeStyle>
-                        TABLA DE POSICIONES
-                    </NavLink>
+                    <BotonNavegacion onClick={() => { historial.replace('/fixture') }}>FIXTURE</BotonNavegacion>
+                    <BotonNavegacion onClick={() => { historial.replace('/equipo') }}>EQUIPOS</BotonNavegacion>
+                    <BotonNavegacion onClick={() => { historial.replace('/tabla') }}>TABLA DE POSICIONES</BotonNavegacion>
                 </NavMenu>
-                <NavBtn>
-                    <NavBtnLink to='/iniciarSesion'>
-                        <img src={require('../Imagenes/menu.png')} />
-                    </NavBtnLink>
-                </NavBtn>
             </Nav>
             <GlobalStyles>
                 <ContenedorRegistro>
@@ -263,82 +182,65 @@ export default function Registro() {
                             <span className='gender'>Mujer</span>
                         </Label>
                     </Category>
-                    <Titulo>EQUIPO Y CANTIDAD JUGADORES</Titulo>
-                    <DetalleUsuario>
-                        <BoxCampo>
-                            <TextBox>EQUIPO</TextBox>
-                            <InputBox type="text" placeholder="Equipo" required id='equipo' onChange={(e) => { setEquipo(e.target.value) }} />
-                        </BoxCampo>
-                        <BoxCampo>
-                            <TextBox>Numero de Jugadores</TextBox>
-                            <InputBox type="number" placeholder="Nº Jugadores" required id='nroJugadores' max={20} min={9} onChange={(e) => { setCantidadJugadores(e.target.value) }} />
-                        </BoxCampo>
-                        <BoxCampo>
-                            <BotonGenerar onClick={generarJugadores}>
-                                <FontAwesomeIcon icon={faPlus} />
-                            </BotonGenerar>
-                        </BoxCampo>
-                        <BoxCampo>
-                            <BotonGenerar onClick={eliminarJugadores}>
-                                <FontAwesomeIcon icon={faTrashCan} />
-                            </BotonGenerar>
-                        </BoxCampo>
-                    </DetalleUsuario>
-                    {
-                        jugadores.map(jugador => {
-                            if (actualizo) {
-                                return (
-                                    <div>
-                                        <Titulo>JUGADOR {jugador.Jugador}</Titulo>
-                                        <DetalleUsuario key={jugador.Jugador}>
-                                            <BoxCampo>
-                                                <TextBox>Nombre Completo</TextBox>
-                                                <InputBox type="text" placeholder="Nombre Completo" required id='nombreCompleto' onChange={(e) => { nombre = e.target.value }} />
-                                            </BoxCampo>
-                                            <BoxCampo>
-                                                <TextBox>Carnet Identidad</TextBox>
-                                                <InputBox type="text" placeholder="Carnet Identidad" required id="carnetIdentidad" onChange={(e) => { carnet = e.target.value }} />
-                                            </BoxCampo>
-                                            <BoxCampo>
-                                                <TextBox>Numero de Celular</TextBox>
-                                                <InputBox type="text" placeholder="Numero de Celular" required id="numeroCelular" onChange={(e) => { numeroCel = e.target.value }} />
-                                            </BoxCampo>
-                                            <BoxCampo>
-                                                <TextBox>Numero de Jugador</TextBox>
-                                                <InputBox type="text" placeholder="Numero de Celular" required id="numeroCelular" onChange={(e) => { numeroCel = e.target.value }} />
-                                            </BoxCampo>
-                                            <BoxCampo>
-                                                <TextBox>Fecha Nacimiento </TextBox>
-                                                <InputBox type="date" placeholder="Fecha Nacimiento" required id="fechaNacimiento" onChange={(e) => { fechaNacimiento = e.target.value }} />
-                                            </BoxCampo>
-                                            <BoxCampo>
-                                                <TextBox>Nacionalidad</TextBox>
-                                                <InputBox type="text" placeholder="Nacionalidad" required id="nacionalidad" onChange={(e) => { nacionalidad = e.target.value }} />
-                                            </BoxCampo>
-                                            <BoxCampo>
-                                                <TextBox>Posicion</TextBox>
-                                                <InputBox type="text" placeholder="Numero de Celular" required id="numeroCelular" onChange={(e) => { numeroCel = e.target.value }} />
-                                            </BoxCampo>
-                                            <BoxCampo>
-                                                <TextBox>Foto Identificacion</TextBox>
-                                                <InputBox type="text" placeholder="Nacionalidad" required id="nacionalidad" onChange={(e) => { nacionalidad = e.target.value }} />
-                                            </BoxCampo>
-
-                                        </DetalleUsuario>
-                                    </div>
-                                )
-                                setActualizo(false)
-                            }
-                        })
-                    }
-                    <div className='button'>
-                        <NavBoton onClick={registroJugadores}>
-                            <FontAwesomeIcon icon={faChevronRight} />
-                        </NavBoton>
-                    </div>
+                    <NavBoton onClick={registroJugadores}>
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </NavBoton>
                 </ContenedorRegistro>
+                <Modal 
+                estado={modal}
+                cambiarEstado={setModal} 
+                pestaña = "/registroEquipo"
+                />
             </GlobalStyles>
             <Toaster reverseOrder={true} position="top-right" />
         </>
     )
 }
+/*
+{
+    jugadores.map(jugador => {
+        if (actualizo) {
+            return (
+                <div>
+                    <Titulo>JUGADOR {jugador.Jugador}</Titulo>
+                    <DetalleUsuario key={jugador.Jugador}>
+                        <BoxCampo>
+                            <TextBox>Nombre Completo</TextBox>
+                            <InputBox type="text" placeholder="Nombre Completo" required id='nombreCompleto' onChange={(e) => { nombre = e.target.value }} />
+                        </BoxCampo>
+                        <BoxCampo>
+                            <TextBox>Carnet Identidad</TextBox>
+                            <InputBox type="text" placeholder="Carnet Identidad" required id="carnetIdentidad" onChange={(e) => { carnet = e.target.value }} />
+                        </BoxCampo>
+                        <BoxCampo>
+                            <TextBox>Numero de Celular</TextBox>
+                            <InputBox type="text" placeholder="Numero de Celular" required id="numeroCelular" onChange={(e) => { numeroCel = e.target.value }} />
+                        </BoxCampo>
+                        <BoxCampo>
+                            <TextBox>Numero de Jugador</TextBox>
+                            <InputBox type="text" placeholder="Numero de Celular" required id="numeroCelular" onChange={(e) => { numeroCel = e.target.value }} />
+                        </BoxCampo>
+                        <BoxCampo>
+                            <TextBox>Fecha Nacimiento </TextBox>
+                            <InputBox type="date" placeholder="Fecha Nacimiento" required id="fechaNacimiento" onChange={(e) => { fechaNacimiento = e.target.value }} />
+                        </BoxCampo>
+                        <BoxCampo>
+                            <TextBox>Nacionalidad</TextBox>
+                            <InputBox type="text" placeholder="Nacionalidad" required id="nacionalidad" onChange={(e) => { nacionalidad = e.target.value }} />
+                        </BoxCampo>
+                        <BoxCampo>
+                            <TextBox>Posicion</TextBox>
+                            <InputBox type="text" placeholder="Numero de Celular" required id="numeroCelular" onChange={(e) => { numeroCel = e.target.value }} />
+                        </BoxCampo>
+                        <BoxCampo>
+                            <TextBox>Foto Identificacion</TextBox>
+                            <InputBox type="text" placeholder="Nacionalidad" required id="nacionalidad" onChange={(e) => { nacionalidad = e.target.value }} />
+                        </BoxCampo>
+
+                    </DetalleUsuario>
+                </div>
+            )
+            setActualizo(false)
+        }
+    })
+}*/

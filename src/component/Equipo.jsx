@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink } from './Nav'
+import IniciarSesion from './IniciarSesion';
 
 export default function Equipo() {
-  
+  const [modal, setModal] = useState(false)
+  document.title = "Equipo"
   return (
     <>
       <Nav>
@@ -21,13 +23,16 @@ export default function Equipo() {
           </NavLink>
         </NavMenu>
         <NavBtn>
-
-          <NavBtnLink to='/iniciarSesion'>
+          <NavBtnLink onClick={() => { setModal(!modal) }}>
             <img src={require('../Imagenes/menu.png')} />
           </NavBtnLink>
         </NavBtn>
       </Nav>
       <div>equipo</div>
+      <IniciarSesion
+        estado={modal}
+        cambiarEstado={setModal}
+      />
     </>
 
   )

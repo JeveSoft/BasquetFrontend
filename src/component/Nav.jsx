@@ -4,7 +4,7 @@ import { NavLink as Link } from 'react-router-dom';
 export const Nav = styled.nav`
     background: #000;   
     height:80px;
-    width: 100%;
+    width: 100vw;
     display:flex;
     justify-content:flex-start;;
     padding:0.5rem calc((100vw-1000px)/2);
@@ -45,7 +45,7 @@ export const NavBtn = styled.nav`
     width: 100vw;
     
 `
-export const NavBtnLink = styled(Link)`
+export const NavBtnLink = styled.button`
     border-radius:4px;
     padding:10px 22px;
     border:none;
@@ -53,6 +53,7 @@ export const NavBtnLink = styled(Link)`
     cursor:pointer;
     transition: all 0.2s ease-in-out;
     text-decoration:none;
+    background: none;
 `
 
 export const Boton = styled.button`

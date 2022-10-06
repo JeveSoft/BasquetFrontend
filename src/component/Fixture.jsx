@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink } from './Nav'
-
+import IniciarSesion from './IniciarSesion';
 export default function Fixture() {
-
+  const [modal, setModal] = useState(false)
+  document.title = "Fixture"
   return (
     <>
       <Nav>
@@ -21,13 +22,16 @@ export default function Fixture() {
           </NavLink>
         </NavMenu>
         <NavBtn>
-
-          <NavBtnLink to='/iniciarSesion'>
+          <NavBtnLink onClick={() => { setModal(!modal) }}>
             <img src={require('../Imagenes/menu.png')} />
           </NavBtnLink>
         </NavBtn>
       </Nav>
       <div>fixture</div>
+      <IniciarSesion
+        estado={modal}
+        cambiarEstado={setModal}
+      />
     </>
 
   )

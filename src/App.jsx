@@ -4,10 +4,12 @@ import {
     BrowserRouter as Router, Redirect, Route, Switch
 } from 'react-router-dom';
 import Fixture from "./component/Fixture"
-import Equipo from "./component/Equipo.jsx"
+import Equipo from "./component/Equipo"
 import Tabla from "./component/Tabla"
 import IniciarSesion from "./component/IniciarSesion"
 import Registro from "./component/Registro";
+import RegistroEquipo from "./component/RegistroEquipo";
+import RegistroPago from "./component/RegistroPago";
 
 export function App() {
     return (
@@ -19,6 +21,8 @@ export function App() {
                 <Route path='/tabla' component={Tabla} />
                 <Route path='/iniciarSesion' component={IniciarSesion}/>
                 <Route path='/registro' component={Registro}/>
+                <Route path='/registroEquipo' component={RegistroEquipo}/>
+                <Route path='/registroPago' component={RegistroPago}/>
             </Switch>
         </Router>
 

@@ -90,27 +90,14 @@ export const InputBox = styled.input`
         border-color: black;
     }
 `
-export const Logo = styled.div`
-  margin-bottom: 20px;
-  position: relative;
-  height: 200px;
-  width: 200px;
-  background: #ff7c01;
-  border-radius: 50%;
-  color: black;
-  justify-content: center;
-  svg{
-    margin-top:10px;
-    width: 100%;
-    height: 80%;
-  }
-`
+
 export const Boton = styled.button`
   background: #ff7c01;
   margin-bottom: 10px;
   border-radius: 5px;
   transition: all 0.2s ease-in-out;
-  width: 200px;
+  width: 110px;
+  margin: 10px;
   height: 40px;
   font-size: 16px;
   &:hover{
@@ -119,72 +106,36 @@ export const Boton = styled.button`
   }
         
 `
-export default function IniciarSesion({ estado, cambiarEstado }) {
-  const [id, setId] = useState("")
-  const [contraseña, setContraseña] = useState("")
+export const Texto = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 25px;
+    margin-bottom: 20px;
+    
+`
+
+export default function Modal ({ estado, cambiarEstado,pestaña}) {
   const historial = useHistory();
-  const iniciarSesion = () => {
-    if (esValido()) {
-      historial.push("/delegado")
-    }
-  }
 
-  function esValido() {
-    var valido = true
-    if (id === "") {
-      toast("Ingesar ID", {
-        icon: "⚠️", duration: 3000, style: {
-          border: '3px solid #ff7c01',
-          padding: '10px',
-          color: '#fff',
-          background: '#000',
-          borderRadius: '25%',
-        },
-      });
-      valido = false
-    } else {
-
-    }
-    if (contraseña === "") {
-      toast("Ingesar Contraseña", {
-        icon: "⚠️", duration: 3000, style: {
-          border: '3px solid #ff7c01',
-          padding: '10px',
-          color: '#fff',
-          background: '#000',
-          borderRadius: '25%',
-        },
-      });
-      valido = false
-    } else {
-
-    }
-    return valido
-  }
   return (
     <>
       {estado &&
         <Overlay>
           <ContenedorModal>
             <EncabezadoModal>
-              <Titulo>Iniciar Sesion</Titulo>
+              <Titulo>Verificar</Titulo>
             </EncabezadoModal>
+            <Texto>¿Esta seguro de continuar?</Texto>
             <BotonCerrar onClick={() => { cambiarEstado(false) }}>
               <FontAwesomeIcon icon={faXmark} />
             </BotonCerrar>
             <DetalleUsuario>
-              <Logo>
-                <FontAwesomeIcon icon={faUser} />
-              </Logo>
-              <InputBox placeholder='ID' type="text" required id='nombreCompleto' onChange={(e) => { setId(e.target.value) }}></InputBox>
-              <InputBox placeholder='CONTRASEÑA' type="password" required id='nombreCompleto' onChange={(e) => { setContraseña(e.target.value) }}></InputBox>
-
+              
             </DetalleUsuario>
             <DetalleUsuario>
-              <Boton onClick={iniciarSesion}>INICIAR SESION</Boton>
-            </DetalleUsuario>
-            <DetalleUsuario>
-              <Boton onClick={() => { historial.push('/registro') }}>REGISTRARSE</Boton>
+              <Boton onClick={() => { cambiarEstado(false) }}>VERIFICAR</Boton>
+              <Boton onClick={()=>{historial.replace(pestaña)}}>CONTINUAR</Boton>
             </DetalleUsuario>
           </ContenedorModal>
         </Overlay>

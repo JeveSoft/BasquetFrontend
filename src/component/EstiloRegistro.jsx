@@ -1,8 +1,19 @@
 import styled from 'styled-components';
 
+export const Nav = styled.nav`
+    background: #000;   
+    height:80px;
+    width: 100vw;
+    display:flex;
+    justify-content:flex-start;;
+    padding:0.5rem calc((100vw-1000px)/2);
+    z-index:10;
+    position: relative;
+`
 export const GlobalStyles = styled.div`
     display: flex;
-    height: 100%;
+    height: 87.8vh;
+    width: 100vw;
     justify-content: center;
     align-items: center;
     padding: 10px;
@@ -108,26 +119,30 @@ export const NavBoton = styled.button`
         
     }
 `
-export const BotonGenerar = styled.button`
-    width: 35px;
-    height: 35px;
-    outline: none;
-    border: none;
-    background: none;
+export const NavMenu = styled.div`
+    display:flex;
+    align-items:center;
+    margin-right:-24px;
+    width: 85vw;
+    white-space: nowrap;
+    
+`
+export const BotonNavegacion = styled.button`
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
     cursor: pointer;
-    padding: 0;
-    position: relative;
-    border-radius: 50%;
-    color: black;
-    margin-left: 40px;
-    margin-right: 10px;
-    top:40%;
+    font-size: 20px;
+    background: transparent;
+    &.active{
+        color: #fc4415;
+    }
     &:hover {
         transition: all 0.2s ease-in-out;
-        background: #ff7c01;
+        color: #fc4415;
+        
     }
-    outline: none;
-    font-size: 16px;
-    border-bottom-width: 2px;
-    transition: all 0.3s ease;
 `

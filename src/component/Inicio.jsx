@@ -7,6 +7,7 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { useEffect } from 'react'
 import styled from 'styled-components';
 import { NavLink as Link } from 'react-router-dom';
+import IniciarSesion from './IniciarSesion';
 
 export const Nav = styled.nav`
     background: transparent;   
@@ -52,7 +53,7 @@ export const NavBtn = styled.nav`
     width: 100vw;
     
 `
-export const NavBtnLink = styled(Link)`
+export const NavBtnLink = styled.button`
     border-radius:4px;
     padding:10px 22px;
     border:none;
@@ -60,13 +61,13 @@ export const NavBtnLink = styled(Link)`
     cursor:pointer;
     transition: all 0.2s ease-in-out;
     text-decoration:none;
+    background: none;
 `
-
 export default function Inicio() {
   const [imageIndex, setImageIndex] = useState(0)
   const imagenes = ["1.jpg", "2.jpg", "3.jpg"]
   const [loaded, setLoaded] = useState(false)
-
+  const [modal, setModal] = useState(false)
   useEffect(() => {
     const interval = setInterval(() => {
       next()
@@ -92,7 +93,7 @@ export default function Inicio() {
       if (imageIndex === 0) setImageIndex(imagenes.length - 1)
     }, 500)
   }
-
+  document.title = "Inicio"
   return (
     <>
       <Nav>
@@ -111,8 +112,8 @@ export default function Inicio() {
           </NavLink>
         </NavMenu>
         <NavBtn>
-          <NavBtnLink to='/registro'>
-          <img src={require('../Imagenes/menu.png')} />
+          <NavBtnLink onClick={() => { setModal(!modal) }}>
+            <img src={require('../Imagenes/menu.png')} />
           </NavBtnLink>
         </NavBtn>
       </Nav>
@@ -131,6 +132,10 @@ export default function Inicio() {
             ))
           }
         </DotContainer>
+        <IniciarSesion
+          estado={modal}
+          cambiarEstado={setModal}
+        />
       </Container>
     </>
 
