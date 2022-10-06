@@ -4,7 +4,7 @@ import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons
 import { useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 import { useHistory } from 'react-router-dom'
-import { NavBoton1,ContenedorBotones, CategoryPago, DetalleUsuarioPago, ImagenPago, NavMenu, BotonNavegacion, Nav, GlobalStyles, ContenedorRegistro, Titulo, DetalleUsuario, BoxCampo, TextBox, InputBox, Category, Label, Radio, NavBoton } from './EstiloRegistro'
+import { SelectNacionalidad,LabelFile, InputFile, NavBoton1, ContenedorBotones, CategoryPago, DetalleUsuarioPago, ImagenPago, NavMenu, BotonNavegacion, Nav, GlobalStyles, ContenedorRegistro, Titulo, DetalleUsuario, BoxCampo, TextBox, InputBox, Category, Label, Radio, NavBoton } from './EstiloRegistro'
 import Modal from './Modal';
 import { useEffect } from 'react';
 
@@ -27,7 +27,9 @@ export default function Registro() {
     var [ventana1, setVentana1] = useState(true)
     var [ventana2, setVentana2] = useState(false)
     var [ventana3, setVentana3] = useState(false)
+    var [ventana4, setVentana4] = useState(false)
     const [pago, setPago] = useState("")
+
     const cambioPago = e => {
         setPago(e.target.value)
     }
@@ -43,11 +45,11 @@ export default function Registro() {
         if (nombre === "") {
             toast("Ingesar Nombre Completo", {
                 icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
+                    border: '2px solid #ff7c01',
                     padding: '10px',
                     color: '#fff',
                     background: '#000',
-                    borderRadius: '25%',
+                    borderRadius: '4%',
                 },
             });
             valido = false
@@ -57,11 +59,11 @@ export default function Registro() {
         if (carnet === "") {
             toast("Ingesar Carnet Identidad", {
                 icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
+                    border: '2px solid #ff7c01',
                     padding: '10px',
                     color: '#fff',
                     background: '#000',
-                    borderRadius: '25%',
+                    borderRadius: '4%',
                 },
             });
             valido = false
@@ -71,11 +73,11 @@ export default function Registro() {
         if (correo === "") {
             toast("Ingesar Correo", {
                 icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
+                    border: '2px solid #ff7c01',
                     padding: '10px',
                     color: '#fff',
                     background: '#000',
-                    borderRadius: '25%',
+                    borderRadius: '4%',
                 },
             });
             valido = false
@@ -85,11 +87,11 @@ export default function Registro() {
         if (numeroCel === "") {
             toast("Ingesar Numero de Celular", {
                 icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
+                    border: '2px solid #ff7c01',
                     padding: '10px',
                     color: '#fff',
                     background: '#000',
-                    borderRadius: '25%',
+                    borderRadius: '4%',
                 },
             });
             valido = false
@@ -99,11 +101,11 @@ export default function Registro() {
         if (fechaNacimiento === "") {
             toast("Ingesar Fecha de Nacimiento", {
                 icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
+                    border: '2px solid #ff7c01',
                     padding: '10px',
                     color: '#fff',
                     background: '#000',
-                    borderRadius: '25%',
+                    borderRadius: '4%',
                 },
             });
             valido = false
@@ -113,11 +115,11 @@ export default function Registro() {
         if (nacionalidad === "") {
             toast("Ingesar Nacionalidad", {
                 icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
+                    border: '2px solid #ff7c01',
                     padding: '10px',
                     color: '#fff',
                     background: '#000',
-                    borderRadius: '25%',
+                    borderRadius: '4%',
                 },
             });
             valido = false
@@ -127,11 +129,11 @@ export default function Registro() {
         if (genero === "") {
             toast("Seleccionar Genero", {
                 icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
+                    border: '2px solid #ff7c01',
                     padding: '10px',
                     color: '#fff',
                     background: '#000',
-                    borderRadius: '25%',
+                    borderRadius: '4%',
                 },
             });
             valido = false
@@ -146,11 +148,11 @@ export default function Registro() {
         if (equipo === "") {
             toast("Ingesar Nombre Equipo", {
                 icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
+                    border: '2px solid #ff7c01',
                     padding: '10px',
                     color: '#fff',
                     background: '#000',
-                    borderRadius: '25%',
+                    borderRadius: '4%',
                 },
             });
             valido = false
@@ -160,39 +162,39 @@ export default function Registro() {
         if (siglas === "") {
             toast("Ingesar Siglas de Equipo", {
                 icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
+                    border: '2px solid #ff7c01',
                     padding: '10px',
                     color: '#fff',
                     background: '#000',
-                    borderRadius: '25%',
+                    borderRadius: '4%',
                 },
             });
             valido = false
         } else {
 
         }
-        if (logo === "") {
+        /*if (logo === "") {
             toast("Ingesar Logo", {
                 icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
+                    border: '2px solid #ff7c01',
                     padding: '10px',
                     color: '#fff',
                     background: '#000',
-                    borderRadius: '25%',
+                    borderRadius: '4%',
                 },
             });
             valido = false
         } else {
 
-        }
+        }*/
         if (cantidadJugadores === "") {
             toast("Ingesar Cantidad de Jugadores", {
                 icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
+                    border: '2px solid #ff7c01',
                     padding: '10px',
                     color: '#fff',
                     background: '#000',
-                    borderRadius: '25%',
+                    borderRadius: '4%',
                 },
             });
             valido = false
@@ -202,11 +204,11 @@ export default function Registro() {
         if (creacion === "") {
             toast("Ingesar Creacion de Equipo", {
                 icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
+                    border: '2px solid #ff7c01',
                     padding: '10px',
                     color: '#fff',
                     background: '#000',
-                    borderRadius: '25%',
+                    borderRadius: '4%',
                 },
             });
             valido = false
@@ -216,11 +218,11 @@ export default function Registro() {
         if (categoria === "") {
             toast("Ingesar Categoria", {
                 icon: "⚠️", duration: 3000, style: {
-                    border: '3px solid #ff7c01',
+                    border: '2px solid #ff7c01',
                     padding: '10px',
                     color: '#fff',
                     background: '#000',
-                    borderRadius: '25%',
+                    borderRadius: '4%',
                 },
             });
             valido = false
@@ -245,54 +247,54 @@ export default function Registro() {
         }
     }
 
-    const registroDelegado = () =>{
+    const registroDelegado = () => {
         setVentana1(true)
         setVentana2(false)
-    }   
+    }
 
-    const recuperarVentana1 = () =>{
-        if (document.getElementById("nombreCompleto") != null){
+    const recuperarVentana1 = () => {
+        if (document.getElementById("nombreCompleto") != null) {
             document.getElementById("nombreCompleto").value = nombre
         }
-        if (document.getElementById("carnetIdentidad") != null){
+        if (document.getElementById("carnetIdentidad") != null) {
             document.getElementById("carnetIdentidad").value = carnet
         }
-        if (document.getElementById("correo") != null){
+        if (document.getElementById("correo") != null) {
             document.getElementById("correo").value = correo
         }
-        if (document.getElementById("numeroCelular") != null){
+        if (document.getElementById("numeroCelular") != null) {
             document.getElementById("numeroCelular").value = numeroCel
         }
-        if (document.getElementById("fechaNacimiento") != null){
+        if (document.getElementById("fechaNacimiento") != null) {
             document.getElementById("fechaNacimiento").value = fechaNacimiento
         }
-        if (document.getElementById("nacionalidad") != null){
+        if (document.getElementById("nacionalidad") != null) {
             document.getElementById("nacionalidad").value = nacionalidad
         }
     }
 
-    const recuperarVentana2 = () =>{
-        if (document.getElementById("nombreEquipo") != null){
+    const recuperarVentana2 = () => {
+        if (document.getElementById("nombreEquipo") != null) {
             document.getElementById("nombreEquipo").value = equipo
         }
-        if (document.getElementById("siglasEquipo") != null){
+        if (document.getElementById("siglasEquipo") != null) {
             document.getElementById("siglasEquipo").value = siglas
         }
-        if (document.getElementById("logo") != null){
+        if (document.getElementById("logo") != null) {
             document.getElementById("logo").value = logo
         }
-        if (document.getElementById("cantidadJugadores") != null){
+        if (document.getElementById("cantidadJugadores") != null) {
             document.getElementById("cantidadJugadores").value = cantidadJugadores
         }
-        if (document.getElementById("creacion") != null){
+        if (document.getElementById("creacion") != null) {
             document.getElementById("creacion").value = creacion
         }
-        if (document.getElementById("categoria") != null){
+        if (document.getElementById("categoria") != null) {
             document.getElementById("categoria").value = categoria
         }
     }
 
-    useEffect(function(){
+    useEffect(function () {
         recuperarVentana1()
         recuperarVentana2()
     })
@@ -308,7 +310,8 @@ export default function Registro() {
                 </NavMenu>
             </Nav>
             <GlobalStyles>
-                {ventana1 &&
+                {
+                    ventana1 &&
                     <ContenedorRegistro>
                         <Titulo>REGISTRO DELEGADO</Titulo>
                         <DetalleUsuario>
@@ -334,7 +337,18 @@ export default function Registro() {
                             </BoxCampo>
                             <BoxCampo>
                                 <TextBox>Nacionalidad</TextBox>
-                                <InputBox type="text" placeholder="Nacionalidad" required id="nacionalidad" onChange={(e) => { setNacionalidad(e.target.value) }} />
+                                <SelectNacionalidad type="text" placeholder='Nacionalidad' required id="nacionalidad" onChange={(e) => { setNacionalidad(e.target.value) }}>
+                                    <option value="Bolivia">Bolivia</option>
+                                    <option value="Peru">Peru</option>
+                                    <option value="Chile">Chile</option>
+                                    <option value="Argentina">Argentina</option>
+                                    <option value="Colombia">Colombia</option>
+                                    <option value="Ecuador">Ecuador</option>
+                                    <option value="Mexico">Mexico</option>
+                                    <option value="Panama">Panama</option>
+                                    <option value="El Salvador">El Salvador</option>
+                                    <option value="Guatemala">Guatemala</option>
+                                </SelectNacionalidad>
                             </BoxCampo>
                         </DetalleUsuario>
                         <Titulo>GENERO</Titulo>
@@ -355,7 +369,8 @@ export default function Registro() {
                         </ContenedorBotones>
                     </ContenedorRegistro>
                 }
-                {ventana2 &&
+                {
+                    ventana2 &&
                     <ContenedorRegistro>
                         <Titulo>REGISTRO EQUIPO</Titulo>
                         <DetalleUsuario>
@@ -369,7 +384,8 @@ export default function Registro() {
                             </BoxCampo>
                             <BoxCampo>
                                 <TextBox>Logo Equipo</TextBox>
-                                <InputBox type="email" placeholder="Logo Equipo" required id="logo" onChange={(e) => { setLogo(e.target.value) }} />
+                                <InputFile type="file" name="" id="logo" hidden />
+                                <LabelFile for="logo" id='selector'>Seleccionar Archivo</LabelFile>
                             </BoxCampo>
                             <BoxCampo>
                                 <TextBox>Cantidad de Jugadores</TextBox>
@@ -420,12 +436,27 @@ export default function Registro() {
                             <NavBoton left onClick={() => { setVentana3(false); setVentana2(true); }} >
                                 <FontAwesomeIcon icon={faChevronLeft} />
                             </NavBoton>
-                            <NavBoton right onClick={() => { setVentana3(false);}} >
+                            <NavBoton right onClick={() => { setVentana3(false); setVentana4(true) }} >
                                 <FontAwesomeIcon icon={faChevronRight} />
                             </NavBoton>
                         </ContenedorBotones>
                     </ContenedorRegistro>
-                    
+                }
+                {
+                    ventana4 &&
+                    <ContenedorRegistro>
+                        <DetalleUsuarioPago>
+
+                        </DetalleUsuarioPago>
+                        <ContenedorBotones>
+                            <NavBoton left onClick={() => { setVentana4(false); setVentana3(true); }} >
+                                <FontAwesomeIcon icon={faChevronLeft} />
+                            </NavBoton>
+                            <NavBoton right onClick={() => { }} >
+                                <FontAwesomeIcon icon={faChevronRight} />
+                            </NavBoton>
+                        </ContenedorBotones>
+                    </ContenedorRegistro>
                 }
                 <Modal
                     estado={modal}

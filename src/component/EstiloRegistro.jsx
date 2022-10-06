@@ -188,3 +188,50 @@ export const BotonNavegacion = styled.button`
 export const ContenedorBotones = styled.div`
     margin-top: 10px;
 `
+export const InputFile = styled.input`
+
+`
+export const LabelFile = styled.label`
+    text-transform: uppercase;
+    height: 45px;
+    width: 100%;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid #ff7c01;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    font-size: 16px;
+    border-bottom-width: 2px;
+    transition: all 0.3s ease;
+    color: black;
+    &:hover{
+        transform: scale(1.02);
+    }
+    &:active{
+        background-color: #ff7c01;
+        color: black;
+        border: 2px solid black;
+    }
+`
+export const SelectNacionalidad = styled.select`
+    height: 45px;
+    width: 205px;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid #ff7c01;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 16px;
+    border-bottom-width: 2px;
+    transition: all 0.3s ease;
+    &:focus{
+        border-color: black;
+    }
+    &:valid{
+        border-color: green;
+    }
+    &:hover{
+        border-color: black;
+    }
+`
