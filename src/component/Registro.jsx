@@ -5,7 +5,6 @@ import { useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 import { useHistory } from 'react-router-dom'
 import { SelectNacionalidad, LabelFile, InputFile, NavBoton1, ContenedorBotones, CategoryPago, DetalleUsuarioPago, ImagenPago, NavMenu, BotonNavegacion, Nav, GlobalStyles, ContenedorRegistro, Titulo, DetalleUsuario, BoxCampo, TextBox, InputBox, Category, Label, Radio, NavBoton } from './EstiloRegistro'
-import Modal from './Modal';
 import { useEffect } from 'react';
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
@@ -841,11 +840,6 @@ export default function Registro() {
                         </ContenedorBotones>
                     </ContenedorRegistro>
                 }
-                <Modal
-                    estado={modal}
-                    cambiarEstado={setModal}
-                    pestaña="/registroEquipo"
-                />
             </GlobalStyles>
             <Toaster reverseOrder={true} position="top-right" />
         </>
