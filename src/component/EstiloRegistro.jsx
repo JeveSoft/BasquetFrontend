@@ -102,6 +102,7 @@ export const InputBox = styled.input`
     &:hover{
         border-color: black;
     }
+    
 `
 export const Category = styled.div`
     display: flex;
@@ -193,6 +194,7 @@ export const InputFile = styled.input`
 `
 export const LabelFile = styled.label`
     text-transform: uppercase;
+    text-align: center;
     height: 45px;
     width: 100%;
     outline: none;

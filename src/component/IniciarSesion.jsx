@@ -125,7 +125,7 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
   const historial = useHistory();
   const iniciarSesion = () => {
     if (esValido()) {
-      historial.push("/delegado")
+      historial.push("/administrador")
     }
   }
 
@@ -134,11 +134,11 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
     if (id === "") {
       toast("Ingesar ID", {
         icon: "⚠️", duration: 3000, style: {
-          border: '3px solid #ff7c01',
+          border: '2px solid #ff7c01',
           padding: '10px',
           color: '#fff',
           background: '#000',
-          borderRadius: '25%',
+          borderRadius: '4%',
         },
       });
       valido = false
@@ -148,11 +148,11 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
     if (contraseña === "") {
       toast("Ingesar Contraseña", {
         icon: "⚠️", duration: 3000, style: {
-          border: '3px solid #ff7c01',
+          border: '2px solid #ff7c01',
           padding: '10px',
           color: '#fff',
           background: '#000',
-          borderRadius: '25%',
+          borderRadius: '4%',
         },
       });
       valido = false
