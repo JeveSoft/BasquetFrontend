@@ -44,7 +44,7 @@ export const Titulo = styled.div`
       left: 0;
       bottom: 0;
       height: 3px;
-      width: 150%;
+      width: 300%;
     background: linear-gradient(135deg,#000000,#ff7c01);
     }
 `
@@ -124,9 +124,9 @@ export default function Modal ({ estado, cambiarEstado,pestaña}) {
         <Overlay>
           <ContenedorModal>
             <EncabezadoModal>
-              <Titulo>Verificar</Titulo>
+              <Titulo>SEGURO</Titulo>
             </EncabezadoModal>
-            <Texto>¿Esta seguro de continuar?</Texto>
+            <Texto>¿Seguro de cerrar sesion?</Texto>
             <BotonCerrar onClick={() => { cambiarEstado(false) }}>
               <FontAwesomeIcon icon={faXmark} />
             </BotonCerrar>
@@ -134,8 +134,8 @@ export default function Modal ({ estado, cambiarEstado,pestaña}) {
               
             </DetalleUsuario>
             <DetalleUsuario>
-              <Boton onClick={() => { cambiarEstado(false) }}>VERIFICAR</Boton>
-              <Boton onClick={()=>{historial.replace(pestaña)}}>CONTINUAR</Boton>
+              <Boton onClick={() => {historial.replace("/")}}>Si</Boton>
+              <Boton onClick={()=>{cambiarEstado(false)}}>No</Boton>
             </DetalleUsuario>
           </ContenedorModal>
         </Overlay>

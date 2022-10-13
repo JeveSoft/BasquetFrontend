@@ -102,21 +102,20 @@ export const ContenedorConfiguracion = styled.div`
     margin-top: 50px;
     margin-bottom: 50px;
 `
-
 export const Detalle = styled.div`
 display: flex;
 flex-wrap: wrap;
 justify-content:space-between;
 `
 export const BoxCampo = styled.div`
-    margin: 20px 0 12px 0;
+    margin: 20px 0 5px 0;
     width: cal(100% / 2 - 20px);
 `
 export const TextBox = styled.span`
-    margin-top: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     display: block;
     font-weight: 500;
-    margin-bottom: 5px;
     width: 300px;
 `
 export const InputBox = styled.input`
@@ -149,10 +148,10 @@ export const NavBoton = styled.button`
     cursor: pointer;
     padding: 0;
     position: relative;
-    margin-top: 30px;
+    margin-top: 10px;
     border-radius: 50%;
     color: black;
-    left: 93%;
+    left: 95%;
     &:hover {
         transition: all 0.2s ease-in-out;
         background: #ff7c01;
@@ -161,4 +160,30 @@ export const NavBoton = styled.button`
 `
 export const ContenedorBoton = styled.div`
     margin-top: 10px;
+`
+export const InputFile = styled.input`
+`
+export const LabelFile = styled.label`
+    text-transform: uppercase;
+    text-align: center;
+    height: 45px;
+    width: 100%;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid #ff7c01;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    font-size: 16px;
+    border-bottom-width: 2px;
+    transition: all 0.3s ease;
+    color: black;
+    &:hover{
+        transform: scale(1.02);
+    }
+    &:active{
+        background-color: #ff7c01;
+        color: black;
+        border: 2px solid black;
+    }
 `
