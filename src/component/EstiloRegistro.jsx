@@ -1,5 +1,5 @@
-import { right } from '@popperjs/core';
 import styled, { css } from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const Nav = styled.nav`
     background: #000;   
@@ -40,7 +40,7 @@ export const GlobalStyles = styled.div`
     background: linear-gradient(135deg,#ff7c01,#000000);
 `
 export const ContenedorRegistro = styled.div`
-    max-width: 700px;
+    max-width: 775px;
     width: 100%;
     top: 10px;
     background: #fff;
@@ -52,7 +52,7 @@ export const ContenedorRegistro = styled.div`
 `
 export const Titulo = styled.div`
     font-size: 25px;
-    font-weight: 500;
+    font-weight: 1000;
     position: relative;
     &::before{
         content: "";
@@ -72,6 +72,8 @@ export const DetalleUsuario = styled.div`
 export const BoxCampo = styled.div`
     margin: 20px 0 12px 0;
     width: cal(100% / 2 - 20px);
+    position: relative;
+    z-index:90;
 `
 export const BoxBoton = styled.div`
     margin: 20px 0 12px 0;
@@ -87,22 +89,44 @@ export const InputBox = styled.input`
     width: 100%;
     outline: none;
     border-radius: 5px;
-    border: 1px solid #ff7c01;
-    padding-left: 15px;
-    padding-right: 15px;
+    border: 2px solid #ff7c01;
+    padding: 0 40px 0 10px ;
     font-size: 16px;
     border-bottom-width: 2px;
-    transition: all 0.3s ease;
-    &:focus{
-        border-color: black;
-    }
-    &:valid{
-        border-color: green;
-    }
+    transition: all 0.1s ease;
+    line-height: 45px;
     &:hover{
-        border-color: black;
+        border: 2px solid black;
+        outline: none;
+        box-shadow: 3px 0px 30px rgba(163,163,163,0.4);
     }
-    
+    &:focus{
+        border: 2px solid black;
+        outline: none;
+        box-shadow: 3px 0px 30px rgba(163,163,163,0.4);
+    }
+    ${props => props.valido === 'true' && css`
+        border: 3px solid green;
+    `}
+    ${props => props.valido === 'false' && css`
+        border: 3px solid red;
+    `}
+`
+export const IconoValidacion = styled(FontAwesomeIcon)`
+    position: absolute;
+    right: 12px;
+    bottom: 14px;
+    z-index:100;
+    font-size: 20px;
+    opacity: 0;
+    ${props => props.valido === 'false' && css`
+        opacity: 1;
+        color: red;
+    `}
+    ${props => props.valido === 'true' && css`
+        opacity: 1;
+        color: green;
+    `}
 `
 export const Category = styled.div`
     display: flex;
@@ -199,7 +223,7 @@ export const LabelFile = styled.label`
     width: 100%;
     outline: none;
     border-radius: 5px;
-    border: 1px solid #ff7c01;
+    border: 2px solid #ff7c01;
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 10px;
@@ -213,27 +237,32 @@ export const LabelFile = styled.label`
     &:active{
         background-color: #ff7c01;
         color: black;
-        border: 2px solid black;
+        border: 3px solid black;
     }
 `
 export const SelectNacionalidad = styled.select`
     height: 45px;
-    width: 205px;
+    width: 210px;
     outline: none;
     border-radius: 5px;
-    border: 1px solid #ff7c01;
+    border: 2px solid #ff7c01;
     padding-left: 15px;
     padding-right: 15px;
     font-size: 16px;
     border-bottom-width: 2px;
     transition: all 0.3s ease;
+    
     &:focus{
-        border-color: black;
+        border: 2px solid black;
+        outline: none;
+        box-shadow: 3px 0px 30px rgba(163,163,163,0.4);
     }
     &:valid{
-        border-color: green;
+        border: 3px solid green;
     }
     &:hover{
-        border-color: black;
+        border: 2px solid black;
+        outline: none;
+        box-shadow: 3px 0px 30px rgba(163,163,163,0.4);
     }
 `

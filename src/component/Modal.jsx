@@ -115,7 +115,7 @@ export const Texto = styled.div`
     
 `
 
-export default function Modal ({ estado, cambiarEstado,pestaña}) {
+export default function Modal ({ estado, cambiarEstado,mensaje}) {
   const historial = useHistory();
 
   return (
@@ -126,7 +126,7 @@ export default function Modal ({ estado, cambiarEstado,pestaña}) {
             <EncabezadoModal>
               <Titulo>SEGURO</Titulo>
             </EncabezadoModal>
-            <Texto>¿Seguro de cerrar sesion?</Texto>
+            <Texto>{mensaje}</Texto>
             <BotonCerrar onClick={() => { cambiarEstado(false) }}>
               <FontAwesomeIcon icon={faXmark} />
             </BotonCerrar>

@@ -1,54 +1,187 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import styled, { css } from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronRight, faChevronLeft, faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
-import { useState } from 'react'
+import { faXmark, faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import toast, { Toaster } from 'react-hot-toast';
-import { useHistory } from 'react-router-dom'
-import { SelectNacionalidad, NavBoton1, LabelFile, InputFile, ContenedorBotones, CategoryPago, DetalleUsuarioPago, ImagenPago, NavMenu, BotonNavegacion, Nav, GlobalStyles, ContenedorRegistro, Titulo, DetalleUsuario, BoxCampo, TextBox, InputBox, Category, Label, Radio, NavBoton, IconoValidacion } from './EstiloRegistro'
-import { useEffect } from 'react';
-import PhoneInput from 'react-phone-number-input'
+import InputValidar from './InputValidar'
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
-import { isValidPhoneNumber } from 'react-phone-number-input'
-import InputValidar from './InputValidar';
+import { Category, IconoValidacion, Label, Radio, SelectNacionalidad } from './EstiloRegistro'
 
-export default function Registro() {
-    const [genero, setGenero] = useState("")
-    const historial = useHistory();
+const Overlay = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+const ContenedorModal = styled.div`
+  max-width: 775px;
+    width: 100%;
+    top: 10px;
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 5px;
+    position: relative;
+    margin-top: 50px;
+    margin-bottom: 50px;
+`
+const EncabezadoModal = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: -10px;
+  padding-bottom: 10px;
+
+`
+export const Titulo = styled.div`
+    font-size: 25px;
+    font-weight: 1000;
+    position: relative;
+    &::before{
+        content: "";
+      position:absolute;
+      left: 0;
+      bottom: 0;
+      height: 3px;
+      width: 275%;
+    background: linear-gradient(135deg,#000000,#ff7c01);
+    }
+`
+export const TituloGenero = styled.div`
+    font-size: 25px;
+    font-weight: 1000;
+    position: relative;
+    &::before{
+        content: "";
+      position:absolute;
+      left: 0;
+      bottom: 0;
+      height: 3px;
+      width: 100%;
+    background: linear-gradient(135deg,#000000,#ff7c01);
+    }
+`
+const BotonCerrar = styled.button`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  height: 30px;
+  width: 30px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: .3s ease all;
+  border-radius: 5px;
+  color: black;
+  &:hover{
+    background: #c9c9c9;
+  }
+`
+export const DetalleUsuario = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:space-between;
+`
+export const ContenedorBotones = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    align-content: center;
+`
+export const InputBox = styled.input`
+    height: 45px;
+    width: 100%;
+    outline: none;
+    border-radius: 5px;
+    border: 2px solid #ff7c01;
+    padding: 0 40px 0 10px ;
+    font-size: 16px;
+    border-bottom-width: 2px;
+    transition: all 0.1s ease;
+    line-height: 45px;
+    &:hover{
+        border: 2px solid black;
+        outline: none;
+        box-shadow: 3px 0px 30px rgba(163,163,163,0.4);
+    }
+    &:focus{
+        border: 2px solid black;
+        outline: none;
+        box-shadow: 3px 0px 30px rgba(163,163,163,0.4);
+    }
+    ${props => props.valido === 'true' && css`
+        border: 3px solid green;
+    `}
+    ${props => props.valido === 'false' && css`
+        border: 3px solid red;
+    `}
+`
+export const Boton = styled.button`
+  background: #ff7c01;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  transition: all 0.2s ease-in-out;
+  width: 110px;
+  margin: 10px;
+  height: 40px;
+  font-size: 16px;
+  &:hover{
+    background: black;
+    color: #ff7c01;
+  }
+        
+`
+export const BoxCampo = styled.div`
+    margin: 20px 0 12px 0;
+    width: cal(100% / 2 - 20px);
+    position: relative;
+    z-index:90;
+`
+export const TextBox = styled.span`
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+`
+export default function ModalRegistroArbitro({ estado, cambiarEstado }) {
     var [nombre, setNombre] = useState({ campo: "", valido: null })
     var [carnet, setCarnet] = useState({ campo: "", valido: null })
     var [correo, setCorreo] = useState({ campo: "", valido: null })
-    var [numeroCel, setNumeroCel] = useState("")
+    var [celular, setCelular] = useState("")
     var [fechaNacimiento, setFechaNacimiento] = useState("")
     var [nacionalidad, setNacionalidad] = useState("")
-    const [equipo, setEquipo] = useState({ campo: "", valido: null })
-    const [siglas, setSiglas] = useState({ campo: "", valido: null })
-    const [logo, setLogo] = useState("")
-    const [cantidadJugadores, setCantidadJugadores] = useState("")
-    const [creacion, setCreacion] = useState("")
-    const [categoria, setCategoria] = useState("")
-    var [ventana1, setVentana1] = useState(true)
-    var [ventana2, setVentana2] = useState(false)
-    var [ventana3, setVentana3] = useState(false)
-    var [ventana4, setVentana4] = useState(false)
-    var [validarJug, setValidarJug] = useState(null)
+    var [genero, setGenero] = useState("")
     var [validarFechaN, setValidarFechaN] = useState(null)
-    var [validarCreacion, setValidarCreacion] = useState(null)
-    const [pago, setPago] = useState("")
-
+    
     const expresiones = {
         nombre: /^[a-zA-ZÀ-ÿ\s]{3,40}$/, // Letras y espacios, pueden llevar acentos.
         correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
         telefono: /^\d{7,14}$/, // 7 a 14 numeros.
-        carnet: /^[a-zA-Z0-9-]{6,15}/,
-        sigla: /^[a-zA-Z0-9-]{1,4}/
+        carnet: /^[a-zA-Z0-9-]{6,15}/
     }
-    const cambioPago = e => {
-        setPago(e.target.value)
+
+    const validar = () => {
+        if (fechaNacimiento != "") {
+            var fechaActual = new Date().toISOString()
+            if (fechaNacimiento < fechaActual) {
+                var edad = calcularEdad(fechaNacimiento);
+                if (edad > 18) {
+                    setValidarFechaN('true')
+                }
+            } else {
+                setValidarFechaN('false')
+            }
+        }
     }
-    document.title = "Registro"
-    const cambioGenero = e => {
-        setGenero(e.target.value)
-    }
+
+    useEffect(function () {
+        validar()
+    })
+
     function calcularEdad(fecha_nacimiento) {
         var hoy = new Date();
         var cumpleanos = new Date(fecha_nacimiento);
@@ -59,6 +192,11 @@ export default function Registro() {
         }
         return edad;
     }
+
+    const cambioGenero = e => {
+        setGenero(e.target.value)
+    }
+
     function esValidoDelegado() {
         var valido = true
         if (nombre.campo === "") {
@@ -136,7 +274,7 @@ export default function Registro() {
                 });
             }
         }
-        if (numeroCel === "") {
+        if (celular === "") {
             toast("Ingesar Numero de Celular", {
                 icon: "⚠️", duration: 3000, style: {
                     border: '2px solid #ff7c01',
@@ -148,7 +286,7 @@ export default function Registro() {
             });
             valido = false
         } else {
-            if (numeroCel.length < 3 || numeroCel.length > 30) {
+            if (celular.length < 3 || celular.length > 30) {
                 valido = false
                 toast("Nombre Completo Invalido", {
                     icon: "⚠️", duration: 3000, style: {
@@ -160,7 +298,7 @@ export default function Registro() {
                     },
                 });
             }
-            if (!isValidPhoneNumber(numeroCel)) {
+            if (!isValidPhoneNumber(celular)) {
                 toast("Numero Invalido", {
                     icon: "⚠️", duration: 3000, style: {
                         border: '2px solid #ff7c01',
@@ -239,241 +377,35 @@ export default function Registro() {
         }
         return valido
     }
-    function esValidoEquipo() {
-        var valido = true
-        if (equipo === "") {
-            toast("Ingesar Nombre Equipo", {
-                icon: "⚠️", duration: 3000, style: {
-                    border: '2px solid #ff7c01',
-                    padding: '10px',
-                    color: '#fff',
-                    background: '#000',
-                    borderRadius: '4%',
-                },
-            });
-            valido = false
-        } else {
-            if (equipo.length < 3 || equipo.length > 30) {
-                valido = false
-                toast("Nombre Equipo Invalido", {
-                    icon: "⚠️", duration: 3000, style: {
-                        border: '2px solid #ff7c01',
-                        padding: '10px',
-                        color: '#fff',
-                        background: '#000',
-                        borderRadius: '4%',
-                    },
-                });
-            }
-        }
-        if (siglas === "") {
-            toast("Ingesar Siglas de Equipo", {
-                icon: "⚠️", duration: 3000, style: {
-                    border: '2px solid #ff7c01',
-                    padding: '10px',
-                    color: '#fff',
-                    background: '#000',
-                    borderRadius: '4%',
-                },
-            });
-            valido = false
-        } else {
-            if (siglas.length < 3 || siglas.length > 10) {
-                valido = false
-                toast("Siglas De Equipo Invalido", {
-                    icon: "⚠️", duration: 3000, style: {
-                        border: '2px solid #ff7c01',
-                        padding: '10px',
-                        color: '#fff',
-                        background: '#000',
-                        borderRadius: '4%',
-                    },
-                });
-            }
-        }
-        if (cantidadJugadores === "") {
-            toast("Ingesar Cantidad de Jugadores", {
-                icon: "⚠️", duration: 3000, style: {
-                    border: '2px solid #ff7c01',
-                    padding: '10px',
-                    color: '#fff',
-                    background: '#000',
-                    borderRadius: '4%',
-                },
-            });
-            valido = false
-        } else {
-            if (cantidadJugadores < 5) {
-                toast("Cantidad de Jugadores Minima 5", {
-                    icon: "⚠️", duration: 3000, style: {
-                        border: '2px solid #ff7c01',
-                        padding: '10px',
-                        color: '#fff',
-                        background: '#000',
-                        borderRadius: '4%',
-                    },
-                });
-                valido = false
-            }
-            if (cantidadJugadores > 15) {
-                toast("Cantidad de Jugadores Maxima 15", {
-                    icon: "⚠️", duration: 3000, style: {
-                        border: '2px solid #ff7c01',
-                        padding: '10px',
-                        color: '#fff',
-                        background: '#000',
-                        borderRadius: '4%',
-                    },
-                });
-                valido = false
-            }
-        }
-        if (creacion === "") {
-            toast("Ingesar Creacion de Equipo", {
-                icon: "⚠️", duration: 3000, style: {
-                    border: '2px solid #ff7c01',
-                    padding: '10px',
-                    color: '#fff',
-                    background: '#000',
-                    borderRadius: '4%',
-                },
-            });
-            valido = false
-        } else {
-            var fechaActual = new Date().toISOString()
-            if (creacion > fechaActual) {
-                valido = false
-                toast("Fecha de Creacion Invalida", {
-                    icon: "⚠️", duration: 3000, style: {
-                        border: '2px solid #ff7c01',
-                        padding: '10px',
-                        color: '#fff',
-                        background: '#000',
-                        borderRadius: '4%',
-                    },
-                });
-            }
-        }
-        if (categoria === "") {
-            toast("Ingesar Categoria", {
-                icon: "⚠️", duration: 3000, style: {
-                    border: '2px solid #ff7c01',
-                    padding: '10px',
-                    color: '#fff',
-                    background: '#000',
-                    borderRadius: '4%',
-                },
-            });
-            valido = false
-        } else {
 
-        }
-        return valido
-    }
-    const registroEquipo = () => {
+    const registrarArbitro = () => {
         if (esValidoDelegado()) {
-            setVentana1(false)
-            setVentana2(true)
+            cambiarEstado(false)
+            limpiarCampo()
         }
     }
-    const registroPago = () => {
-        if (esValidoEquipo()) {
-            setVentana2(false)
-            setVentana3(true)
-        }
+
+    const limpiarCampo = () => {
+        setNombre({campo : "" , valido :null})
+        setCarnet({campo : "" , valido :null})
+        setCorreo({campo : "" , valido :null})
+        setCelular("")
+        setFechaNacimiento("")
+        setNacionalidad("")
+        setGenero("")
+        setValidarFechaN(null)
     }
-    const registroDelegado = () => {
-        setVentana1(true)
-        setVentana2(false)
-    }
-    const recuperarVentana1 = () => {
-        if (document.getElementById("nombreCompleto") != null) {
-            document.getElementById("nombreCompleto").value = nombre.campo
-        }
-        if (document.getElementById("carnetIdentidad") != null) {
-            document.getElementById("carnetIdentidad").value = carnet.campo
-        }
-        if (document.getElementById("correo") != null) {
-            document.getElementById("correo").value = correo.campo
-        }
-        if (document.getElementById("numeroCelular") != null) {
-            document.getElementById("numeroCelular").value = numeroCel
-        }
-        if (document.getElementById("fechaNacimiento") != null) {
-            document.getElementById("fechaNacimiento").value = fechaNacimiento
-        }
-        if (document.getElementById("nacionalidad") != null) {
-            document.getElementById("nacionalidad").value = nacionalidad
-        }
-    }
-    const recuperarVentana2 = () => {
-        if (document.getElementById("nombreEquipo") != null) {
-            document.getElementById("nombreEquipo").value = equipo.campo
-        }
-        if (document.getElementById("siglasEquipo") != null) {
-            document.getElementById("siglasEquipo").value = siglas.campo
-        }
-        if (document.getElementById("logo") != null) {
-            document.getElementById("logo").value = logo
-        }
-        if (document.getElementById("cantidadJugadores") != null) {
-            document.getElementById("cantidadJugadores").value = cantidadJugadores
-        }
-        if (document.getElementById("creacion") != null) {
-            document.getElementById("creacion").value = creacion
-        }
-        if (document.getElementById("categoria") != null) {
-            document.getElementById("categoria").value = categoria
-        }
-    }
-    const validar = () => {
-        if (cantidadJugadores != "") {
-            if (cantidadJugadores > 4 && cantidadJugadores < 20) {
-                setValidarJug('true')
-            } else {
-                setValidarJug('false')
-            }
-        }
-        if (fechaNacimiento != "") {
-            var fechaActual = new Date().toISOString()
-            if (fechaNacimiento < fechaActual) {
-                var edad = calcularEdad(fechaNacimiento);
-                if (edad > 18) {
-                    setValidarFechaN('true')
-                }
-            } else {
-                setValidarFechaN('false')
-            }
-        }
-        if (creacion != "") {
-            var fechaActual = new Date().toISOString()
-            if (creacion < fechaActual) {
-                setValidarCreacion('true')
-            } else {
-                setValidarCreacion('false')
-            }
-        }
-    }
-    useEffect(function () {
-        recuperarVentana1()
-        recuperarVentana2()
-        validar()
-    })
     return (
         <>
-            <Nav>
-                <BotonNavegacion onClick={() => { historial.push('/') }}><h1>logo</h1></BotonNavegacion>
-                <NavMenu>
-                    <BotonNavegacion onClick={() => { historial.push('/fixture') }}>FIXTURE</BotonNavegacion>
-                    <BotonNavegacion onClick={() => { historial.push('/equipo') }}>EQUIPOS</BotonNavegacion>
-                    <BotonNavegacion onClick={() => { historial.push('/tabla') }}>TABLA DE POSICIONES</BotonNavegacion>
-                </NavMenu>
-            </Nav>
-            <GlobalStyles>
-                {
-                    ventana1 &&
-                    <ContenedorRegistro>
-                        <Titulo>REGISTRO DELEGADO</Titulo>
+            {estado &&
+                <Overlay>
+                    <ContenedorModal>
+                        <EncabezadoModal>
+                            <Titulo>REGISTRAR ARBITRO</Titulo>
+                        </EncabezadoModal>
+                        <BotonCerrar onClick={() => { cambiarEstado(false); limpiarCampo() }}>
+                            <FontAwesomeIcon icon={faXmark} />
+                        </BotonCerrar>
                         <DetalleUsuario>
                             <InputValidar
                                 estado={nombre}
@@ -492,7 +424,6 @@ export default function Registro() {
                                 placeholder="Carnet Identidad"
                                 name="carnetIdentidad"
                                 expresionRegular={expresiones.carnet}
-                                mensaje="Carnet Invalido"
                             />
                             <InputValidar
                                 estado={correo}
@@ -502,11 +433,10 @@ export default function Registro() {
                                 placeholder="Correo"
                                 name="correo"
                                 expresionRegular={expresiones.correo}
-                                mensaje="Correo Invalido"
                             />
                             <BoxCampo>
                                 <TextBox>Numero de Celular</TextBox>
-                                <PhoneInput placeholder="Numero de Celular" defaultCountry="BO" id="numeroCelular" value={numeroCel} onChange={numeroCel => setNumeroCel(numeroCel)} />
+                                <PhoneInput placeholder="Numero de Celular" defaultCountry="BO" id="numeroCelular" value={celular} onChange={numeroCel => setCelular(numeroCel)} />
                             </BoxCampo>
                             <BoxCampo>
                                 <TextBox>Fecha Nacimiento </TextBox>
@@ -719,7 +649,7 @@ export default function Registro() {
                                 </SelectNacionalidad>
                             </BoxCampo>
                         </DetalleUsuario>
-                        <Titulo>GENERO</Titulo>
+                            <TituloGenero>Genero</TituloGenero>
                         <Category>
                             <Label for="dot-1">
                                 <Radio type='radio' name='gender' id="dot-1" value="Hombre" checked={genero === "Hombre" ? true : false} onChange={cambioGenero} />
@@ -731,188 +661,15 @@ export default function Registro() {
                             </Label>
                         </Category>
                         <ContenedorBotones>
-                            <NavBoton1 onClick={registroEquipo}>
-                                <FontAwesomeIcon icon={faChevronRight} />
-                            </NavBoton1>
+                            <Boton onClick={registrarArbitro}>GUARDAR</Boton>
+                            <Boton onClick={() => { cambiarEstado(false); limpiarCampo() }}>CANCELAR</Boton>
                         </ContenedorBotones>
-                    </ContenedorRegistro>
-                }
-                {
-                    ventana2 &&
-                    <ContenedorRegistro>
-                        <Titulo>REGISTRO EQUIPO</Titulo>
-                        <DetalleUsuario>
-                            <InputValidar
-                                estado={equipo}
-                                cambiarEstado={setEquipo}
-                                tipo="text"
-                                label="Nombre Equipo"
-                                placeholder="Nombre Equipo"
-                                name="nombreEquipo"
-                                expresionRegular={expresiones.carnet}
-                            />
-                            <InputValidar
-                                estado={siglas}
-                                cambiarEstado={setSiglas}
-                                tipo="text"
-                                label="Siglas Equipo"
-                                placeholder="Siglas Equipo"
-                                name="siglasEquipo"
-                                expresionRegular={expresiones.sigla}
-                            />
-                            <BoxCampo>
-                                <TextBox>Logo Equipo</TextBox>
-                                <InputFile type="file" name="" id="logo" hidden />
-                                <LabelFile for="logo" id='imagenLogo'>Seleccionar Archivo</LabelFile>
-                            </BoxCampo>
-                            <BoxCampo>
-                                <TextBox>Cantidad de Jugadores</TextBox>
-                                <InputBox type="number" valido={validarJug} placeholder="Cantidad de Jugadores" required id="cantidadJugadores" onChange={(e) => { setCantidadJugadores(e.target.value) }} />
-                                <IconoValidacion icon={validarJug === 'true' ? faCircleCheck : faCircleXmark} valido={validarJug} />
-                            </BoxCampo>
-                            <BoxCampo>
-                                <TextBox>Creacion de Equipo </TextBox>
-                                <InputBox type="date" valido={validarCreacion} placeholder="Creacion de Equipo" required id="creacion" onChange={(e) => { setCreacion(e.target.value) }} />
-                                <IconoValidacion icon={validarCreacion === 'true' ? faCircleCheck : faCircleXmark} valido={validarCreacion} />
-                            </BoxCampo>
-                            <BoxCampo>
-                                <TextBox>Categoria</TextBox>
-                                <SelectNacionalidad type="text" placeholder="Categoria" required id="categoria" onChange={(e) => { setCategoria(e.target.value) }}>
-                                    <option value="">Categoria</option>
-                                    <option value="35">+35</option>
-                                    <option value="45">+45</option>
-                                    <option value="55">+55</option>
-                                    <option value="Femenino">Femenino</option>
-                                </SelectNacionalidad>
-                            </BoxCampo>
-                        </DetalleUsuario>
-                        <ContenedorBotones>
-                            <NavBoton left onClick={registroDelegado} >
-                                <FontAwesomeIcon icon={faChevronLeft} />
-                            </NavBoton>
-                            <NavBoton right onClick={registroPago} >
-                                <FontAwesomeIcon icon={faChevronRight} />
-                            </NavBoton>
-                        </ContenedorBotones>
-                    </ContenedorRegistro>
-                }
-                {
-                    ventana3 &&
-                    <ContenedorRegistro>
-                        <Titulo>PAGO</Titulo>
-                        <CategoryPago>
-                            <Label for="dot-1">
-                                <Radio type='radio' name='gender' id="dot-1" value="Medio" checked={pago === "Medio" ? true : false} onChange={cambioPago} />
-                                <span className='gender'>Pago Medio</span>
-                            </Label>
-                            <Label for="dot-2">
-                                <Radio type='radio' name='gender' id="dot-2" value="Completo" checked={pago === "Completo" ? true : false} onChange={cambioPago} />
-                                <span className='gender'>Pago Completo</span>
-                            </Label>
-                        </CategoryPago>
-                        <DetalleUsuarioPago>
-                            {
-                                pago == "Completo" && <ImagenPago src={require('../Imagenes/2.jpg')} />
-                            }
-                            {
-                                pago == "Medio" && <ImagenPago src={require('../Imagenes/1.jpg')} />
-                            }
-                        </DetalleUsuarioPago>
-                        <ContenedorBotones>
-                            <NavBoton left onClick={() => {
-                               
-                                    setVentana3(false); setVentana2(true);
-                                
-                            }} >
-                                <FontAwesomeIcon icon={faChevronLeft} />
-                            </NavBoton>
-                            <NavBoton right onClick={() => { 
-                                if (pago != "") {
-                                    setVentana3(false); setVentana4(true)
-                                }else{
-                                    toast("Seleccionar Pago", {
-                                    icon: "⚠️", duration: 3000, style: {
-                                        border: '2px solid #ff7c01',
-                                        padding: '10px',
-                                        color: '#fff',
-                                        background: '#000',
-                                        borderRadius: '4%',
-                                    },
-                                });}
-                                }} >
-                                <FontAwesomeIcon icon={faChevronRight} />
-                            </NavBoton>
-                        </ContenedorBotones>
-                    </ContenedorRegistro>
-                }
-                {
-                    ventana4 &&
-                    <ContenedorRegistro>
-                        <Titulo>COMPROBANTE DE PAGO</Titulo>
-                        <CategoryPago>
-                            <InputFile type="file" name="" id="logo" hidden />
-                            <LabelFile for="logo" id='comprobantePago'>Seleccionar Archivo</LabelFile>
-                        </CategoryPago>
-                        <ContenedorBotones>
-                            <NavBoton left onClick={() => { setVentana4(false); setVentana3(true); }} >
-                                <FontAwesomeIcon icon={faChevronLeft} />
-                            </NavBoton>
-                            <NavBoton right onClick={() => { historial.replace('/')}} >
-                                <FontAwesomeIcon icon={faChevronRight} />
-                            </NavBoton>
-                        </ContenedorBotones>
-                    </ContenedorRegistro>
-                }
-            </GlobalStyles>
+                        3
+                        
+                    </ContenedorModal>
+                </Overlay>
+            }
             <Toaster reverseOrder={true} position="top-right" />
         </>
     )
 }
-/*
-{
-    jugadores.map(jugador => {
-        if (actualizo) {
-            return (
-                <div>
-                    <Titulo>JUGADOR {jugador.Jugador}</Titulo>
-                    <DetalleUsuario key={jugador.Jugador}>
-                        <BoxCampo>
-                            <TextBox>Nombre Completo</TextBox>
-                            <InputBox type="text" placeholder="Nombre Completo" required id='nombreCompleto' onChange={(e) => { nombre = e.target.value }} />
-                        </BoxCampo>
-                        <BoxCampo>
-                            <TextBox>Carnet Identidad</TextBox>
-                            <InputBox type="text" placeholder="Carnet Identidad" required id="carnetIdentidad" onChange={(e) => { carnet = e.target.value }} />
-                        </BoxCampo>
-                        <BoxCampo>
-                            <TextBox>Numero de Celular</TextBox>
-                            <InputBox type="text" placeholder="Numero de Celular" required id="numeroCelular" onChange={(e) => { numeroCel = e.target.value }} />
-                        </BoxCampo>
-                        <BoxCampo>
-                            <TextBox>Numero de Jugador</TextBox>
-                            <InputBox type="text" placeholder="Numero de Celular" required id="numeroCelular" onChange={(e) => { numeroCel = e.target.value }} />
-                        </BoxCampo>
-                        <BoxCampo>
-                            <TextBox>Fecha Nacimiento </TextBox>
-                            <InputBox type="date" placeholder="Fecha Nacimiento" required id="fechaNacimiento" onChange={(e) => { fechaNacimiento = e.target.value }} />
-                        </BoxCampo>
-                        <BoxCampo>
-                            <TextBox>Nacionalidad</TextBox>
-                            <InputBox type="text" placeholder="Nacionalidad" required id="nacionalidad" onChange={(e) => { nacionalidad = e.target.value }} />
-                        </BoxCampo>
-                        <BoxCampo>
-                            <TextBox>Posicion</TextBox>
-                            <InputBox type="text" placeholder="Numero de Celular" required id="numeroCelular" onChange={(e) => { numeroCel = e.target.value }} />
-                        </BoxCampo>
-                        <BoxCampo>
-                            <TextBox>Foto Identificacion</TextBox>
-                            <InputBox type="text" placeholder="Nacionalidad" required id="nacionalidad" onChange={(e) => { nacionalidad = e.target.value }} />
-                        </BoxCampo>
-
-                    </DetalleUsuario>
-                </div>
-            )
-            setActualizo(false)
-        }
-    })
-}*/

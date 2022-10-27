@@ -55,7 +55,6 @@ export const NavBtnLink = styled.button`
     text-decoration:none;
     background: none;
 `
-
 export const Boton = styled.button`
     width: 35px;
     height: 35px;
@@ -76,4 +75,4 @@ export const Boton = styled.button`
         color: #010606;
         
     }
-    `
+`
