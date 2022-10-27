@@ -664,8 +664,6 @@ export default function ModalRegistroArbitro({ estado, cambiarEstado }) {
                             <Boton onClick={registrarArbitro}>GUARDAR</Boton>
                             <Boton onClick={() => { cambiarEstado(false); limpiarCampo() }}>CANCELAR</Boton>
                         </ContenedorBotones>
-                        3
-                        
                     </ContenedorModal>
                 </Overlay>
             }

@@ -7,6 +7,9 @@ import Modal from './Modal';
 import ModalRegistroArbitro from './ModalRegistroArbitro'
 import { Table, TableHead, TableBody, TableCell, TableRow } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import ModalAñadirInformacion from './ModalAñadirInformacion'
+import ModalFoto from './ModalFoto'
+import ModalArbitro from './ModalArbitro'
 
 const styles = makeStyles({
     encabezado: {
@@ -23,6 +26,9 @@ export default function Administrador() {
     const [titulo, setTitulo] = useState("ADMINISTRADOR")
     const classes = styles();
     const [modalRegistroArbitro, setModalRegistroArbitro] = useState(false)
+    const [modalAñadirInfo, setModalAñadirInfo] = useState(false)
+    const [modalVerFoto, setModalVerFoto] = useState(false)
+    const [modalVerArbitro, setModalVerArbitro] = useState(false)
     const [modal, setModal] = useState(false)
     const [activoCL, setActivoCL] = useState("")
     const [activoE, setActivoE] = useState("")
@@ -37,6 +43,8 @@ export default function Administrador() {
     const [activoL, setActivoL] = useState("")
     const [activoP, setActivoP] = useState("")
     const [opcionL, setOpcionL] = useState("1")
+    const [eliminarFoto, setEliminarFoto] = useState(false)
+    const [eliminarArbitro, setEliminarArbitro] = useState(false)
     return (
         <ContenedorPrincipal>
             <ContenedorOpciones>
@@ -222,8 +230,8 @@ export default function Administrador() {
                                 <TableRow className={classes.bordes}>
                                     <TableCell><LetraCuerpo id='true'>11111111</LetraCuerpo></TableCell>
                                     <TableCell><LetraCuerpo name='true'>Sergio Brayan Soliz Nogales</LetraCuerpo></TableCell>
-                                    <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faUserTie} /></BotonVer></TableCell>
-                                    <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
+                                    <TableCell align='right'><BotonVer onClick={() => setModalVerArbitro(!modalVerArbitro)}><FontAwesomeIcon icon={faUserTie} /></BotonVer></TableCell>
+                                    <TableCell align='right'><BotonVer onClick={() => setEliminarArbitro(!eliminarArbitro)}><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
@@ -251,14 +259,14 @@ export default function Administrador() {
                             <TableBody>
                                 <TableRow className={classes.bordes}>
                                     <TableCell><LetraCuerpo titulo='true'>Titulo</LetraCuerpo></TableCell>
-                                    <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faImage} /></BotonVer></TableCell>
-                                    <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
+                                    <TableCell align='right'><BotonVer onClick={() => setModalVerFoto(!modalVerFoto)}><FontAwesomeIcon icon={faImage} /></BotonVer></TableCell>
+                                    <TableCell align='right'><BotonVer onClick={() => setEliminarFoto(!eliminarFoto)}><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
                     </ContenedorTable>
                     <ContenedorBoton>
-                        <BotonAñadir>
+                        <BotonAñadir onClick={() => setModalAñadirInfo(!modalAñadirInfo)}>
                             Añadir Informacion
                         </BotonAñadir>
                     </ContenedorBoton>
@@ -272,6 +280,30 @@ export default function Administrador() {
             <ModalRegistroArbitro
                 estado={modalRegistroArbitro}
                 cambiarEstado={setModalRegistroArbitro}
+            />
+            <ModalAñadirInformacion
+            estado={modalAñadirInfo}
+            cambiarEstado={setModalAñadirInfo}
+            />
+            <Modal
+                estado={eliminarFoto}
+                cambiarEstado={setEliminarFoto}
+                tipo={'eliminarFoto'}
+                mensaje={"¿Seguro de eliminar foto?"}
+            />
+            <Modal
+                estado={eliminarArbitro}
+                cambiarEstado={setEliminarArbitro}
+                tipo={'eliminarArbitro'}
+                mensaje={"¿Seguro de eliminar Arbitro?"}
+            />
+            <ModalFoto
+                estado={modalVerFoto}
+                cambiarEstado={setModalVerFoto}
+            />
+            <ModalArbitro
+            estado={modalVerArbitro}
+            cambiarEstado={setModalVerArbitro}
             />
         </ContenedorPrincipal>
     )

@@ -112,12 +112,24 @@ export const Texto = styled.div`
     align-items: center;
     font-size: 25px;
     margin-bottom: 20px;
-    
+    text-align: center;
 `
 
-export default function Modal ({ estado, cambiarEstado,mensaje}) {
+export default function Modal({ estado, cambiarEstado, mensaje, tipo }) {
   const historial = useHistory();
-
+  const verificarProceso = () => {
+    if (tipo == 'eliminarFoto') {
+      console.log("eliminado")
+      cambiarEstado(false)
+    } else {
+      if (tipo == 'eliminarArbitro') {
+        console.log("eliminado arbitro")
+        cambiarEstado(false)
+      } else {
+        historial.replace("/")
+      }
+    }
+  }
   return (
     <>
       {estado &&
@@ -131,11 +143,8 @@ export default function Modal ({ estado, cambiarEstado,mensaje}) {
               <FontAwesomeIcon icon={faXmark} />
             </BotonCerrar>
             <DetalleUsuario>
-              
-            </DetalleUsuario>
-            <DetalleUsuario>
-              <Boton onClick={() => {historial.replace("/")}}>Si</Boton>
-              <Boton onClick={()=>{cambiarEstado(false)}}>No</Boton>
+              <Boton onClick={() => { verificarProceso() }}>Si</Boton>
+              <Boton onClick={() => { cambiarEstado(false) }}>No</Boton>
             </DetalleUsuario>
           </ContenedorModal>
         </Overlay>
