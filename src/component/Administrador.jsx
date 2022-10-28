@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
-import { Texto, NavBotonMenu, NavMenu, Nav, BotonVer, Letra, ContenedorTable, BotonAñadir, InputFile, LabelFile, ContenedorBoton, NavBoton, BoxCampo, TextBox, InputBox, Titulo2, ContenedorConfiguracion, ContenedorBotones, Botones, BotonLogo, Titulo, ContenedorPrincipal, ContenedorOpciones, Imagen, Detalle, LetraCuerpo } from './EstilosAdministrador'
+import { Texto, NavBotonMenu, Nav, BotonVer, Letra, ContenedorTable, BotonAñadir, InputFile, LabelFile, ContenedorBoton, BoxCampo, TextBox, InputBox, Titulo2, ContenedorConfiguracion, ContenedorBotones, Botones, BotonLogo, Titulo, ContenedorPrincipal, ContenedorOpciones, Imagen, Detalle, LetraCuerpo } from './EstilosAdministrador'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTruckFast, faFileInvoice, faTrashCan, faChevronRight, faCirclePlay, faImage, faTrash, faCircleUser, faUserTie, faEnvelopeOpenText, faCalendarCheck, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { faTruckFast, faFileInvoice, faTrashCan, faCirclePlay, faImage, faTrash, faCircleUser, faUserTie, faEnvelopeOpenText, faCalendarCheck, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import Modal from './Modal';
 import ModalRegistroArbitro from './ModalRegistroArbitro'
 import { Table, TableHead, TableBody, TableCell, TableRow } from '@material-ui/core'
@@ -45,17 +45,18 @@ export default function Administrador() {
     const [opcionL, setOpcionL] = useState("1")
     const [eliminarFoto, setEliminarFoto] = useState(false)
     const [eliminarArbitro, setEliminarArbitro] = useState(false)
+
     return (
         <ContenedorPrincipal>
             <ContenedorOpciones>
                 <Titulo>{titulo}</Titulo>
-                <BotonLogo onClick={() => { setTitulo("ADMINISTRADOR");setActivoCL(""); setActivoE(""); setActivoA(""); setActivoI(""); }}></BotonLogo>
+                <BotonLogo onClick={() => { setTitulo("ADMINISTRADOR"); setActivoCL(""); setActivoE(""); setActivoA(""); setActivoI(""); }}></BotonLogo>
                 <ContenedorBotones>
-                    <Botones opcion = {activoCL} onClick={() => { setTitulo("CONFIGURAR LIGA");setActivoCL("true"); setActivoE(""); setActivoA(""); setActivoI("");}}>CONFIGURAR LIGA</Botones>
-                    <Botones opcion = {activoE} onClick={() => { setTitulo("EQUIPO");setActivoCL(""); setActivoE("true"); setActivoA(""); setActivoI(""); }}>EQUIPO</Botones>
-                    <Botones opcion = {activoA} onClick={() => { setTitulo("ARBITRO");setActivoCL(""); setActivoE(""); setActivoA("true"); setActivoI(""); }}>ARBITRO</Botones>
-                    <Botones opcion = {activoI} onClick={() => { setTitulo("INFORMACIÓN");setActivoCL(""); setActivoE(""); setActivoA(""); setActivoI("true"); }}>INFORMACIÓN</Botones>
-                    <Botones onClick={() => setModal(!modal)}>CERRAR SESION</Botones>
+                    <Botones opcion={activoCL} onClick={() => { setTitulo("CONFIGURAR LIGA"); setActivoCL("true"); setActivoE(""); setActivoA(""); setActivoI(""); }}>CONFIGURAR LIGA</Botones>
+                    <Botones opcion={activoE} onClick={() => { setTitulo("EQUIPO"); setActivoCL(""); setActivoE("true"); setActivoA(""); setActivoI(""); }}>EQUIPO</Botones>
+                    <Botones opcion={activoA} onClick={() => { setTitulo("ARBITRO"); setActivoCL(""); setActivoE(""); setActivoA("true"); setActivoI(""); }}>ARBITRO</Botones>
+                    <Botones opcion={activoI} onClick={() => { setTitulo("INFORMACIÓN"); setActivoCL(""); setActivoE(""); setActivoA(""); setActivoI("true"); }}>INFORMACIÓN</Botones>
+                    <Botones onClick={() => { setTitulo("ADMINISTRADOR"); setActivoCL(""); setActivoE(""); setActivoA(""); setActivoI(""); setModal(!modal) }}>CERRAR SESION</Botones>
                 </ContenedorBotones>
             </ContenedorOpciones>
             {
@@ -282,8 +283,8 @@ export default function Administrador() {
                 cambiarEstado={setModalRegistroArbitro}
             />
             <ModalAñadirInformacion
-            estado={modalAñadirInfo}
-            cambiarEstado={setModalAñadirInfo}
+                estado={modalAñadirInfo}
+                cambiarEstado={setModalAñadirInfo}
             />
             <Modal
                 estado={eliminarFoto}
@@ -302,8 +303,8 @@ export default function Administrador() {
                 cambiarEstado={setModalVerFoto}
             />
             <ModalArbitro
-            estado={modalVerArbitro}
-            cambiarEstado={setModalVerArbitro}
+                estado={modalVerArbitro}
+                cambiarEstado={setModalVerArbitro}
             />
         </ContenedorPrincipal>
     )

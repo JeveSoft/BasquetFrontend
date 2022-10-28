@@ -34,7 +34,7 @@ export default function Registro() {
     var [validarFechaN, setValidarFechaN] = useState(null)
     var [validarCreacion, setValidarCreacion] = useState(null)
     const [pago, setPago] = useState("")
-
+    var existe = false
     const expresiones = {
         nombre: /^[a-zA-ZÀ-ÿ\s]{3,40}$/, // Letras y espacios, pueden llevar acentos.
         correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
@@ -427,30 +427,34 @@ export default function Registro() {
         }
     }
     const validar = () => {
-        if (cantidadJugadores != "") {
-            if (cantidadJugadores > 4 && cantidadJugadores < 20) {
-                setValidarJug('true')
-            } else {
-                setValidarJug('false')
-            }
-        }
-        if (fechaNacimiento != "") {
-            var fechaActual = new Date().toISOString()
-            if (fechaNacimiento < fechaActual) {
-                var edad = calcularEdad(fechaNacimiento);
-                if (edad > 18) {
-                    setValidarFechaN('true')
+        if (ventana1){
+            if (fechaNacimiento != "") {
+                var fechaActual = new Date().toISOString()
+                if (fechaNacimiento < fechaActual) {
+                    var edad = calcularEdad(fechaNacimiento);
+                    if (edad > 18) {
+                        setValidarFechaN('true')
+                    }
+                } else {
+                    setValidarFechaN('false')
                 }
-            } else {
-                setValidarFechaN('false')
             }
         }
-        if (creacion != "") {
-            var fechaActual = new Date().toISOString()
-            if (creacion < fechaActual) {
-                setValidarCreacion('true')
-            } else {
-                setValidarCreacion('false')
+        if (ventana2){
+            if (cantidadJugadores != "") {
+                if (cantidadJugadores > 4 && cantidadJugadores < 20) {
+                    setValidarJug('true')
+                } else {
+                    setValidarJug('false')
+                }
+            }
+            if (creacion != "") {
+                var fechaActual = new Date().toISOString()
+                if (creacion < fechaActual) {
+                    setValidarCreacion('true')
+                } else {
+                    setValidarCreacion('false')
+                }
             }
         }
     }
@@ -459,6 +463,49 @@ export default function Registro() {
         recuperarVentana2()
         validar()
     })
+
+    const agregarBaseDatos = ()=>{
+        if (!existe){
+            const delegado = {
+                "NOMBREDELEGADO": nombre.campo,
+                "CARNETDELEGADO": carnet.campo,
+                "CORREODELEGADO": correo.campo,
+                "NUMERODELEGADO": numeroCel,
+                "FECHANACIMIENTO": fechaNacimiento,
+                "NACIONALIDAD": nacionalidad,
+                "GENERO": genero
+            }
+            const equipoBd= {
+                "NOMBREEQUIPO": equipo.campo,
+                "SIGLASEQUIPO": siglas.campo,
+                "CANTIDADJUGADORES": cantidadJugadores,
+                "CREACIONEQUIPO": numeroCel,
+                "CATEGORIA": fechaNacimiento
+            }
+            console.log(delegado)
+            console.log(equipoBd)
+            toast("Delegado Registrado", {
+                icon: "✅", duration: 3000, style: {
+                    border: '2px solid #ff7c01',
+                    padding: '10px',
+                    color: '#fff',
+                    background: '#000',
+                    borderRadius: '4%',
+                },
+            });
+            historial.replace('/')
+        }else{
+            toast("Delegado Existente", {
+                icon: "⚠️", duration: 3000, style: {
+                    border: '2px solid #ff7c01',
+                    padding: '10px',
+                    color: '#fff',
+                    background: '#000',
+                    borderRadius: '4%',
+                },
+            });
+        }
+    }
     return (
         <>
             <Nav>
@@ -857,7 +904,7 @@ export default function Registro() {
                             <NavBoton left onClick={() => { setVentana4(false); setVentana3(true); }} >
                                 <FontAwesomeIcon icon={faChevronLeft} />
                             </NavBoton>
-                            <NavBoton right onClick={() => { historial.replace('/')}} >
+                            <NavBoton right onClick={agregarBaseDatos}>
                                 <FontAwesomeIcon icon={faChevronRight} />
                             </NavBoton>
                         </ContenedorBotones>

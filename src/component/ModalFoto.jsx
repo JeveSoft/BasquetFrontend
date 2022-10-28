@@ -67,7 +67,6 @@ export const DetalleUsuario = styled.img`
     height: 400px;
     background: black;
 `
-
 export default function ModalFoto({ estado, cambiarEstado }) {
 
     return (

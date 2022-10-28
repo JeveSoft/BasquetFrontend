@@ -143,25 +143,6 @@ export const InputBox = styled.input`
         border-color: black;
     }  
 `
-export const NavBoton = styled.button`
-    width: 35px;
-    height: 35px;
-    outline: none;
-    border: none;
-    background: none;
-    cursor: pointer;
-    padding: 0;
-    position: relative;
-    margin-top: 10px;
-    border-radius: 50%;
-    color: black;
-    left: 95%;
-    &:hover {
-        transition: all 0.2s ease-in-out;
-        background: #ff7c01;
-        
-    }
-`
 export const BotonAñadir = styled.button`
 width: 32%;
 height: 40px;

@@ -67,7 +67,6 @@ export const DetalleUsuario = styled.div`
     height: 400px;
     background: black;
 `
-
 export default function ModalArbitro({ estado, cambiarEstado }) {
   return (
 <>

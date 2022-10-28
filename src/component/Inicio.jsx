@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import styled from 'styled-components';
 import { NavLink as Link } from 'react-router-dom';
 import IniciarSesion from './IniciarSesion';
+import { Toaster } from 'react-hot-toast'
 
 export const Nav = styled.nav`
     background: transparent;   
@@ -137,6 +138,7 @@ export default function Inicio() {
           cambiarEstado={setModal}
         />
       </Container>
+      <Toaster reverseOrder={true} position="top-right" />
     </>
 
   )

@@ -1,10 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark, faUser } from '@fortawesome/free-solid-svg-icons'
-import { useHistory } from 'react-router'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import toast, { Toaster } from 'react-hot-toast';
-import { IconoValidacion } from './EstiloRegistro'
 
 const Overlay = styled.div`
   width: 100vw;
@@ -89,7 +87,6 @@ export const InputBox = styled.input`
         border-color: black;
     }
 `
-
 export const Boton = styled.button`
   background: #ff7c01;
   margin-bottom: 10px;
@@ -150,7 +147,6 @@ export const LabelFile = styled.label`
     }
 `
 export const InputFile = styled.input`
-
 `
 export default function ModalAñadirInformacion({ estado, cambiarEstado }) {
 

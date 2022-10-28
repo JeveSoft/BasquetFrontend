@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faXmark} from '@fortawesome/free-solid-svg-icons'
 import { useHistory } from 'react-router'
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -90,7 +90,6 @@ export const InputBox = styled.input`
         border-color: black;
     }
 `
-
 export const Boton = styled.button`
   background: #ff7c01;
   margin-bottom: 10px;
@@ -114,7 +113,6 @@ export const Texto = styled.div`
     margin-bottom: 20px;
     text-align: center;
 `
-
 export default function Modal({ estado, cambiarEstado, mensaje, tipo }) {
   const historial = useHistory();
   const verificarProceso = () => {
