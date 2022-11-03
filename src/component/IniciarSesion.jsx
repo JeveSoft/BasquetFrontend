@@ -124,28 +124,89 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
   const [contraseña, setContraseña] = useState("")
   const historial = useHistory();
 
-  const obtenerAdministrador = async () => {
-    const response = await axios.get('http://localhost/:8000/administrador/117SER1320')
-    console.log(response)
-  }
-
   const iniciarSesion = () => {
-    /*if (esValido()) {
-      if (id.substring(0,1) > 0 && id.substring(0,1) < 4){
-        
-        historial.push("/administrador")
-      }
-      if (id.substring(0,1) > 3 && id.substring(0,1) < 7){
-        historial.push("/arbitro")
-      }
-      if (id.substring(0,1) > 6 && id.substring(0,1) < 10){
-        axios.get('http://localhost:8000/administrador/'+ id).then(response => {
-          console.log(response.data)
+    if (esValido()) {
+      if (id.substring(0, 1) > 0 && id.substring(0, 1) < 4) {
+        axios.get('http://localhost:8000/administrador/' + id).then(response => {
+          if (response.data.length > 0){
+            if(response.data[0].CIADMINISTRADOR === contraseña){
+              toast("Inicio Correctamente", {
+                icon: "✔️", duration: 3000, style: {
+                  border: '2px solid #ff7c01',
+                  padding: '10px',
+                  color: '#fff',
+                  background: '#000',
+                  borderRadius: '4%',
+                },
+              });
+              document.title = response.data[0].NOMBREADMINISTRADOR
+              historial.push("/administrador")
+            }else{
+              toast("Contraseña Incorrecta", {
+                icon: "⚠️", duration: 3000, style: {
+                  border: '2px solid #ff7c01',
+                  padding: '10px',
+                  color: '#fff',
+                  background: '#000',
+                  borderRadius: '4%',
+                },
+              });
+            }
+          }else{
+            toast("Id Invalido", {
+              icon: "⚠️", duration: 3000, style: {
+                border: '2px solid #ff7c01',
+                padding: '10px',
+                color: '#fff',
+                background: '#000',
+                borderRadius: '4%',
+              },
+            });
+          }
         })
-      //}
-    //}*/
-    //obtenerAdministrador()
-
+      }
+      if (id.substring(0, 1) > 3 && id.substring(0, 1) < 7) {
+        
+      }
+      if (id.substring(0, 1) > 6 && id.substring(0, 1) < 10) {
+        axios.get('http://localhost:8000/delegado/' + id).then(response => {
+          if (response.data.length > 0){
+            if(response.data[0].CI === contraseña){
+              toast("Inicio Correctamente", {
+                icon: "✔️", duration: 3000, style: {
+                  border: '2px solid #ff7c01',
+                  padding: '10px',
+                  color: '#fff',
+                  background: '#000',
+                  borderRadius: '4%',
+                },
+              });
+              historial.push("/delegado")
+            }else{
+              toast("Contraseña Incorrecta", {
+                icon: "⚠️", duration: 3000, style: {
+                  border: '2px solid #ff7c01',
+                  padding: '10px',
+                  color: '#fff',
+                  background: '#000',
+                  borderRadius: '4%',
+                },
+              });
+            }
+          }else{
+            toast("Id Invalido", {
+              icon: "⚠️", duration: 3000, style: {
+                border: '2px solid #ff7c01',
+                padding: '10px',
+                color: '#fff',
+                background: '#000',
+                borderRadius: '4%',
+              },
+            });
+          }
+        })
+      }
+    }
   }
 
   function esValido() {
@@ -197,7 +258,6 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
               </Logo>
               <InputBox placeholder='ID' type="text" required id='nombreCompleto' onChange={(e) => { setId(e.target.value) }}></InputBox>
               <InputBox placeholder='CONTRASEÑA' type="password" required id='nombreCompleto' onChange={(e) => { setContraseña(e.target.value) }}></InputBox>
-
             </DetalleUsuario>
             <DetalleUsuario>
               <Boton onClick={iniciarSesion}>INICIAR SESION</Boton>

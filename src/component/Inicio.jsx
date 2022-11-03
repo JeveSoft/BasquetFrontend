@@ -64,6 +64,14 @@ export const NavBtnLink = styled.button`
     text-decoration:none;
     background: none;
 `
+export const ImagenLogo = styled.img`
+    position: relative;
+    height: 100px;
+    width: 80px;
+    left: 4%;
+    top: 20px;
+    cursor: pointer;
+`
 export default function Inicio() {
   const [imageIndex, setImageIndex] = useState(0)
   const imagenes = ["1.jpg", "2.jpg", "3.jpg"]
@@ -99,7 +107,7 @@ export default function Inicio() {
     <>
       <Nav>
         <NavLink to="/">
-          <h1>logo</h1>
+         <ImagenLogo src={require('../Imagenes/Logo.png')} />
         </NavLink>
         <NavMenu>
           <NavLink to='/fixture' activeStyle>

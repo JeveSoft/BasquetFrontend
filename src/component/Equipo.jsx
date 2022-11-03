@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink } from './Nav'
+import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink, ImagenLogo } from './Nav'
 import IniciarSesion from './IniciarSesion';
 
 export default function Equipo() {
@@ -9,7 +9,7 @@ export default function Equipo() {
     <>
       <Nav>
         <NavLink to="/">
-          <h1>logo</h1>
+        <ImagenLogo src={require('../Imagenes/LogoBlanco.png')} />
         </NavLink>
         <NavMenu>
           <NavLink to='/fixture' activeStyle>

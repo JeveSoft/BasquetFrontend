@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const Nav = styled.nav`
     background: #000;   
-    height:80px;
+    height:82px;
     width: 100vw;
     display:flex;
     justify-content:flex-start;;
@@ -32,7 +32,7 @@ export const CategoryPago = styled.div`
 `
 export const GlobalStyles = styled.div`
     display: flex;
-    height: 87.8vh;
+    height: 87.5vh;
     width: 100vw;
     justify-content: center;
     align-items: center;
@@ -201,6 +201,7 @@ export const BotonNavegacion = styled.button`
     cursor: pointer;
     font-size: 20px;
     background: transparent;
+    margin-left: 9px;
     &.active{
         color: #fc4415;
     }
@@ -265,4 +266,12 @@ export const SelectNacionalidad = styled.select`
         outline: none;
         box-shadow: 3px 0px 30px rgba(163,163,163,0.4);
     }
+`
+export const ImagenLogo = styled.img`
+    position: relative;
+    height: 100px;
+    width: 80px;
+    left: 0.8%;
+    top: 10px;
+    cursor: pointer;
 `

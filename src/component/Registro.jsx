@@ -4,7 +4,7 @@ import { faChevronRight, faChevronLeft, faCircleCheck, faCircleXmark } from '@fo
 import { useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 import { useHistory } from 'react-router-dom'
-import { SelectNacionalidad, NavBoton1, LabelFile, InputFile, ContenedorBotones, CategoryPago, DetalleUsuarioPago, ImagenPago, NavMenu, BotonNavegacion, Nav, GlobalStyles, ContenedorRegistro, Titulo, DetalleUsuario, BoxCampo, TextBox, InputBox, Category, Label, Radio, NavBoton, IconoValidacion } from './EstiloRegistro'
+import { SelectNacionalidad, NavBoton1, LabelFile, InputFile, ContenedorBotones, CategoryPago, DetalleUsuarioPago, ImagenPago, NavMenu, BotonNavegacion, Nav, GlobalStyles, ContenedorRegistro, Titulo, DetalleUsuario, BoxCampo, TextBox, InputBox, Category, Label, Radio, NavBoton, IconoValidacion, ImagenLogo } from './EstiloRegistro'
 import { useEffect } from 'react';
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
@@ -427,7 +427,7 @@ export default function Registro() {
         }
     }
     const validar = () => {
-        if (ventana1){
+        if (ventana1) {
             if (fechaNacimiento != "") {
                 var fechaActual = new Date().toISOString()
                 if (fechaNacimiento < fechaActual) {
@@ -440,7 +440,7 @@ export default function Registro() {
                 }
             }
         }
-        if (ventana2){
+        if (ventana2) {
             if (cantidadJugadores != "") {
                 if (cantidadJugadores > 4 && cantidadJugadores < 20) {
                     setValidarJug('true')
@@ -463,8 +463,8 @@ export default function Registro() {
         recuperarVentana2()
     })
 
-    const agregarBaseDatos = ()=>{
-        if (!existe){
+    const agregarBaseDatos = () => {
+        if (!existe) {
             const delegado = {
                 "NOMBREDELEGADO": nombre.campo,
                 "CARNETDELEGADO": carnet.campo,
@@ -474,7 +474,7 @@ export default function Registro() {
                 "NACIONALIDAD": nacionalidad,
                 "GENERO": genero
             }
-            const equipoBd= {
+            const equipoBd = {
                 "NOMBREEQUIPO": equipo.campo,
                 "SIGLASEQUIPO": siglas.campo,
                 "CANTIDADJUGADORES": cantidadJugadores,
@@ -493,7 +493,7 @@ export default function Registro() {
                 },
             });
             historial.replace('/')
-        }else{
+        } else {
             toast("Delegado Existente", {
                 icon: "⚠️", duration: 3000, style: {
                     border: '2px solid #ff7c01',
@@ -508,11 +508,10 @@ export default function Registro() {
     return (
         <>
             <Nav>
-                <BotonNavegacion onClick={() => { historial.push('/') }}><h1>logo</h1></BotonNavegacion>
-                <NavMenu>
-                    <BotonNavegacion onClick={() => { historial.push('/fixture') }}>FIXTURE</BotonNavegacion>
-                    <BotonNavegacion onClick={() => { historial.push('/equipo') }}>EQUIPOS</BotonNavegacion>
-                    <BotonNavegacion onClick={() => { historial.push('/tabla') }}>TABLA DE POSICIONES</BotonNavegacion>
+                <ImagenLogo onClick={() => { historial.push('/') }} src={require('../Imagenes/LogoBlanco.png')} />                <NavMenu>
+                <BotonNavegacion onClick={() => { historial.push('/fixture') }}>FIXTURE</BotonNavegacion>
+                <BotonNavegacion onClick={() => { historial.push('/equipo') }}>EQUIPOS</BotonNavegacion>
+                <BotonNavegacion onClick={() => { historial.push('/tabla') }}>TABLA DE POSICIONES</BotonNavegacion>
                 </NavMenu>
             </Nav>
             <GlobalStyles>
@@ -557,7 +556,7 @@ export default function Registro() {
                             <BoxCampo>
                                 <TextBox>Fecha Nacimiento </TextBox>
                                 <InputBox type="date" valido={validarFechaN} placeholder="Fecha Nacimiento" required id="fechaNacimiento" onChange={(e) => { setFechaNacimiento(e.target.value) }} onKeyUp={validar}
-                                onBlur={validar}/>
+                                    onBlur={validar} />
                                 <IconoValidacion icon={validarFechaN === 'true' ? faCircleCheck : faCircleXmark} valido={validarFechaN} />
                             </BoxCampo>
                             <BoxCampo>
@@ -815,13 +814,13 @@ export default function Registro() {
                             <BoxCampo>
                                 <TextBox>Cantidad de Jugadores</TextBox>
                                 <InputBox type="number" valido={validarJug} placeholder="Cantidad de Jugadores" required id="cantidadJugadores" onChange={(e) => { setCantidadJugadores(e.target.value) }} onKeyUp={validar}
-                                onBlur={validar}/>
+                                    onBlur={validar} />
                                 <IconoValidacion icon={validarJug === 'true' ? faCircleCheck : faCircleXmark} valido={validarJug} />
                             </BoxCampo>
                             <BoxCampo>
                                 <TextBox>Creacion de Equipo </TextBox>
                                 <InputBox type="date" valido={validarCreacion} placeholder="Creacion de Equipo" required id="creacion" onChange={(e) => { setCreacion(e.target.value) }} onKeyUp={validar}
-                                onBlur={validar}/>
+                                    onBlur={validar} />
                                 <IconoValidacion icon={validarCreacion === 'true' ? faCircleCheck : faCircleXmark} valido={validarCreacion} />
                             </BoxCampo>
                             <BoxCampo>
@@ -869,26 +868,27 @@ export default function Registro() {
                         </DetalleUsuarioPago>
                         <ContenedorBotones>
                             <NavBoton left onClick={() => {
-                               
-                                    setVentana3(false); setVentana2(true);
-                                
+
+                                setVentana3(false); setVentana2(true);
+
                             }} >
                                 <FontAwesomeIcon icon={faChevronLeft} />
                             </NavBoton>
-                            <NavBoton right onClick={() => { 
+                            <NavBoton right onClick={() => {
                                 if (pago != "") {
                                     setVentana3(false); setVentana4(true)
-                                }else{
+                                } else {
                                     toast("Seleccionar Pago", {
-                                    icon: "⚠️", duration: 3000, style: {
-                                        border: '2px solid #ff7c01',
-                                        padding: '10px',
-                                        color: '#fff',
-                                        background: '#000',
-                                        borderRadius: '4%',
-                                    },
-                                });}
-                                }} >
+                                        icon: "⚠️", duration: 3000, style: {
+                                            border: '2px solid #ff7c01',
+                                            padding: '10px',
+                                            color: '#fff',
+                                            background: '#000',
+                                            borderRadius: '4%',
+                                        },
+                                    });
+                                }
+                            }} >
                                 <FontAwesomeIcon icon={faChevronRight} />
                             </NavBoton>
                         </ContenedorBotones>

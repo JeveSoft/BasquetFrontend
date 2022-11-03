@@ -9,6 +9,7 @@ import Tabla from "./component/Tabla"
 import IniciarSesion from "./component/IniciarSesion"
 import Registro from "./component/Registro";
 import Administrador from "./component/Administrador";
+import Delegado from "./component/Delegado";
 
 export function App() {
     return (
@@ -21,6 +22,7 @@ export function App() {
                 <Route path='/iniciarSesion' component={IniciarSesion}/>
                 <Route path='/registro' component={Registro}/>
                 <Route path='/administrador' component={Administrador}/>
+                <Route path='/delegado' component={Delegado}/>
             </Switch>
         </Router>
 

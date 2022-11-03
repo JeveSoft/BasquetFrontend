@@ -3,7 +3,7 @@ import { NavLink as Link } from 'react-router-dom';
 
 export const Nav = styled.nav`
     background: #000;   
-    height:80px;
+    height:90px;
     width: 100vw;
     display:flex;
     justify-content:flex-start;;
@@ -75,4 +75,12 @@ export const Boton = styled.button`
         color: #010606;
         
     }
+`
+export const ImagenLogo = styled.img`
+    position: relative;
+    height: 100px;
+    width: 80px;
+    left: 4%;
+    top: 20px;
+    cursor: pointer;
 `
