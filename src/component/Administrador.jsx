@@ -11,6 +11,7 @@ import ModalAñadirInformacion from './ModalAñadirInformacion'
 import ModalFoto from './ModalFoto'
 import ModalArbitro from './ModalArbitro'
 import { IconoValidacion } from './EstiloRegistro'
+import axios from 'axios'
 
 const styles = makeStyles({
     encabezado: {
@@ -75,6 +76,72 @@ export default function Administrador() {
             }
         }*/
     }
+
+    const subirPagos =()=>{
+        axios.get('http://127.0.0.1:8000/todosCampeonatos').then(response => {
+            if (response.data.length > 0){
+                var pagos = {
+                    "DESCRIPCION":"",
+                    "INIPREINSCRIPCION":"",
+                    "FINPREINSCRIPCION":"",
+                    "INIINSCRIPCION":"",
+                    "FININSCRIPCION":"",
+                    "INICIOLIGA":"",
+                    "FINLIGA":"",
+                    "PAGOMITAD":"pagomedio.jpg",
+                    "PAGOCOMPLETO":"pagocompleto.jpg"
+                }
+            }else{
+                var pagos = {
+                    "DESCRIPCION":"",
+                    "INIPREINSCRIPCION":"",
+                    "FINPREINSCRIPCION":"",
+                    "INIINSCRIPCION":"",
+                    "FININSCRIPCION":"",
+                    "INICIOLIGA":"",
+                    "FINLIGA":"",
+                    "PAGOMITAD":"pagomedio.jpg",
+                    "PAGOCOMPLETO":"pagocompleto.jpg"
+                }
+                axios.post('http://127.0.0.1:8000/añadirCampeonato',pagos).then(response => {
+                    console.log ("se subio")
+                })
+            }
+        })
+    }
+
+    const subirFechas =()=>{
+        axios.get('http://127.0.0.1:8000/todosCampeonatos').then(response => {
+            if (response.data.length > 0){
+                
+                axios.put('http://127.0.0.1:8000/acutalizarFechas/' + response.data[0].IDCAMPEONATO, 
+                {"INIPREINSCRIPCION":fechaPreInicio,
+                "FINPREINSCRIPCION":fechaPreFin,
+                "INIINSCRIPCION":fechaPreInicio,
+                "FININSCRIPCION":fechaPreFin,
+                "INICIOLIGA":fechaPreInicio,
+                "FINLIGA":fechaPreFin}).then(response => {
+                    console.log ("subio")
+                })
+            }else{
+                var fechas = {
+                    "DESCRIPCION":"",
+                    "INIPREINSCRIPCION":fechaPreInicio,
+                    "FINPREINSCRIPCION":fechaPreFin,
+                    "INIINSCRIPCION":fechaPreInicio,
+                    "FININSCRIPCION":fechaPreFin,
+                    "INICIOLIGA":fechaPreInicio,
+                    "FINLIGA":fechaPreFin,
+                    "PAGOMITAD":"",
+                    "PAGOCOMPLETO":""
+                }
+                axios.post('http://127.0.0.1:8000/añadirCampeonato',fechas).then(response => {
+                    console.log ("se subio")
+                })
+            }
+        })
+    }
+
     return (
         <ContenedorPrincipal>
             <ContenedorOpciones>
@@ -134,7 +201,7 @@ export default function Administrador() {
                                 <InputBox type="date" placeholder="Siglas Equipo" required id="siglasEquipo" onChange={(e) => { }} />
                             </BoxCampo>
                             <ContenedorBotonGuardar>
-                                <BotonGuardar>Guardar</BotonGuardar>
+                                <BotonGuardar onClick={subirFechas}>Guardar</BotonGuardar>
                             </ContenedorBotonGuardar>
                         </Detalle>
                     }
@@ -151,6 +218,9 @@ export default function Administrador() {
                                 <InputFile type="file" name="" id="completo" hidden />
                                 <LabelFile for="completo" id='imagenCompleto'>Seleccionar Archivo</LabelFile>
                             </BoxCampo>
+                            <ContenedorBotonGuardar>
+                                <BotonGuardar onClick={subirPagos}>Guardar</BotonGuardar>
+                            </ContenedorBotonGuardar>
                         </Detalle>
                     }
                 </ContenedorConfiguracion>
@@ -161,7 +231,7 @@ export default function Administrador() {
                     <Titulo2>EQUIPO</Titulo2>
                     <Nav>
                         <NavBotonMenu activo={activoMP} onClick={() => { setActivoNR(""); setActivoRS(""); setActivoR(""); setActivoMP("true"); setOpcion("1") }}><Texto >MEDIO PAGO</Texto></NavBotonMenu>
-                        <NavBotonMenu activo={activoNR} onClick={() => { setActivoNR("true"); setActivoRS(""); setActivoR(""); setActivoMP(""); setOpcion("2") }}><Texto >EQUIPOS NO REGISTRADOS</Texto></NavBotonMenu>
+                        <NavBotonMenu activo={activoNR} onClick={() => { setActivoNR("true"); setActivoRS(""); setActivoR(""); setActivoMP(""); setOpcion("2") }}><Texto >EQUIPOS NO HABILITADOS</Texto></NavBotonMenu>
                         <NavBotonMenu activo={activoRS} onClick={() => { setActivoNR(""); setActivoRS("true"); setActivoR(""); setActivoMP(""); setOpcion("3") }}><Texto >EQUIPOS SIN JUGADORES</Texto></NavBotonMenu>
                         <NavBotonMenu activo={activoR} onClick={() => { setActivoNR(""); setActivoRS(""); setActivoR("true"); setActivoMP(""); setOpcion("4") }}><Texto >EQUIPOS HABILITADOS</Texto></NavBotonMenu>
                     </Nav>

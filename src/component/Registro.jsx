@@ -10,6 +10,7 @@ import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { isValidPhoneNumber } from 'react-phone-number-input'
 import InputValidar from './InputValidar';
+import axios from 'axios';
 
 export default function Registro() {
     const [genero, setGenero] = useState("")
@@ -463,36 +464,65 @@ export default function Registro() {
         recuperarVentana2()
     })
 
+    function generarIDDelegado() {
+        var codigo = (7 + fechaNacimiento.substring(8, 10) + nombre.campo.substring(0, 3) + carnet.campo.substring(0, 2) + fechaNacimiento.substring(0, 2)).toUpperCase()
+        return codigo
+    }
+
+    function generarIDEquipo() {
+        var codigo = (equipo.campo.substring(0, 3) + creacion.substring(0, 2)) + creacion.substring(8, 10).toUpperCase()
+        return codigo
+    }
+
     const agregarBaseDatos = () => {
         if (!existe) {
             const delegado = {
-                "NOMBREDELEGADO": nombre.campo,
-                "CARNETDELEGADO": carnet.campo,
-                "CORREODELEGADO": correo.campo,
-                "NUMERODELEGADO": numeroCel,
+                "IDDELEGADO": generarIDDelegado(),
+                "NOMBRE": nombre.campo,
+                "CI": carnet.campo,
+                "EMAIL": correo.campo,
+                "CELULAR": numeroCel,
                 "FECHANACIMIENTO": fechaNacimiento,
                 "NACIONALIDAD": nacionalidad,
-                "GENERO": genero
+                "GENERO": genero,
+                "CONTRASENA": carnet.campo
             }
             const equipoBd = {
-                "NOMBREEQUIPO": equipo.campo,
-                "SIGLASEQUIPO": siglas.campo,
-                "CANTIDADJUGADORES": cantidadJugadores,
-                "CREACIONEQUIPO": numeroCel,
-                "CATEGORIA": fechaNacimiento
+                "IDEQUIPO": generarIDEquipo(),
+                "NOMBRE": equipo.campo,
+                "SIGLAS": siglas.campo,
+                "LOGO": "LOGO.JPG",
+                "CANTIDAD": cantidadJugadores,
+                "FECHACREACION": creacion,
+                "IDDELEGADO": generarIDDelegado(),
+                "CATEGORIA": categoria
             }
-            console.log(delegado)
-            console.log(equipoBd)
-            toast("Delegado Registrado", {
-                icon: "✅", duration: 3000, style: {
-                    border: '2px solid #ff7c01',
-                    padding: '10px',
-                    color: '#fff',
-                    background: '#000',
-                    borderRadius: '4%',
-                },
-            });
-            historial.replace('/')
+            var inscripcion = {
+                "IDEQUIPO": generarIDEquipo(),
+                "COMPROBANTEPAGO": "foto.jpg",
+                "PAGOMEDIO": pago,
+                "COMPROBANTEMEDIO": "",
+                "HABILITADO": "false",
+                "HABILITADOSIN": "false"
+            }
+            axios.post('http://127.0.0.1:8000/añadirDelegado', delegado).then(response => {
+                axios.post('http://127.0.0.1:8000/añadirEquipo', equipoBd).then(response => {
+                    axios.post('http://127.0.0.1:8000/añadirInscripcion', inscripcion).then(response => {
+                        console.log("se añadio")
+                        toast("Delegado Registrado", {
+                            icon: "✅", duration: 3000, style: {
+                                border: '2px solid #ff7c01',
+                                padding: '10px',
+                                color: '#fff',
+                                background: '#000',
+                                borderRadius: '4%',
+                            },
+                        });
+                        historial.replace('/')
+                    })
+
+                })
+            })
         } else {
             toast("Delegado Existente", {
                 icon: "⚠️", duration: 3000, style: {
@@ -509,9 +539,9 @@ export default function Registro() {
         <>
             <Nav>
                 <ImagenLogo onClick={() => { historial.push('/') }} src={require('../Imagenes/LogoBlanco.png')} />                <NavMenu>
-                <BotonNavegacion onClick={() => { historial.push('/fixture') }}>FIXTURE</BotonNavegacion>
-                <BotonNavegacion onClick={() => { historial.push('/equipo') }}>EQUIPOS</BotonNavegacion>
-                <BotonNavegacion onClick={() => { historial.push('/tabla') }}>TABLA DE POSICIONES</BotonNavegacion>
+                    <BotonNavegacion onClick={() => { historial.push('/fixture') }}>FIXTURE</BotonNavegacion>
+                    <BotonNavegacion onClick={() => { historial.push('/equipo') }}>EQUIPOS</BotonNavegacion>
+                    <BotonNavegacion onClick={() => { historial.push('/tabla') }}>TABLA DE POSICIONES</BotonNavegacion>
                 </NavMenu>
             </Nav>
             <GlobalStyles>
