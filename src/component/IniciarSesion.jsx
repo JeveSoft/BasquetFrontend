@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useHistory } from 'react-router'
 import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios'
 
 const Overlay = styled.div`
   width: 100vw;
@@ -117,16 +118,34 @@ export const Boton = styled.button`
     background: black;
     color: #ff7c01;
   }
-        
 `
 export default function IniciarSesion({ estado, cambiarEstado }) {
   const [id, setId] = useState("")
   const [contraseña, setContraseña] = useState("")
   const historial = useHistory();
+
+  const obtenerAdministrador = async () => {
+    const response = await axios.get('http://localhost/:8000/administrador/117SER1320')
+    console.log(response)
+  }
+
   const iniciarSesion = () => {
-    if (esValido()) {
-      historial.push("/administrador")
-    }
+    /*if (esValido()) {
+      if (id.substring(0,1) > 0 && id.substring(0,1) < 4){
+        
+        historial.push("/administrador")
+      }
+      if (id.substring(0,1) > 3 && id.substring(0,1) < 7){
+        historial.push("/arbitro")
+      }
+      if (id.substring(0,1) > 6 && id.substring(0,1) < 10){
+        axios.get('http://localhost:8000/administrador/'+ id).then(response => {
+          console.log(response.data)
+        })
+      //}
+    //}*/
+    obtenerAdministrador()
+
   }
 
   function esValido() {

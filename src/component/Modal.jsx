@@ -102,8 +102,7 @@ export const Boton = styled.button`
   &:hover{
     background: black;
     color: #ff7c01;
-  }
-        
+  }    
 `
 export const Texto = styled.div`
     display: flex;

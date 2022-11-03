@@ -147,7 +147,7 @@ export const TextBox = styled.span`
     font-weight: 500;
     margin-bottom: 5px;
 `
-export default function ModalRegistroArbitro({ estado, cambiarEstado }) {
+export default function ModalRegistroArbitro({ estado, cambiarEstado,codigo}) {
     var [nombre, setNombre] = useState({ campo: "", valido: null })
     var [carnet, setCarnet] = useState({ campo: "", valido: null })
     var [correo, setCorreo] = useState({ campo: "", valido: null })
@@ -380,9 +380,15 @@ export default function ModalRegistroArbitro({ estado, cambiarEstado }) {
 
     const registrarArbitro = () => {
         if (esValidoDelegado()) {
+            generarCodigo()
             cambiarEstado(false)
             limpiarCampo()
         }
+    }
+
+    function generarCodigo (){
+        codigo = (codigo +fechaNacimiento.substring(8,10)+nombre.campo.substring(0,3)+carnet.campo.substring(0,2)+fechaNacimiento.substring(0,2)).toUpperCase()
+        console.log(codigo)
     }
 
     const limpiarCampo = () => {

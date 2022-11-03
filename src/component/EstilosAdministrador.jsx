@@ -13,13 +13,10 @@ export const ContenedorOpciones = styled.div`
 `
 export const Imagen = styled.img`
     position: absolute;
-    height: 300px;
-    width: 300px;
-    left: 49%;
+    height: 400px;
+    width: 325px;
+    left: 47%;
     top: 28%;
-    border: 3px solid white;
-    background: black;
-    border-radius: 50%;
 `
 export const Titulo = styled.div`
     font-size: 25px;
@@ -79,19 +76,8 @@ export const Botones = styled.button`
 export const ContenedorBotones = styled.div`
     width: 20%;
     height:50vh;
-    top: 230px;
+    top: 250px;
     position: absolute;
-`
-export const BotonLogo = styled.button`
-    position: absolute;
-    height: 100px;
-    width: 100px;
-    top: 100px;
-    left: 6%;
-    border-radius: 50%;
-    border: 3px solid white;
-    background: black;
-    margin-bottom: 50px;
 `
 export const ContenedorConfiguracion = styled.div`
     left: 15%;
@@ -111,9 +97,15 @@ flex-wrap: wrap;
 justify-content:space-between;
 margin-top: 70px;
 `
+export const ContenedorBotonGuardar = styled.div`
+left: 79.6%;
+position: relative;
+`
 export const BoxCampo = styled.div`
-    margin: 20px 0 5px 0;
+    margin: 20px 0 12px 0;
     width: cal(100% / 2 - 20px);
+    position: relative;
+    z-index:90;
 `
 export const TextBox = styled.span`
     margin-top: 5px;
@@ -127,21 +119,28 @@ export const InputBox = styled.input`
     width: 100%;
     outline: none;
     border-radius: 5px;
-    border: 1px solid #ff7c01;
-    padding-left: 15px;
-    padding-right: 15px;
+    border: 2px solid #ff7c01;
+    padding: 0 40px 0 10px ;
     font-size: 16px;
     border-bottom-width: 2px;
-    transition: all 0.3s ease;
-    &:focus{
-        border-color: black;
-    }
-    &:valid{
-        border-color: green;
-    }
+    transition: all 0.1s ease;
+    line-height: 45px;
     &:hover{
-        border-color: black;
-    }  
+        border: 2px solid black;
+        outline: none;
+        box-shadow: 3px 0px 30px rgba(163,163,163,0.4);
+    }
+    &:focus{
+        border: 2px solid black;
+        outline: none;
+        box-shadow: 3px 0px 30px rgba(163,163,163,0.4);
+    }
+    ${props => props.valido === 'true' && css`
+        border: 3px solid green;
+    `}
+    ${props => props.valido === 'false' && css`
+        border: 3px solid red;
+    `}
 `
 export const BotonAñadir = styled.button`
 width: 32%;
@@ -163,6 +162,7 @@ font-weight: 1000;
     border: 2px solid black;
     color: black;
 }
+
 `
 export const ContenedorBoton = styled.div`
 `
@@ -256,7 +256,7 @@ svg{
     height: 100%;
 }
 ${props => props.id === 'true' && css`
-        width: 110px;
+        width: 112px;
     `}
     ${props => props.name === 'true' && css`
         width: 320px;
@@ -297,4 +297,27 @@ export const NavBotonMenu = styled.button`
     ${props => props.activo === '' && css`
         color: #fff;
     `}
+`
+export const ImagenLogo = styled.img`
+    position: absolute;
+    height: 200px;
+    width: 150px;
+    top: 100px;
+    left: 4%;
+    cursor: pointer;
+`
+export const BotonGuardar = styled.button`
+  background: #ff7c01;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  transition: all 0.2s ease-in-out;
+  width: 110px;
+  margin: 10px;
+  height: 40px;
+  font-size: 16px;
+  left: 50%;
+  &:hover{
+    background: black;
+    color: #ff7c01;
+  } 
 `

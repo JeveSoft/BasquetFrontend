@@ -461,7 +461,6 @@ export default function Registro() {
     useEffect(function () {
         recuperarVentana1()
         recuperarVentana2()
-        validar()
     })
 
     const agregarBaseDatos = ()=>{
@@ -557,7 +556,8 @@ export default function Registro() {
                             </BoxCampo>
                             <BoxCampo>
                                 <TextBox>Fecha Nacimiento </TextBox>
-                                <InputBox type="date" valido={validarFechaN} placeholder="Fecha Nacimiento" required id="fechaNacimiento" onChange={(e) => { setFechaNacimiento(e.target.value) }} />
+                                <InputBox type="date" valido={validarFechaN} placeholder="Fecha Nacimiento" required id="fechaNacimiento" onChange={(e) => { setFechaNacimiento(e.target.value) }} onKeyUp={validar}
+                                onBlur={validar}/>
                                 <IconoValidacion icon={validarFechaN === 'true' ? faCircleCheck : faCircleXmark} valido={validarFechaN} />
                             </BoxCampo>
                             <BoxCampo>
@@ -814,12 +814,14 @@ export default function Registro() {
                             </BoxCampo>
                             <BoxCampo>
                                 <TextBox>Cantidad de Jugadores</TextBox>
-                                <InputBox type="number" valido={validarJug} placeholder="Cantidad de Jugadores" required id="cantidadJugadores" onChange={(e) => { setCantidadJugadores(e.target.value) }} />
+                                <InputBox type="number" valido={validarJug} placeholder="Cantidad de Jugadores" required id="cantidadJugadores" onChange={(e) => { setCantidadJugadores(e.target.value) }} onKeyUp={validar}
+                                onBlur={validar}/>
                                 <IconoValidacion icon={validarJug === 'true' ? faCircleCheck : faCircleXmark} valido={validarJug} />
                             </BoxCampo>
                             <BoxCampo>
                                 <TextBox>Creacion de Equipo </TextBox>
-                                <InputBox type="date" valido={validarCreacion} placeholder="Creacion de Equipo" required id="creacion" onChange={(e) => { setCreacion(e.target.value) }} />
+                                <InputBox type="date" valido={validarCreacion} placeholder="Creacion de Equipo" required id="creacion" onChange={(e) => { setCreacion(e.target.value) }} onKeyUp={validar}
+                                onBlur={validar}/>
                                 <IconoValidacion icon={validarCreacion === 'true' ? faCircleCheck : faCircleXmark} valido={validarCreacion} />
                             </BoxCampo>
                             <BoxCampo>
