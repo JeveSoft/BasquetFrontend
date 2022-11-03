@@ -144,7 +144,7 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
         })
       //}
     //}*/
-    obtenerAdministrador()
+    //obtenerAdministrador()
 
   }
 
