@@ -74,6 +74,9 @@ export const BoxCampo = styled.div`
     width: cal(100% / 2 - 20px);
     position: relative;
     z-index:90;
+    ${props => props.tipo == 'categoria' && css`
+        margin: 5px 10px 0px 10px;
+    `}
 `
 export const BoxBoton = styled.div`
     margin: 20px 0 12px 0;

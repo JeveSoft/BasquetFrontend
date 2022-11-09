@@ -36,6 +36,8 @@ export default function Registro() {
     var [validarCreacion, setValidarCreacion] = useState(null)
     const [pago, setPago] = useState("")
     var existe = false
+    const url = "http://127.0.0.1:8000/"
+
     const expresiones = {
         nombre: /^[a-zA-ZÀ-ÿ\s]{3,40}$/, // Letras y espacios, pueden llevar acentos.
         correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
@@ -505,9 +507,9 @@ export default function Registro() {
                 "HABILITADO": "false",
                 "HABILITADOSIN": "false"
             }
-            axios.post('http://127.0.0.1:8000/añadirDelegado', delegado).then(response => {
-                axios.post('http://127.0.0.1:8000/añadirEquipo', equipoBd).then(response => {
-                    axios.post('http://127.0.0.1:8000/añadirInscripcion', inscripcion).then(response => {
+            axios.post(url+'añadirDelegado', delegado).then(response => {
+                axios.post(url+'añadirEquipo', equipoBd).then(response => {
+                    axios.post(url+'añadirInscripcion', inscripcion).then(response => {
                         console.log("se añadio")
                         toast("Delegado Registrado", {
                             icon: "✅", duration: 3000, style: {
@@ -532,7 +534,7 @@ export default function Registro() {
                     background: '#000',
                     borderRadius: '4%',
                 },
-            });
+            })
         }
     }
     return (
@@ -898,9 +900,7 @@ export default function Registro() {
                         </DetalleUsuarioPago>
                         <ContenedorBotones>
                             <NavBoton left onClick={() => {
-
                                 setVentana3(false); setVentana2(true);
-
                             }} >
                                 <FontAwesomeIcon icon={faChevronLeft} />
                             </NavBoton>

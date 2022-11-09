@@ -1,8 +1,10 @@
-import React from 'react'
-import styled from 'styled-components'
+import React, { useState } from 'react'
+import styled, { css } from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import toast, { Toaster } from 'react-hot-toast';
+import InputValidar from './InputValidar';
+import axios from 'axios';
 
 const Overlay = styled.div`
   width: 100vw;
@@ -24,6 +26,10 @@ const ContenedorModal = styled.div`
   box-shadow: rgba(100,100,111,0.2) 8px 7px 29px 8px;
   padding: 20px;
   top: 25px;
+  ${props => props.tipo === 'categoria' && css`
+       width: 550px;
+       height: 290px;
+    `}
 `
 const EncabezadoModal = styled.div`
   display: flex;
@@ -44,6 +50,9 @@ export const Titulo = styled.div`
       width: 125%;
     background: linear-gradient(135deg,#000000,#ff7c01);
     }
+    ${props => props.tipo === 'categoria' && css`
+       width: 405px;
+    `}
 `
 const BotonCerrar = styled.button`
   position: absolute;
@@ -111,7 +120,7 @@ export const Texto = styled.div`
     
 `
 export const BoxCampo = styled.div`
-    margin: 20px 0 12px 0;
+    margin: 10px 0 5px 0;
     width: cal(100% / 2 - 20px);
     position: relative;
     z-index:90;
@@ -148,32 +157,135 @@ export const LabelFile = styled.label`
 `
 export const InputFile = styled.input`
 `
-export default function ModalAñadirInformacion({ estado, cambiarEstado }) {
+export const ContenedorBotones = styled.div`
+    width: 50%;
+    position: absolute;
+    margin-top: 165px;
+`
+export default function ModalAñadirInformacion({ estado, cambiarEstado, tipo, titulo }) {
+    const [categoria, setCategoria] = useState("")
+    const [edadMin, setEdadMin] = useState("")
+    const [edadMax, setEdadMax] = useState("")
+    const url = "http://127.0.0.1:8000/"
+
+    const validarEdad = () => {
+        var valido = false
+        if (edadMin.campo < edadMax.campo){
+            valido = true
+        }
+        return valido
+    }
+
+    const subirDatos = () => {
+        if (validarEdad()){
+            const datos = {
+                "NOMBRECATEGORIA": categoria.campo,
+                "EDADMIN": edadMin.campo,
+                "EDADMAX": edadMax.campo
+            }
+            axios.post(url+'añadirCategoria',datos).then(response => {
+                setCategoria("")
+                setEdadMin("")
+                setEdadMax("")
+                cambiarEstado(false)
+                console.log("se subio")
+            })
+        }else{
+            toast("Verificar Edad Minima y Edad Maxima", {
+                icon: "⚠️", duration: 3000, style: {
+                    border: '2px solid #ff7c01',
+                    padding: '10px',
+                    color: '#fff',
+                    background: '#000',
+                    borderRadius: '4%',
+                },
+            });
+        }
+    }
+
+    const cancelar = () => {
+        setCategoria("")
+        setEdadMin("")
+        setEdadMax("")
+        cambiarEstado(false)
+    }
 
     return (
         <>
             {estado &&
                 <Overlay>
-                    <ContenedorModal>
+                    <ContenedorModal tipo={tipo}>
                         <EncabezadoModal>
-                            <Titulo>AÑADIR IMAGENES</Titulo>
+                            <Titulo tipo={tipo}>{titulo}</Titulo>
                         </EncabezadoModal>
                         <BotonCerrar onClick={() => { cambiarEstado(false) }}>
                             <FontAwesomeIcon icon={faXmark} />
                         </BotonCerrar>
-                        <DetalleUsuario>
-                        <BoxCampo>
-                                <TextBox>TITULO DE IMAGEN</TextBox>
-                                <InputBox type="text"  placeholder="Titulo Imagen" required id="cantidadJugadores"/>
-                            </BoxCampo>
-                            <BoxCampo>
-                                <TextBox>IMAGEN</TextBox>
-                                <InputFile type="file" name="" id="foto" hidden />
-                                <LabelFile for="foto" id='imagenLogo'>Seleccionar Archivo</LabelFile>
-                            </BoxCampo>
-                            <Boton onClick={() => { cambiarEstado(false) }}>Guardar</Boton>
-                            <Boton onClick={() => { cambiarEstado(false) }}>Cancelar</Boton>
-                        </DetalleUsuario>
+                        {
+                            tipo == 'reglamento' &&
+                            <DetalleUsuario>
+                                <BoxCampo>
+                                    <TextBox>REGLAMENTO</TextBox>
+                                    <InputFile type="file" name="" id="foto" hidden />
+                                    <LabelFile for="foto" id='imagenLogo'>Seleccionar Archivo</LabelFile>
+                                </BoxCampo>
+                                <Boton onClick={() => { cambiarEstado(false) }}>Guardar</Boton>
+                                <Boton onClick={() => { cambiarEstado(false) }}>Cancelar</Boton>
+                            </DetalleUsuario>
+                        }
+                        {tipo == 'categoria' &&
+                            <DetalleUsuario tipo='categoria'>
+                                <InputValidar
+                                    estado={categoria}
+                                    cambiarEstado={setCategoria}
+                                    tipo="text"
+                                    label="Categoria"
+                                    placeholder="Categoria"
+                                    name="categoria"
+                                    classe='categoria'
+                                    expresionRegular={/^[a-zA-Z0-9-]{3,15}/}
+                                />
+                                <InputValidar
+                                    estado={edadMin}
+                                    cambiarEstado={setEdadMin}
+                                    tipo="number"
+                                    label="Edad Minima"
+                                    placeholder="Edad Minima"
+                                    name="edadMinima"
+                                    classe='categoria'
+                                    expresionRegular={/^[0-9]/}
+                                />
+                                <InputValidar
+                                    estado={edadMax}
+                                    cambiarEstado={setEdadMax}
+                                    tipo="number"
+                                    label="Edad Maxima"
+                                    placeholder="Edad Maxima"
+                                    name="edadMaxima"
+                                    classe='categoria'
+                                    expresionRegular={/^[0-9]/}
+                                />
+                                <ContenedorBotones>
+                                    <Boton onClick={subirDatos}>Guardar</Boton>
+                                    <Boton onClick={cancelar}>Cancelar</Boton>
+                                </ContenedorBotones>
+                            </DetalleUsuario>
+                        }
+                        {tipo == 'informacion' &&
+                            <DetalleUsuario>
+                                <BoxCampo>
+                                    <TextBox>TITULO DE IMAGEN</TextBox>
+                                    <InputBox type="text" placeholder="Titulo Imagen" required id="cantidadJugadores" />
+                                </BoxCampo>
+                                <BoxCampo>
+                                    <TextBox>IMAGEN</TextBox>
+                                    <InputFile type="file" name="" id="foto" hidden />
+                                    <LabelFile for="foto" id='imagenLogo'>Seleccionar Archivo</LabelFile>
+                                </BoxCampo>
+                                <Boton onClick={() => { cambiarEstado(false) }}>Guardar</Boton>
+                                <Boton onClick={() => { cambiarEstado(false) }}>Cancelar</Boton>
+                            </DetalleUsuario>
+                        }
                     </ContenedorModal>
                 </Overlay>
             }

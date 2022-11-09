@@ -123,11 +123,13 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
   const [id, setId] = useState("")
   const [contraseña, setContraseña] = useState("")
   const historial = useHistory();
+  const url = "http://127.0.0.1:8000/"
+
 
   const iniciarSesion = () => {
     if (esValido()) {
       if (id.substring(0, 1) > 0 && id.substring(0, 1) < 4) {
-        axios.get('http://localhost:8000/administrador/' + id).then(response => {
+        axios.get(url+'administrador/' + id).then(response => {
           if (response.data.length > 0){
             if(response.data[0].CIADMINISTRADOR === contraseña){
               toast("Inicio Correctamente", {
@@ -169,7 +171,7 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
         
       }
       if (id.substring(0, 1) > 6 && id.substring(0, 1) < 10) {
-        axios.get('http://localhost:8000/delegado/' + id).then(response => {
+        axios.get(url+'delegado/' + id).then(response => {
           if (response.data.length > 0){
             if(response.data[0].CI === contraseña){
               toast("Inicio Correctamente", {

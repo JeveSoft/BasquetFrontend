@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCircleDollarToSlot, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useHistory } from 'react-router'
 import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios'
 
 const Overlay = styled.div`
   width: 100vw;
@@ -112,16 +113,29 @@ export const Texto = styled.div`
     margin-bottom: 20px;
     text-align: center;
 `
-export default function Modal({ estado, cambiarEstado, mensaje, tipo }) {
+export default function Modal({ estado, cambiarEstado, mensaje, tipo, datos }) {
   const historial = useHistory();
+  const url = "http://127.0.0.1:8000/"
+
   const verificarProceso = () => {
     if (tipo == 'eliminarFoto') {
       console.log("eliminado")
       cambiarEstado(false)
     } else {
       if (tipo == 'eliminarArbitro') {
-        console.log("eliminado arbitro")
-        cambiarEstado(false)
+        axios.delete('http://127.0.0.1:8000/eliminarArbitro/' + datos.IDARBITRO).then(response => {
+          toast("Arbitro Eliminado con Exito", {
+            icon: "✅", duration: 3000, style: {
+              border: '2px solid #ff7c01',
+              padding: '10px',
+              color: '#fff',
+              background: '#000',
+              borderRadius: '4%',
+            },
+          })
+          cambiarEstado(false)
+        })
+
       } else {
         if (tipo == 'registro') {
 

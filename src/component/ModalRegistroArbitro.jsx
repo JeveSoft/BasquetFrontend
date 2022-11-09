@@ -7,6 +7,7 @@ import InputValidar from './InputValidar'
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { Category, IconoValidacion, Label, Radio, SelectNacionalidad } from './EstiloRegistro'
+import axios from 'axios';
 
 const Overlay = styled.div`
   width: 100vw;
@@ -156,7 +157,8 @@ export default function ModalRegistroArbitro({ estado, cambiarEstado,codigo}) {
     var [nacionalidad, setNacionalidad] = useState("")
     var [genero, setGenero] = useState("")
     var [validarFechaN, setValidarFechaN] = useState(null)
-    
+    const url = "http://127.0.0.1:8000/"
+
     const expresiones = {
         nombre: /^[a-zA-ZÀ-ÿ\s]{3,40}$/, // Letras y espacios, pueden llevar acentos.
         correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
@@ -379,16 +381,37 @@ export default function ModalRegistroArbitro({ estado, cambiarEstado,codigo}) {
     }
 
     const registrarArbitro = () => {
-        if (esValidoDelegado()) {
+        if (esValidoDelegado()) {                
             generarCodigo()
-            cambiarEstado(false)
-            limpiarCampo()
+            var datos = {
+                "IDARBITRO": codigo,
+                "NOMBRE": nombre.campo,
+                "CI": carnet.campo,
+                "EMAIL": correo.campo,
+                "CELULAR": celular,
+                "FECHANACIMIENTO": fechaNacimiento,
+                "NACIONALIDAD": nacionalidad,
+                "GENERO": genero
+              }
+            axios.post(url+'añadirArbitro',datos).then(response =>{
+                toast("Registro Arbitro Exitoso", {
+                    icon: "✅", duration: 3000, style: {
+                        border: '2px solid #ff7c01',
+                        padding: '10px',
+                        color: '#fff',
+                        background: '#000',
+                        borderRadius: '4%',
+                    },
+                });
+                cambiarEstado(false)
+                limpiarCampo()
+            })
+            
         }
     }
 
     function generarCodigo (){
         codigo = (codigo +fechaNacimiento.substring(8,10)+nombre.campo.substring(0,3)+carnet.campo.substring(0,2)+fechaNacimiento.substring(0,2)).toUpperCase()
-        console.log(codigo)
     }
 
     const limpiarCampo = () => {

@@ -97,15 +97,21 @@ flex-wrap: wrap;
 justify-content:space-between;
 margin-top: 70px;
 `
-export const ContenedorBotonGuardar = styled.div`
-left: 79.6%;
-position: relative;
-`
 export const BoxCampo = styled.div`
     margin: 20px 0 12px 0;
     width: cal(100% / 2 - 20px);
     position: relative;
     z-index:90;
+`
+export const BoxCampoBoton = styled.div`
+    width: 250px;
+    position: relative;
+    ${props => props.text === 'true' && css`
+        margin: 20px 0 0 0;
+    `}
+    ${props => props.text === 'false' && css`
+        margin: 5px 0 0 0;
+`}
 `
 export const TextBox = styled.span`
     margin-top: 5px;
@@ -143,7 +149,7 @@ export const InputBox = styled.input`
     `}
 `
 export const BotonAñadir = styled.button`
-width: 32%;
+width: 100%;
 height: 40px;
 color: #ff7c01;
 outline: none;
@@ -165,6 +171,7 @@ font-weight: 1000;
 
 `
 export const ContenedorBoton = styled.div`
+    width: 32%;
 `
 export const InputFile = styled.input`
 `
@@ -200,6 +207,10 @@ export const ContenedorTable = styled.div`
     ${props => props.ventana === '2' && css`
         margin-top: 70px;
     `}
+    ${props => props.ventana === 'categoria' && css`
+        height: 350px;
+        margin-top: 0px;
+    `}
 
 `
 export const Letra = styled.h1`
@@ -213,8 +224,16 @@ svg{
     width: 100%;
     height: 100%;
 }
-    ${props => props.img === 'true' && css`
+${props => props.img === 'true' && css`
         width: 35px;
+    `}
+    ${props => props.img1 === 'true' && css`
+        width: 35px;
+        left: 35px;
+    `}
+    ${props => props.img2 === 'true' && css`
+        width: 35px;
+        left: 23px;
     `}
     ${props => props.equipo === 'true' && css`
         width: 216px;
@@ -246,14 +265,14 @@ export const BotonVer = styled.button`
 
 `
 export const LetraCuerpo = styled.h1`
-color: black;    
+color: black;  
 width: 216px;
 font-size: 18px;
 font-weight: 1000;
 margin-top: 10px;
 svg{
+    height: 20px;
     width: 100%;
-    height: 100%;
 }
 ${props => props.id === 'true' && css`
         width: 112px;
@@ -305,19 +324,4 @@ export const ImagenLogo = styled.img`
     top: 100px;
     left: 4%;
     cursor: pointer;
-`
-export const BotonGuardar = styled.button`
-  background: #ff7c01;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  transition: all 0.2s ease-in-out;
-  width: 110px;
-  margin: 10px;
-  height: 40px;
-  font-size: 16px;
-  left: 50%;
-  &:hover{
-    background: black;
-    color: #ff7c01;
-  } 
 `

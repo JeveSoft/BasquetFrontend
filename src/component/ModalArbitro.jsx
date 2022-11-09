@@ -17,7 +17,7 @@ const Overlay = styled.div`
 `
 const ContenedorModal = styled.div`
   width: 500px;
-  min-height: 500px;
+  height: 400px;
   background: #fff;
   position: relative;
   border-radius: 5px;
@@ -62,30 +62,49 @@ const BotonCerrar = styled.button`
   }
 `
 export const DetalleUsuario = styled.div`
-    margin: 25px;
+    margin: 25px 25px 25px 25px;
     width: 400px;
     height: 400px;
-    background: black;
 `
-export default function ModalArbitro({ estado, cambiarEstado }) {
+export const BoxCampo = styled.div`
+    width: 400px;
+    position: relative;
+    z-index:90;
+`
+export const TextBox = styled.span`
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+    font-size: 20px;
+`
+export default function ModalArbitro({ estado, cambiarEstado, datos }) {
   return (
-<>
-            {estado &&
-                <Overlay>
-                    <ContenedorModal>
-                        <EncabezadoModal>
-                            <Titulo>DATOS DE ARBITRO</Titulo>
-                        </EncabezadoModal>
-                        <BotonCerrar onClick={() => { cambiarEstado(false) }}>
-                            <FontAwesomeIcon icon={faXmark} />
-                        </BotonCerrar>
-                        <DetalleUsuario>
-
-                        </DetalleUsuario>
-                    </ContenedorModal>
-                </Overlay>
-            }
-            <Toaster reverseOrder={true} position="top-right" />
-        </>
+    <>
+      {estado &&
+        <Overlay>
+          <ContenedorModal>
+            <EncabezadoModal>
+              <Titulo>DATOS DE ARBITRO</Titulo>
+            </EncabezadoModal>
+            <BotonCerrar onClick={() => { cambiarEstado(false) }}>
+              <FontAwesomeIcon icon={faXmark} />
+            </BotonCerrar>
+            <DetalleUsuario>
+              <BoxCampo>
+                <TextBox>ID Arbitro = {datos.IDARBITRO}</TextBox>
+                <TextBox>Nombre Arbitro = {datos.NOMBRE}</TextBox>
+                <TextBox>CI Arbitro = {datos.CI}</TextBox>
+                <TextBox>Email Arbitro = {datos.EMAIL}</TextBox>
+                <TextBox>Celular Arbitro = {datos.CELULAR}</TextBox>
+                <TextBox>Fecha Nacimiento Arbitro = {datos.FECHANACIMIENTO}</TextBox>
+                <TextBox>Nacionalidad Arbitro = {datos.NACIONALIDAD}</TextBox>
+                <TextBox>Genero Arbitro = {datos.GENERO}</TextBox>
+              </BoxCampo>
+            </DetalleUsuario>
+          </ContenedorModal>
+        </Overlay>
+      }
+      <Toaster reverseOrder={true} position="top-right" />
+    </>
   )
 }
