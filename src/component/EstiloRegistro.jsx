@@ -86,6 +86,9 @@ export const TextBox = styled.span`
     display: block;
     font-weight: 500;
     margin-bottom: 5px;
+    ${props => props.centro === 'true' && css`
+        text-align: center;
+    `}
 `
 export const InputBox = styled.input`
     height: 45px;
@@ -114,6 +117,11 @@ export const InputBox = styled.input`
     ${props => props.valido === 'false' && css`
         border: 3px solid red;
     `}
+    ${props => props.centro === 'true' && css`
+        text-align: center;
+    `}
+    
+
 `
 export const IconoValidacion = styled(FontAwesomeIcon)`
     position: absolute;
@@ -277,4 +285,8 @@ export const ImagenLogo = styled.img`
     left: 0.8%;
     top: 10px;
     cursor: pointer;
+`
+export const Img = styled.img`
+  width: 35px;
+  height: 35px;
 `

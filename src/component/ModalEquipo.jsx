@@ -1,9 +1,11 @@
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
-import React from 'react'
+import React, { useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast'
 import styled, { css } from 'styled-components'
+import { Img } from './EstilosAdministrador'
+import emailjs from '@emailjs/browser';
 
 const Overlay = styled.div`
   width: 100vw;
@@ -136,6 +138,46 @@ font-weight: 1000;
 `
 export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
     const url = "http://127.0.0.1:8000/"
+    const [espera, setEspera] = useState('false')
+    const [inhabilitado, setInhabilitado] = useState(false)
+
+    const recordar = () => {
+        setEspera('true')
+        setInhabilitado(true)
+        var templateParams = {
+            correo: datos.EMAIL,
+            nombre: datos.NOMBREDELEGADO,
+            mensaje: "Nos complace informar que su registro del equipo '"+datos.NOMBREEQUIPO+"' no fue completado exitosamente, le invitamos a terminar el proceso de registro."
+        }
+        emailjs.send('service_486x7hq', 'template_fmrp7yq', templateParams, 'uygKcXnl0C2x-7MkG')
+            .then(function (response) {
+                setEspera('false')
+                setInhabilitado(false)
+                cambiarEstado(false)
+                console.log('SUCCESS!', response.status, response.text);
+            }, function (error) {
+                console.log('FAILED...', error);
+            });
+    }
+
+    const recordarJugadores = () => {
+        setEspera('true')
+        setInhabilitado(true)
+        var templateParams = {
+            mensaje: "Nos complace informar que el equipo '"+datos.NOMBREEQUIPO+"' no fue habilitado exitosamente, le invitamos a terminar el proceso de habilitacion.",            
+            correo: datos.EMAIL,
+            nombre: datos.NOMBREDELEGADO,
+        }
+        emailjs.send('service_486x7hq', 'template_fmrp7yq', templateParams, 'uygKcXnl0C2x-7MkG')
+            .then(function (response) {
+                setEspera('false')
+                setInhabilitado(false)
+                cambiarEstado(false)
+                console.log('SUCCESS!', response.status, response.text);
+            }, function (error) {
+                console.log('FAILED...', error);
+            });
+    }
 
     return (
         <>
@@ -174,7 +216,10 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                                     <TextBox>Comprobante = <ImgComprobante></ImgComprobante></TextBox>
                                 </BoxCampo>
                                 <ContenedorBoton>
-                                    <BotonAñadir tipo={tipo}>Recordar</BotonAñadir>
+                                    <BotonAñadir tipo={tipo} disabled={inhabilitado} onClick={recordar}>
+                                        {espera == 'false' && "Recordar"}
+                                        {espera == 'true' && <Img src={require('../Imagenes/Carga.gif')} />}
+                                    </BotonAñadir>
                                 </ContenedorBoton>
                             </DetalleUsuario>
                         }
@@ -212,8 +257,12 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                                     </>
                                 }
                                 <ContenedorBoton>
-                                    <BotonAñadir tipo={tipo} onClick={() => {
-                                        axios.put(url+'habilitarSinJugador/' + datos.IDINSCRIPCION,{"HABILITADO": "SinJugador"}).then(response => {
+                                    <BotonAñadir disabled={inhabilitado} tipo={tipo} onClick={() => {
+                                        setEspera('true')
+                                        setInhabilitado(true)
+                                        axios.put(url + 'habilitarSinJugador/' + datos.IDINSCRIPCION, { "HABILITADO": "SinJugador" }).then(response => {
+                                            setEspera('false')
+                                            setInhabilitado(false)
                                             toast("Equipo Habilitado Con Exito", {
                                                 icon: "✅", duration: 3000, style: {
                                                     border: '2px solid #ff7c01',
@@ -225,8 +274,11 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                                             })
                                             cambiarEstado(false)
                                         })
-                                    }}>Habilitar</BotonAñadir>
-                                    <BotonAñadir tipo={tipo} onClick={() => {cambiarEstado(false)}}>Cancelar</BotonAñadir>
+                                    }}>
+                                        {espera == 'false' && "Habilitar"}
+                                        {espera == 'true' && <Img src={require('../Imagenes/Carga.gif')} />}
+                                    </BotonAñadir>
+                                    <BotonAñadir tipo={tipo} disabled={inhabilitado} onClick={() => { cambiarEstado(false) }}>Cancelar</BotonAñadir>
                                 </ContenedorBoton>
                             </DetalleUsuario>
                         }
@@ -264,7 +316,10 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                                     </>
                                 }
                                 <ContenedorBoton>
-                                    <BotonAñadir tipo={tipo} onClick={() => { }}>Recordar</BotonAñadir>
+                                    <BotonAñadir disabled={inhabilitado} tipo={tipo} onClick={recordarJugadores}>
+                                        {espera == 'false' && "Recordar"}
+                                        {espera == 'true' && <Img src={require('../Imagenes/Carga.gif')} />}
+                                    </BotonAñadir>
                                 </ContenedorBoton>
                             </DetalleUsuario>
                         }
@@ -303,7 +358,7 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                                 }
                                 <ContenedorBoton>
                                     <BotonAñadir tipo={tipo} onClick={() => { }}>Habilitar</BotonAñadir>
-                                    <BotonAñadir tipo={tipo} onClick={() => {cambiarEstado(false)}}>Cancelar</BotonAñadir>
+                                    <BotonAñadir tipo={tipo} onClick={() => { cambiarEstado(false) }}>Cancelar</BotonAñadir>
                                 </ContenedorBoton>
                             </DetalleUsuario>
                         }

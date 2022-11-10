@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleDollarToSlot, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useHistory } from 'react-router'
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios'
+import { Img } from './EstilosAdministrador'
 
 const Overlay = styled.div`
   width: 100vw;
@@ -104,6 +105,9 @@ export const Boton = styled.button`
     background: black;
     color: #ff7c01;
   }    
+  ${props => props.espera === 'true' && css`
+  border: 2px solid black;
+`}
 `
 export const Texto = styled.div`
     display: flex;
@@ -116,14 +120,31 @@ export const Texto = styled.div`
 export default function Modal({ estado, cambiarEstado, mensaje, tipo, datos }) {
   const historial = useHistory();
   const url = "http://127.0.0.1:8000/"
+  const [espera, setEspera] = useState('false')
+  const [inhabilitado, setInhabilitado] = useState(false)
 
   const verificarProceso = () => {
+    setEspera('true')
+    setInhabilitado(true)
     if (tipo == 'eliminarFoto') {
-      console.log("eliminado")
-      cambiarEstado(false)
+      axios.delete(url + 'eliminarFoto/' + datos.TITULO).then(response => {
+        toast("Foto Eliminado con Exito", {
+          icon: "✅", duration: 3000, style: {
+            border: '2px solid #ff7c01',
+            padding: '10px',
+            color: '#fff',
+            background: '#000',
+            borderRadius: '4%',
+          },
+        })
+        setEspera('false')
+        setInhabilitado(false)
+        cambiarEstado(false)
+      })
+
     } else {
       if (tipo == 'eliminarArbitro') {
-        axios.delete('http://127.0.0.1:8000/eliminarArbitro/' + datos.IDARBITRO).then(response => {
+        axios.delete(url + 'eliminarArbitro/' + datos.IDARBITRO).then(response => {
           toast("Arbitro Eliminado con Exito", {
             icon: "✅", duration: 3000, style: {
               border: '2px solid #ff7c01',
@@ -133,6 +154,8 @@ export default function Modal({ estado, cambiarEstado, mensaje, tipo, datos }) {
               borderRadius: '4%',
             },
           })
+          setEspera('false')
+          setInhabilitado(false)
           cambiarEstado(false)
         })
 
@@ -159,8 +182,11 @@ export default function Modal({ estado, cambiarEstado, mensaje, tipo, datos }) {
               <FontAwesomeIcon icon={faXmark} />
             </BotonCerrar>
             <DetalleUsuario>
-              <Boton onClick={() => { verificarProceso() }}>Si</Boton>
-              <Boton onClick={() => { cambiarEstado(false) }}>No</Boton>
+              <Boton espera={espera} disabled={inhabilitado} onClick={() => { verificarProceso() }}>
+                {espera == 'false' && "Si"}
+                {espera == 'true' && <Img src={require('../Imagenes/Carga.gif')} />}
+              </Boton>
+              <Boton espera={espera} disabled={inhabilitado} onClick={() => { cambiarEstado(false) }}>No</Boton>
             </DetalleUsuario>
           </ContenedorModal>
         </Overlay>

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { resolveValue, Toaster } from 'react-hot-toast';
 import InputValidar from './InputValidar';
 import axios from 'axios';
 
@@ -109,7 +109,9 @@ export const Boton = styled.button`
     background: black;
     color: #ff7c01;
   }
-        
+  ${props => props.espera === 'true' && css`
+    border: 2px solid black;
+    `}  
 `
 export const Texto = styled.div`
     display: flex;
@@ -162,36 +164,103 @@ export const ContenedorBotones = styled.div`
     position: absolute;
     margin-top: 165px;
 `
+export const Img = styled.img`
+  width: 35px;
+  height: 35px;
+`
 export default function ModalAñadirInformacion({ estado, cambiarEstado, tipo, titulo }) {
-    const [categoria, setCategoria] = useState("")
-    const [edadMin, setEdadMin] = useState("")
-    const [edadMax, setEdadMax] = useState("")
+    const [categoria, setCategoria] = useState({ campo: "", valido: null })
+    const [tituloFoto, setTituloFoto] = useState({ campo: "", valido: null })
+    const [edadMin, setEdadMin] = useState({ campo: "", valido: null })
+    const [edadMax, setEdadMax] = useState({ campo: "", valido: null })
+    const [nombreFoto, setNombreFoto] = useState("foto.jpg")
+
     const url = "http://127.0.0.1:8000/"
+    const [espera, setEspera] = useState('false')
+    const [inhabilitado, setInhabilitado] = useState(false)
 
     const validarEdad = () => {
         var valido = false
-        if (edadMin.campo < edadMax.campo){
+        if (edadMin.campo < edadMax.campo) {
             valido = true
         }
         return valido
     }
-
-    const subirDatos = () => {
-        if (validarEdad()){
+    const subirDatosInformacion = () =>{
+        if (tituloFoto.valido === 'true'){
+            setEspera('true')
+            setInhabilitado(true)
             const datos = {
-                "NOMBRECATEGORIA": categoria.campo,
-                "EDADMIN": edadMin.campo,
-                "EDADMAX": edadMax.campo
+                "TITULO": tituloFoto.campo,
+                "NOMBREFOTO": nombreFoto,
             }
-            axios.post(url+'añadirCategoria',datos).then(response => {
-                setCategoria("")
-                setEdadMin("")
-                setEdadMax("")
+            axios.post(url+'añadirInformacion',datos).then(response => {
+                setTituloFoto({ campo: "", valido: null })
+                setEspera('false')
+                setInhabilitado(false)
                 cambiarEstado(false)
-                console.log("se subio")
             })
         }else{
-            toast("Verificar Edad Minima y Edad Maxima", {
+            toast("Verificar Titulo", {
+                icon: "⚠️", duration: 3000, style: {
+                    border: '2px solid #ff7c01',
+                    padding: '10px',
+                    color: '#fff',
+                    background: '#000',
+                    borderRadius: '4%',
+                },
+            });
+        }
+    }
+    const subirDatos = () => {
+        if (categoria.valido === 'true') {
+            if (validarEdad()) {
+                setEspera('true')
+                setInhabilitado(true)
+                const datos = {
+                    "NOMBRECATEGORIA": categoria.campo,
+                    "EDADMIN": edadMin.campo,
+                    "EDADMAX": edadMax.campo
+                }
+                axios.get(url + 'existeCategoria/' + categoria.campo).then(response => {
+                    if (response.data.length <= 0) {
+                        axios.post(url + 'añadirCategoria', datos).then(response1 => {
+                            setEspera('false')
+                            setInhabilitado(false)
+                            setCategoria({ campo: "", valido: null })
+                            setEdadMin({ campo: "", valido: null })
+                            setEdadMax({ campo: "", valido: null })
+                            cambiarEstado(false)
+                            console.log("se subio")
+                        })
+                    } else {
+                        setEspera('false')
+                        setInhabilitado(false)
+                        toast("La Categoria Ya Existe", {
+                            icon: "⚠️", duration: 3000, style: {
+                                border: '2px solid #ff7c01',
+                                padding: '10px',
+                                color: '#fff',
+                                background: '#000',
+                                borderRadius: '4%',
+                            },
+                        });
+                    }
+                })
+
+            } else {
+                toast("Verificar Edad Minima y Edad Maxima", {
+                    icon: "⚠️", duration: 3000, style: {
+                        border: '2px solid #ff7c01',
+                        padding: '10px',
+                        color: '#fff',
+                        background: '#000',
+                        borderRadius: '4%',
+                    },
+                });
+            }
+        } else {
+            toast("Verificar Categoria", {
                 icon: "⚠️", duration: 3000, style: {
                     border: '2px solid #ff7c01',
                     padding: '10px',
@@ -204,9 +273,9 @@ export default function ModalAñadirInformacion({ estado, cambiarEstado, tipo, t
     }
 
     const cancelar = () => {
-        setCategoria("")
-        setEdadMin("")
-        setEdadMax("")
+        setCategoria({ campo: "", valido: null })
+        setEdadMin({ campo: "", valido: null })
+        setEdadMax({ campo: "", valido: null })
         cambiarEstado(false)
     }
 
@@ -218,11 +287,11 @@ export default function ModalAñadirInformacion({ estado, cambiarEstado, tipo, t
                         <EncabezadoModal>
                             <Titulo tipo={tipo}>{titulo}</Titulo>
                         </EncabezadoModal>
-                        <BotonCerrar onClick={() => { cambiarEstado(false) }}>
+                        <BotonCerrar onClick={cancelar}>
                             <FontAwesomeIcon icon={faXmark} />
                         </BotonCerrar>
                         {
-                            tipo == 'reglamento' &&
+                            tipo === 'reglamento' &&
                             <DetalleUsuario>
                                 <BoxCampo>
                                     <TextBox>REGLAMENTO</TextBox>
@@ -233,7 +302,8 @@ export default function ModalAñadirInformacion({ estado, cambiarEstado, tipo, t
                                 <Boton onClick={() => { cambiarEstado(false) }}>Cancelar</Boton>
                             </DetalleUsuario>
                         }
-                        {tipo == 'categoria' &&
+                        {
+                            tipo === 'categoria' &&
                             <DetalleUsuario tipo='categoria'>
                                 <InputValidar
                                     estado={categoria}
@@ -243,7 +313,7 @@ export default function ModalAñadirInformacion({ estado, cambiarEstado, tipo, t
                                     placeholder="Categoria"
                                     name="categoria"
                                     classe='categoria'
-                                    expresionRegular={/^[a-zA-Z0-9-]{3,15}/}
+                                    expresionRegular={/^[a-zA-Z0-9-+]{3,15}/}
                                 />
                                 <InputValidar
                                     estado={edadMin}
@@ -266,24 +336,38 @@ export default function ModalAñadirInformacion({ estado, cambiarEstado, tipo, t
                                     expresionRegular={/^[0-9]/}
                                 />
                                 <ContenedorBotones>
-                                    <Boton onClick={subirDatos}>Guardar</Boton>
-                                    <Boton onClick={cancelar}>Cancelar</Boton>
+                                    <Boton espera={espera} disabled={inhabilitado} onClick={subirDatos}>
+                                        {espera == 'false' && "Guardar"}
+                                        {espera == 'true' && <Img src={require('../Imagenes/Carga.gif')} />}
+                                    </Boton>
+                                    <Boton espera={espera} disabled={inhabilitado} onClick={cancelar}>Cancelar</Boton>
                                 </ContenedorBotones>
                             </DetalleUsuario>
                         }
-                        {tipo == 'informacion' &&
+                        {
+                            tipo == 'informacion' &&
                             <DetalleUsuario>
-                                <BoxCampo>
-                                    <TextBox>TITULO DE IMAGEN</TextBox>
-                                    <InputBox type="text" placeholder="Titulo Imagen" required id="cantidadJugadores" />
-                                </BoxCampo>
+                                <InputValidar
+                                    estado={tituloFoto}
+                                    cambiarEstado={setTituloFoto}
+                                    tipo="text"
+                                    label="Titulo Imagen"
+                                    placeholder="Titulo Imagen"
+                                    name="tituloImagen"
+                                    classe='categoria'
+                                    expresionRegular={/^[a-zA-Z0-9-+]{3,15}/}
+                                    centro = {'true'}
+                                />
                                 <BoxCampo>
                                     <TextBox>IMAGEN</TextBox>
                                     <InputFile type="file" name="" id="foto" hidden />
                                     <LabelFile for="foto" id='imagenLogo'>Seleccionar Archivo</LabelFile>
                                 </BoxCampo>
-                                <Boton onClick={() => { cambiarEstado(false) }}>Guardar</Boton>
-                                <Boton onClick={() => { cambiarEstado(false) }}>Cancelar</Boton>
+                                <Boton espera={espera} disabled={inhabilitado} onClick={subirDatosInformacion}>
+                                    {espera == 'false' && "Guardar"}
+                                    {espera == 'true' && <Img src={require('../Imagenes/Carga.gif')} />}
+                                </Boton>
+                                <Boton espera={espera} disabled={inhabilitado} onClick={cancelar}>Cancelar</Boton>
                             </DetalleUsuario>
                         }
                     </ContenedorModal>

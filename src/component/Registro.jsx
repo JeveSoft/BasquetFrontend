@@ -4,13 +4,14 @@ import { faChevronRight, faChevronLeft, faCircleCheck, faCircleXmark } from '@fo
 import { useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 import { useHistory } from 'react-router-dom'
-import { SelectNacionalidad, NavBoton1, LabelFile, InputFile, ContenedorBotones, CategoryPago, DetalleUsuarioPago, ImagenPago, NavMenu, BotonNavegacion, Nav, GlobalStyles, ContenedorRegistro, Titulo, DetalleUsuario, BoxCampo, TextBox, InputBox, Category, Label, Radio, NavBoton, IconoValidacion, ImagenLogo } from './EstiloRegistro'
+import { SelectNacionalidad, NavBoton1, LabelFile, InputFile, ContenedorBotones, CategoryPago, DetalleUsuarioPago, ImagenPago, NavMenu, BotonNavegacion, Nav, GlobalStyles, ContenedorRegistro, Titulo, DetalleUsuario, BoxCampo, TextBox, InputBox, Category, Label, Radio, NavBoton, IconoValidacion, ImagenLogo, Img } from './EstiloRegistro'
 import { useEffect } from 'react';
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { isValidPhoneNumber } from 'react-phone-number-input'
 import InputValidar from './InputValidar';
 import axios from 'axios';
+import emailjs from '@emailjs/browser';
 
 export default function Registro() {
     const [genero, setGenero] = useState("")
@@ -35,9 +36,49 @@ export default function Registro() {
     var [validarFechaN, setValidarFechaN] = useState(null)
     var [validarCreacion, setValidarCreacion] = useState(null)
     const [pago, setPago] = useState("")
-    var existe = false
+    const [listaCategoria, setListaCategoria] = useState([])
     const url = "http://127.0.0.1:8000/"
+    const [espera, setEspera] = useState('false')
+    const [inhabilitado, setInhabilitado] = useState(false)
 
+    const existeDelegado = () => {
+        axios.get(url + 'delegadoNombre/' + carnet.campo).then(response => {
+            if (response.data.length <= 0) {
+                obtenerCategoria()
+            } else {
+                toast("Existe Delegado", {
+                    icon: "⚠️", duration: 3000, style: {
+                        border: '2px solid #ff7c01',
+                        padding: '10px',
+                        color: '#fff',
+                        background: '#000',
+                        borderRadius: '4%',
+                    },
+                })
+            }
+        })
+
+
+    }
+    const existeEquipo = () => {
+        axios.get(url + 'obtenerEquipo/' + equipo.campo).then(response => {
+            if (response.data.length <= 0) {
+                setVentana2(false)
+                setVentana3(true)
+            } else {
+                toast("Existe Equipo", {
+                    icon: "⚠️", duration: 3000, style: {
+                        border: '2px solid #ff7c01',
+                        padding: '10px',
+                        color: '#fff',
+                        background: '#000',
+                        borderRadius: '4%',
+                    },
+                })
+            }
+        })
+
+    }
     const expresiones = {
         nombre: /^[a-zA-ZÀ-ÿ\s]{3,40}$/, // Letras y espacios, pueden llevar acentos.
         correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
@@ -256,7 +297,19 @@ export default function Registro() {
             });
             valido = false
         } else {
-            if (equipo.length < 3 || equipo.length > 30) {
+            if (equipo.valido === 'false') {
+                valido = false
+                toast("Equipo Invalido", {
+                    icon: "⚠️", duration: 3000, style: {
+                        border: '2px solid #ff7c01',
+                        padding: '10px',
+                        color: '#fff',
+                        background: '#000',
+                        borderRadius: '4%',
+                    },
+                });
+            }
+            if (equipo.campo.length < 3 || equipo.campo.length > 30) {
                 valido = false
                 toast("Nombre Equipo Invalido", {
                     icon: "⚠️", duration: 3000, style: {
@@ -281,7 +334,7 @@ export default function Registro() {
             });
             valido = false
         } else {
-            if (siglas.length < 3 || siglas.length > 10) {
+            if (siglas.campo.length < 3 || siglas.campo.length > 10) {
                 valido = false
                 toast("Siglas De Equipo Invalido", {
                     icon: "⚠️", duration: 3000, style: {
@@ -375,14 +428,12 @@ export default function Registro() {
     }
     const registroEquipo = () => {
         if (esValidoDelegado()) {
-            setVentana1(false)
-            setVentana2(true)
+            existeDelegado()
         }
     }
     const registroPago = () => {
         if (esValidoEquipo()) {
-            setVentana2(false)
-            setVentana3(true)
+            existeEquipo()
         }
     }
     const registroDelegado = () => {
@@ -461,6 +512,14 @@ export default function Registro() {
             }
         }
     }
+    const obtenerCategoria = () => {
+        axios.get(url + 'categorias').then(response => {
+            setListaCategoria(response.data)
+            setVentana1(false)
+            setVentana2(true)
+
+        })
+    }
     useEffect(function () {
         recuperarVentana1()
         recuperarVentana2()
@@ -476,67 +535,78 @@ export default function Registro() {
         return codigo
     }
 
-    const agregarBaseDatos = () => {
-        if (!existe) {
-            const delegado = {
-                "IDDELEGADO": generarIDDelegado(),
-                "NOMBRE": nombre.campo,
-                "CI": carnet.campo,
-                "EMAIL": correo.campo,
-                "CELULAR": numeroCel,
-                "FECHANACIMIENTO": fechaNacimiento,
-                "NACIONALIDAD": nacionalidad,
-                "GENERO": genero,
-                "CONTRASENA": carnet.campo
-            }
-            const equipoBd = {
-                "IDEQUIPO": generarIDEquipo(),
-                "NOMBRE": equipo.campo,
-                "SIGLAS": siglas.campo,
-                "LOGO": "LOGO.JPG",
-                "CANTIDAD": cantidadJugadores,
-                "FECHACREACION": creacion,
-                "IDDELEGADO": generarIDDelegado(),
-                "CATEGORIA": categoria
-            }
-            var inscripcion = {
-                "IDEQUIPO": generarIDEquipo(),
-                "COMPROBANTEPAGO": "foto.jpg",
-                "PAGOMEDIO": pago,
-                "COMPROBANTEMEDIO": "",
-                "HABILITADO": "false",
-                "HABILITADOSIN": "false"
-            }
-            axios.post(url+'añadirDelegado', delegado).then(response => {
-                axios.post(url+'añadirEquipo', equipoBd).then(response => {
-                    axios.post(url+'añadirInscripcion', inscripcion).then(response => {
-                        console.log("se añadio")
-                        toast("Delegado Registrado", {
-                            icon: "✅", duration: 3000, style: {
-                                border: '2px solid #ff7c01',
-                                padding: '10px',
-                                color: '#fff',
-                                background: '#000',
-                                borderRadius: '4%',
-                            },
-                        });
-                        historial.replace('/')
-                    })
-
-                })
-            })
-        } else {
-            toast("Delegado Existente", {
-                icon: "⚠️", duration: 3000, style: {
-                    border: '2px solid #ff7c01',
-                    padding: '10px',
-                    color: '#fff',
-                    background: '#000',
-                    borderRadius: '4%',
-                },
-            })
+    const enviarCredenciales = () => {
+        var templateParams = {
+            nombre: nombre.campo,
+            correo: correo.campo,
+            fecha: new Date().toLocaleDateString(),
+            equipo: equipo.campo,
+            id: generarIDDelegado(),
+            ci: carnet.campo
         }
+        emailjs.send('service_486x7hq', 'template_ct1it0m', templateParams, 'uygKcXnl0C2x-7MkG')
+            .then(function (response) {
+                console.log('SUCCESS!', response.status, response.text);
+            }, function (error) {
+                console.log('FAILED...', error);
+            });
     }
+
+    const agregarBaseDatos = () => {
+        setEspera('true')
+        setInhabilitado(true)
+        const delegado = {
+            "IDDELEGADO": generarIDDelegado(),
+            "NOMBRE": nombre.campo,
+            "CI": carnet.campo,
+            "EMAIL": correo.campo,
+            "CELULAR": numeroCel,
+            "FECHANACIMIENTO": fechaNacimiento,
+            "NACIONALIDAD": nacionalidad,
+            "GENERO": genero,
+            "CONTRASENA": carnet.campo
+        }
+        const equipoBd = {
+            "IDEQUIPO": generarIDEquipo(),
+            "NOMBRE": equipo.campo,
+            "SIGLAS": siglas.campo,
+            "LOGO": "LOGO.JPG",
+            "CANTIDAD": cantidadJugadores,
+            "FECHACREACION": creacion,
+            "IDDELEGADO": generarIDDelegado(),
+            "CATEGORIA": categoria
+        }
+        var inscripcion = {
+            "IDEQUIPO": generarIDEquipo(),
+            "COMPROBANTEPAGO": "foto.jpg",
+            "PAGOMEDIO": pago,
+            "COMPROBANTEMEDIO": "",
+            "HABILITADO": "false",
+            "HABILITADOSIN": "false"
+        }
+        axios.post(url + 'añadirDelegado', delegado).then(response => {
+            axios.post(url + 'añadirEquipo', equipoBd).then(response => {
+                axios.post(url + 'añadirInscripcion', inscripcion).then(response => {
+                    toast("Delegado Registrado", {
+                        icon: "✅", duration: 3000, style: {
+                            border: '2px solid #ff7c01',
+                            padding: '10px',
+                            color: '#fff',
+                            background: '#000',
+                            borderRadius: '4%',
+                        },
+                    });
+                    enviarCredenciales()
+                    setEspera('false')
+                    setInhabilitado(false)
+                    historial.replace('/')
+                })
+
+            })
+        })
+
+    }
+
     return (
         <>
             <Nav>
@@ -859,10 +929,14 @@ export default function Registro() {
                                 <TextBox>Categoria</TextBox>
                                 <SelectNacionalidad type="text" placeholder="Categoria" required id="categoria" onChange={(e) => { setCategoria(e.target.value) }}>
                                     <option value="">Categoria</option>
-                                    <option value="35">+35</option>
-                                    <option value="45">+45</option>
-                                    <option value="55">+55</option>
-                                    <option value="Femenino">Femenino</option>
+                                    {
+                                        listaCategoria.map(datos => {
+                                            return (
+                                                <option value={datos.NOMBRECATEGORIA}>{datos.NOMBRECATEGORIA}</option>
+
+                                            )
+                                        })
+                                    }
                                 </SelectNacionalidad>
                             </BoxCampo>
                         </DetalleUsuario>
@@ -933,11 +1007,17 @@ export default function Registro() {
                             <LabelFile for="logo" id='comprobantePago'>Seleccionar Archivo</LabelFile>
                         </CategoryPago>
                         <ContenedorBotones>
-                            <NavBoton left onClick={() => { setVentana4(false); setVentana3(true); }} >
+                            <NavBoton disabled={inhabilitado} left onClick={() => { setVentana4(false); setVentana3(true); }} >
                                 <FontAwesomeIcon icon={faChevronLeft} />
                             </NavBoton>
-                            <NavBoton right onClick={agregarBaseDatos}>
-                                <FontAwesomeIcon icon={faChevronRight} />
+                            <NavBoton disabled={inhabilitado} right onClick={agregarBaseDatos}>
+                                {
+                                    espera == 'false' && <FontAwesomeIcon icon={faChevronRight} />
+                                }
+
+                                {
+                                    espera == 'true' && <Img src={require('../Imagenes/Carga.gif')} />
+                                }
                             </NavBoton>
                         </ContenedorBotones>
                     </ContenedorRegistro>

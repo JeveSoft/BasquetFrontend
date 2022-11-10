@@ -1,7 +1,7 @@
 import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import React from 'react'
 import { BoxCampo, IconoValidacion, InputBox, TextBox } from './EstiloRegistro'
-export default function InputValidar({ estado, cambiarEstado, tipo, label, placeholder, name, expresionRegular , classe}) {
+export default function InputValidar({ estado, cambiarEstado, tipo, label, placeholder, name, expresionRegular , classe,centro}) {
     const validacion = () => {
         if(expresionRegular){
 			if(expresionRegular.test(estado.campo)){
@@ -13,8 +13,9 @@ export default function InputValidar({ estado, cambiarEstado, tipo, label, place
     }
     return (
         <BoxCampo tipo = {classe}>
-            <TextBox>{label}</TextBox>
+            <TextBox centro = {centro} >{label}</TextBox>
             <InputBox
+                centro = {centro}
                 type={tipo}
                 placeholder={placeholder}
                 id={name}

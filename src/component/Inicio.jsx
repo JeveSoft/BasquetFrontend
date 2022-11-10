@@ -71,7 +71,8 @@ export const ImagenLogo = styled.img`
     left: 4%;
     top: 20px;
     cursor: pointer;
-`
+    padding:0%;
+    `
 export default function Inicio() {
   const [imageIndex, setImageIndex] = useState(0)
   const imagenes = ["1.jpg", "2.jpg", "3.jpg"]

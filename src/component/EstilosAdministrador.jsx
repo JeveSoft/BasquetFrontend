@@ -170,6 +170,18 @@ font-weight: 1000;
 }
 
 `
+export const Img = styled.img`
+  width: 35px;
+  height: 35px;
+`
+export const ImgCarga = styled.img`
+  width: 75%;
+  height: 75%;
+  margin-left: 10%;
+  margin-top:10%
+
+  
+`
 export const ContenedorBoton = styled.div`
     width: 32%;
 `

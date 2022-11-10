@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useHistory } from 'react-router'
@@ -106,6 +106,11 @@ export const Logo = styled.div`
     height: 80%;
   }
 `
+export const Img = styled.img`
+  width: 35px;
+  height: 35px;
+`
+
 export const Boton = styled.button`
   background: #ff7c01;
   margin-bottom: 10px;
@@ -114,24 +119,33 @@ export const Boton = styled.button`
   width: 200px;
   height: 40px;
   font-size: 16px;
+  text-align: center;
   &:hover{
     background: black;
     color: #ff7c01;
   }
+  ${props => props.espera === 'true' && css`
+  border: 3px solid black;
+    `}
 `
 export default function IniciarSesion({ estado, cambiarEstado }) {
   const [id, setId] = useState("")
   const [contraseña, setContraseña] = useState("")
   const historial = useHistory();
   const url = "http://127.0.0.1:8000/"
-
+  const [espera, setEspera] = useState('false')
+  const [inhabilitado, setInhabilitado] = useState(false)
+  const [inicio, setInicio] = useState("INICIAR SESION")
 
   const iniciarSesion = () => {
     if (esValido()) {
+      setEspera('true')
+      setInicio("")
+      setInhabilitado(true)
       if (id.substring(0, 1) > 0 && id.substring(0, 1) < 4) {
-        axios.get(url+'administrador/' + id).then(response => {
-          if (response.data.length > 0){
-            if(response.data[0].CIADMINISTRADOR === contraseña){
+        axios.get(url + 'administrador/' + id).then(response => {
+          if (response.data.length > 0) {
+            if (response.data[0].CIADMINISTRADOR === contraseña) {
               toast("Inicio Correctamente", {
                 icon: "✔️", duration: 3000, style: {
                   border: '2px solid #ff7c01',
@@ -142,8 +156,12 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
                 },
               });
               document.title = response.data[0].NOMBREADMINISTRADOR
+              setEspera('false')
               historial.push("/administrador")
-            }else{
+            } else {
+              setInhabilitado(false)
+              setEspera('false')
+              setInicio("INICIAR SESION")
               toast("Contraseña Incorrecta", {
                 icon: "⚠️", duration: 3000, style: {
                   border: '2px solid #ff7c01',
@@ -154,7 +172,10 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
                 },
               });
             }
-          }else{
+          } else {
+            setInhabilitado(false)
+            setEspera('false')
+            setInicio("INICIAR SESION")
             toast("Id Invalido", {
               icon: "⚠️", duration: 3000, style: {
                 border: '2px solid #ff7c01',
@@ -168,12 +189,12 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
         })
       }
       if (id.substring(0, 1) > 3 && id.substring(0, 1) < 7) {
-        
+
       }
       if (id.substring(0, 1) > 6 && id.substring(0, 1) < 10) {
-        axios.get(url+'delegado/' + id).then(response => {
-          if (response.data.length > 0){
-            if(response.data[0].CI === contraseña){
+        axios.get(url + 'delegado/' + id).then(response => {
+          if (response.data.length > 0) {
+            if (response.data[0].CI === contraseña) {
               toast("Inicio Correctamente", {
                 icon: "✔️", duration: 3000, style: {
                   border: '2px solid #ff7c01',
@@ -184,7 +205,7 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
                 },
               });
               historial.push("/delegado")
-            }else{
+            } else {
               toast("Contraseña Incorrecta", {
                 icon: "⚠️", duration: 3000, style: {
                   border: '2px solid #ff7c01',
@@ -195,7 +216,7 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
                 },
               });
             }
-          }else{
+          } else {
             toast("Id Invalido", {
               icon: "⚠️", duration: 3000, style: {
                 border: '2px solid #ff7c01',
@@ -262,7 +283,12 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
               <InputBox placeholder='CONTRASEÑA' type="password" required id='nombreCompleto' onChange={(e) => { setContraseña(e.target.value) }}></InputBox>
             </DetalleUsuario>
             <DetalleUsuario>
-              <Boton onClick={iniciarSesion}>INICIAR SESION</Boton>
+              <Boton espera = {espera}disabled={inhabilitado} onClick={iniciarSesion}>{inicio}
+                {
+                  espera == 'true' && <Img src={require('../Imagenes/Carga.gif')} />
+                }
+
+              </Boton>
             </DetalleUsuario>
             <DetalleUsuario>
               <Boton onClick={() => { historial.push('/registro') }}>REGISTRARSE</Boton>

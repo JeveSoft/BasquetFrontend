@@ -8,6 +8,7 @@ import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { Category, IconoValidacion, Label, Radio, SelectNacionalidad } from './EstiloRegistro'
 import axios from 'axios';
+import { Img } from './EstilosAdministrador';
 
 const Overlay = styled.div`
   width: 100vw;
@@ -135,7 +136,9 @@ export const Boton = styled.button`
     background: black;
     color: #ff7c01;
   }
-        
+  ${props => props.espera === 'true' && css`
+  border: 2px solid black;
+`}    
 `
 export const BoxCampo = styled.div`
     margin: 20px 0 12px 0;
@@ -148,7 +151,7 @@ export const TextBox = styled.span`
     font-weight: 500;
     margin-bottom: 5px;
 `
-export default function ModalRegistroArbitro({ estado, cambiarEstado,codigo}) {
+export default function ModalRegistroArbitro({ estado, cambiarEstado, codigo }) {
     var [nombre, setNombre] = useState({ campo: "", valido: null })
     var [carnet, setCarnet] = useState({ campo: "", valido: null })
     var [correo, setCorreo] = useState({ campo: "", valido: null })
@@ -158,6 +161,8 @@ export default function ModalRegistroArbitro({ estado, cambiarEstado,codigo}) {
     var [genero, setGenero] = useState("")
     var [validarFechaN, setValidarFechaN] = useState(null)
     const url = "http://127.0.0.1:8000/"
+    const [espera, setEspera] = useState('false')
+    const [inhabilitado, setInhabilitado] = useState(false)
 
     const expresiones = {
         nombre: /^[a-zA-ZÀ-ÿ\s]{3,40}$/, // Letras y espacios, pueden llevar acentos.
@@ -381,7 +386,9 @@ export default function ModalRegistroArbitro({ estado, cambiarEstado,codigo}) {
     }
 
     const registrarArbitro = () => {
-        if (esValidoDelegado()) {                
+        if (esValidoDelegado()) {
+            setEspera('true')
+            setInhabilitado(true)
             generarCodigo()
             var datos = {
                 "IDARBITRO": codigo,
@@ -391,9 +398,10 @@ export default function ModalRegistroArbitro({ estado, cambiarEstado,codigo}) {
                 "CELULAR": celular,
                 "FECHANACIMIENTO": fechaNacimiento,
                 "NACIONALIDAD": nacionalidad,
-                "GENERO": genero
-              }
-            axios.post(url+'añadirArbitro',datos).then(response =>{
+                "GENERO": genero,
+                "CONTRASENA": carnet.campo
+            }
+            axios.post(url + 'añadirArbitro', datos).then(response => {
                 toast("Registro Arbitro Exitoso", {
                     icon: "✅", duration: 3000, style: {
                         border: '2px solid #ff7c01',
@@ -403,21 +411,23 @@ export default function ModalRegistroArbitro({ estado, cambiarEstado,codigo}) {
                         borderRadius: '4%',
                     },
                 });
+                setEspera('false')
+                setInhabilitado(false)
                 cambiarEstado(false)
                 limpiarCampo()
             })
-            
+
         }
     }
 
-    function generarCodigo (){
-        codigo = (codigo +fechaNacimiento.substring(8,10)+nombre.campo.substring(0,3)+carnet.campo.substring(0,2)+fechaNacimiento.substring(0,2)).toUpperCase()
+    function generarCodigo() {
+        codigo = (codigo + fechaNacimiento.substring(8, 10) + nombre.campo.substring(0, 3) + carnet.campo.substring(0, 2) + fechaNacimiento.substring(0, 2)).toUpperCase()
     }
 
     const limpiarCampo = () => {
-        setNombre({campo : "" , valido :null})
-        setCarnet({campo : "" , valido :null})
-        setCorreo({campo : "" , valido :null})
+        setNombre({ campo: "", valido: null })
+        setCarnet({ campo: "", valido: null })
+        setCorreo({ campo: "", valido: null })
         setCelular("")
         setFechaNacimiento("")
         setNacionalidad("")
@@ -678,7 +688,7 @@ export default function ModalRegistroArbitro({ estado, cambiarEstado,codigo}) {
                                 </SelectNacionalidad>
                             </BoxCampo>
                         </DetalleUsuario>
-                            <TituloGenero>Genero</TituloGenero>
+                        <TituloGenero>Genero</TituloGenero>
                         <Category>
                             <Label for="dot-1">
                                 <Radio type='radio' name='gender' id="dot-1" value="Hombre" checked={genero === "Hombre" ? true : false} onChange={cambioGenero} />
@@ -690,8 +700,11 @@ export default function ModalRegistroArbitro({ estado, cambiarEstado,codigo}) {
                             </Label>
                         </Category>
                         <ContenedorBotones>
-                            <Boton onClick={registrarArbitro}>GUARDAR</Boton>
-                            <Boton onClick={() => { cambiarEstado(false); limpiarCampo() }}>CANCELAR</Boton>
+                            <Boton espera={espera} disabled={inhabilitado} onClick={registrarArbitro}>
+                                {espera == 'false' && "GUARDAR"}
+                                {espera == 'true' && <Img src={require('../Imagenes/Carga.gif')} />}
+                            </Boton>
+                            <Boton espera={espera} disabled={inhabilitado} onClick={() => { cambiarEstado(false); limpiarCampo() }}>CANCELAR</Boton>
                         </ContenedorBotones>
                     </ContenedorModal>
                 </Overlay>

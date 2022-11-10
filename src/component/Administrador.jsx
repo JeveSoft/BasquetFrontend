@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { Texto, NavBotonMenu, Nav, BotonVer, Letra, ContenedorTable, BotonAñadir, InputFile, LabelFile, ContenedorBoton, BoxCampo, TextBox, InputBox, Titulo2, ContenedorConfiguracion, ContenedorBotones, Botones, Titulo, ContenedorPrincipal, ContenedorOpciones, Imagen, Detalle, LetraCuerpo, ImagenLogo, BoxCampoBoton } from './EstilosAdministrador'
+import { Texto, NavBotonMenu, Nav, BotonVer, Letra, ContenedorTable, BotonAñadir, InputFile, LabelFile, ContenedorBoton, BoxCampo, TextBox, InputBox, Titulo2, ContenedorConfiguracion, ContenedorBotones, Botones, Titulo, ContenedorPrincipal, ContenedorOpciones, Imagen, Detalle, LetraCuerpo, ImagenLogo, BoxCampoBoton, Img, ImgCarga } from './EstilosAdministrador'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTruckFast, faFileInvoice, faTrashCan, faCirclePlay, faImage, faTrash, faCircleUser, faUserTie, faEnvelopeOpenText, faCalendarCheck, faCheckCircle, faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 import Modal from './Modal';
@@ -81,11 +81,18 @@ export default function Administrador() {
     const [listaHabilitadoSin, setListaHabilitadoSin] = useState([])
     const [obtuvoH, setObtuvoH] = useState(false)
     const [datos, setDatos] = useState([])
+    const [obtuvoC, setObtuvoC] = useState(false)
+    const [obtuvoFechas, setObtuvoFechas] = useState(false)
+    const [obtuvoA, setObtuvoA] = useState(false)
+    const [obtuvoI, setObtuvoI] = useState(false)
     const [listaArbitro, setListaArbitro] = useState([])
     const [listaHabilitado, setListaHabilitado] = useState([])
+    const [listaInformacion, setListaInformacion] = useState([])
     const [elEquipo, setElEquipo] = useState([])
     const [tipoEquipo, settipoEquipo] = useState([])
     const url = "http://127.0.0.1:8000/"
+    const [espera, setEspera] = useState('false')
+    const [inhabilitado, setInhabilitado] = useState(false)
 
     const validarFechaFinLiga = () => {
         if (fechaFinLiga != "") {
@@ -98,7 +105,6 @@ export default function Administrador() {
             setValidarFinLiga(null)
         }
     }
-
     const validarFechaInicioLiga = () => {
         if (fechaInicioLiga != "") {
             if (fechaInicioLiga > fechaFin && validarInicio == 'true' && validarFin == 'true' && validarPreFin == 'true' && validarPreInicio == 'true') {
@@ -110,7 +116,6 @@ export default function Administrador() {
             setValidarInicioLiga(null)
         }
     }
-
     const validarFechaInicio = () => {
         if (fechaInicio != "") {
             if (fechaInicio > fechaPreFin && validarPreFin == 'true' && validarPreInicio == 'true') {
@@ -122,7 +127,6 @@ export default function Administrador() {
             setValidarInicio(null)
         }
     }
-
     const validarFechaFin = () => {
         if (fechaFin != "") {
             if (fechaFin > fechaInicio && validarInicio == 'true' && validarPreFin == 'true' && validarPreInicio == 'true') {
@@ -134,7 +138,6 @@ export default function Administrador() {
             setValidarFin(null)
         }
     }
-
     const validarFechaPreFin = () => {
         if (fechaPreFin != "") {
             if (fechaPreFin > fechaPreInicio && validarPreInicio == 'true') {
@@ -146,7 +149,6 @@ export default function Administrador() {
             setValidarPreFin(null)
         }
     }
-
     const validarFechaPreInicio = () => {
         if (fechaPreInicio != "") {
             if (!empezo) {
@@ -164,7 +166,6 @@ export default function Administrador() {
             setValidarPreInicio(null)
         }
     }
-
     const subirPagos = () => {
         axios.get(url + 'todosCampeonatos').then(response => {
             if (response.data.length > 0) {
@@ -197,8 +198,9 @@ export default function Administrador() {
             }
         })
     }
-
     const subirFechas = () => {
+        setEspera('true')
+        setInhabilitado(true)
         if (validarFinLiga == 'true' && validarInicioLiga == 'true' && validarInicio == 'true' && validarFin == 'true' && validarPreFin == 'true' && validarPreInicio == 'true') {
             axios.get(url + 'todosCampeonatos').then(response => {
                 if (response.data.length > 0) {
@@ -211,6 +213,8 @@ export default function Administrador() {
                             "INICIOLIGA": fechaInicioLiga,
                             "FINLIGA": fechaFinLiga
                         }).then(response => {
+                            setEspera('false')
+                            setInhabilitado(false)
                             toast("Fechas Establecidas", {
                                 icon: "✅", duration: 3000, style: {
                                     border: '2px solid #ff7c01',
@@ -234,6 +238,8 @@ export default function Administrador() {
                         "PAGOCOMPLETO": ""
                     }
                     axios.post(url + 'añadirCampeonato', fechas).then(response => {
+                        setEspera('false')
+                        setInhabilitado(false)
                         toast("Fechas Establecidas", {
                             icon: "✅", duration: 3000, style: {
                                 border: '2px solid #ff7c01',
@@ -259,13 +265,13 @@ export default function Administrador() {
             });
         }
     }
-
     const obtenerFechas = () => {
         if (titulo === "CONFIGURAR LIGA" && opcionL === '1') {
             if (fechas == null) {
                 if (nombreBoton == "Guardar") {
                     axios.get(url + 'todosCampeonatos').then(response => {
                         fechas = response.data
+                        setObtuvoFechas(true)
                         if (fechas.length > 0) {
                             setFechaPreInicio(fechas[0].INIPREINSCRIPCION)
                             document.getElementById('fechaPreInicio').value = fechaPreInicio
@@ -281,6 +287,7 @@ export default function Administrador() {
                             document.getElementById('fechaFinLiga').value = fechaFinLiga
                             setNombreBoton("Editar")
                             verificarFechas()
+                            setObtuvoFechas(true)
                         }
                     })
                 }
@@ -288,10 +295,18 @@ export default function Administrador() {
         }
 
     }
-
     useEffect(function () {
         if (titulo === "CONFIGURAR LIGA" && nombreBoton !== 'Editar' && opcionL === '1') {
-            obtenerFechas()
+            if (!obtuvoFechas) {
+                obtenerFechas()
+            } else {
+                document.getElementById('fechaPreInicio').value = fechaPreInicio
+                document.getElementById('fechaPreFin').value = fechaPreFin
+                document.getElementById('fechaInicio').value = fechaInicio
+                document.getElementById('fechaFin').value = fechaFin
+                document.getElementById('fechaInicioLiga').value = fechaInicioLiga
+                document.getElementById('fechaFinLiga').value = fechaFinLiga
+            }
         } else {
             if (titulo === "CONFIGURAR LIGA" && opcionL === '1') {
                 document.getElementById('fechaPreInicio').value = fechaPreInicio
@@ -300,11 +315,13 @@ export default function Administrador() {
                 document.getElementById('fechaFin').value = fechaFin
                 document.getElementById('fechaInicioLiga').value = fechaInicioLiga
                 document.getElementById('fechaFinLiga').value = fechaFinLiga
-
             }
         }
         if (titulo === "ARBITRO") {
             obtenerArbitro()
+        }
+        if (titulo === "INFORMACIÓN") {
+            obtenerInformacion()
         }
         if (titulo === "EQUIPO") {
             if (opcion === '1') { obtenerMedioPago() }
@@ -313,8 +330,6 @@ export default function Administrador() {
             if (opcion === '4') { obtenerHabilitado() }
         }
         obtenerCategoria()
-
-
         if (titulo === "CONFIGURAR LIGA" && opcionL === '1') {
             validarFechaPreInicio()
             validarFechaPreFin()
@@ -324,47 +339,42 @@ export default function Administrador() {
             validarFechaFinLiga()
         }
     })
-
     const verificarFechas = () => {
         var fechaActual = new Date().toISOString()
         if (fechaPreInicio < fechaActual) {
             setEmpezo(true)
         }
     }
-
     const obtenerCategoria = () => {
         axios.get(url + 'categorias').then(response => {
             setListaCategoria(response.data)
+            setObtuvoC(true)
         })
     }
-
     const obtenerArbitro = () => {
         axios.get(url + 'arbitros').then(response => {
             setListaArbitro(response.data)
+            setObtuvoA(true)
         })
     }
-
     const obtenerPagoCompleto = () => {
         axios.get(url + 'pagoCompleto').then(response => {
             setListaPagoCompleto(response.data)
             setObtuvoPC(true)
         })
     }
-
     const obtenerMedioPago = () => {
         axios.get(url + 'medioPago').then(response => {
             setListaMedioPago(response.data)
             setObtuvoMP(true)
         })
     }
-
     const obtenerHabilitadoSin = () => {
         axios.get(url + 'habilitadoSin').then(response => {
             setListaHabilitadoSin(response.data)
             setObtuvoHS(true)
         })
     }
-
     const obtenerHabilitado = () => {
         axios.get(url + 'habilitado').then(response => {
             setListaHabilitado(response.data)
@@ -372,6 +382,12 @@ export default function Administrador() {
         })
     }
 
+    const obtenerInformacion = () => {
+        axios.get(url + 'informacion').then(response => {
+            setListaInformacion(response.data)
+            setObtuvoI(true)
+        })
+    }
 
     return (
         <ContenedorPrincipal>
@@ -401,82 +417,122 @@ export default function Administrador() {
                     </Nav>
                     {
                         opcionL === '1' &&
-                        <Detalle>
-                            <BoxCampo>
-                                <TextBox>Inicio Pre-Inscripcion</TextBox>
-                                <InputBox type="date" valido={validarPreInicio} id="fechaPreInicio" onChange={(e) => { setFechaPreInicio(e.target.value) }} onKeyUp={validarFechaPreInicio}
-                                    onBlur={validarFechaPreInicio} />
-                                <IconoValidacion icon={validarPreInicio === 'true' ? faCircleCheck : faCircleXmark} valido={validarPreInicio} />
-                            </BoxCampo>
-                            <BoxCampo>
-                                <TextBox>Fin Pre-Inscripcion</TextBox>
-                                <InputBox type="date" valido={validarPreFin} id="fechaPreFin" onChange={(e) => { setFechaPreFin(e.target.value) }} onKeyUp={validarFechaPreFin}
-                                    onBlur={validarFechaPreFin} />
-                                <IconoValidacion icon={validarPreFin === 'true' ? faCircleCheck : faCircleXmark} valido={validarPreFin} />
-                            </BoxCampo>
-                            <BoxCampo>
-                                <TextBox>Inicio Inscripcion</TextBox>
-                                <InputBox type="date" valido={validarInicio} id="fechaInicio" onChange={(e) => { setFechaInicio(e.target.value) }} onKeyUp={validarFechaInicio}
-                                    onBlur={validarFechaInicio} />
-                                <IconoValidacion icon={validarInicio === 'true' ? faCircleCheck : faCircleXmark} valido={validarInicio} />
-                            </BoxCampo>
-                            <BoxCampo>
-                                <TextBox>Fin Inscripcion</TextBox>
-                                <InputBox type="date" valido={validarFin} id="fechaFin" onChange={(e) => { setFechaFin(e.target.value) }} onKeyUp={validarFechaFin}
-                                    onBlur={validarFechaFin} />
-                                <IconoValidacion icon={validarFin === 'true' ? faCircleCheck : faCircleXmark} valido={validarFin} />
+                        <>
+                            {
+                                obtuvoFechas &&
+                                <Detalle>
+                                    <BoxCampo>
+                                        <TextBox>Inicio Pre-Inscripcion</TextBox>
+                                        <InputBox type="date" valido={validarPreInicio} id="fechaPreInicio" onChange={(e) => { setFechaPreInicio(e.target.value) }} onKeyUp={validarFechaPreInicio}
+                                            onBlur={validarFechaPreInicio} />
+                                        <IconoValidacion icon={validarPreInicio === 'true' ? faCircleCheck : faCircleXmark} valido={validarPreInicio} />
+                                    </BoxCampo>
+                                    <BoxCampo>
+                                        <TextBox>Fin Pre-Inscripcion</TextBox>
+                                        <InputBox type="date" valido={validarPreFin} id="fechaPreFin" onChange={(e) => { setFechaPreFin(e.target.value) }} onKeyUp={validarFechaPreFin}
+                                            onBlur={validarFechaPreFin} />
+                                        <IconoValidacion icon={validarPreFin === 'true' ? faCircleCheck : faCircleXmark} valido={validarPreFin} />
+                                    </BoxCampo>
+                                    <BoxCampo>
+                                        <TextBox>Inicio Inscripcion</TextBox>
+                                        <InputBox type="date" valido={validarInicio} id="fechaInicio" onChange={(e) => { setFechaInicio(e.target.value) }} onKeyUp={validarFechaInicio}
+                                            onBlur={validarFechaInicio} />
+                                        <IconoValidacion icon={validarInicio === 'true' ? faCircleCheck : faCircleXmark} valido={validarInicio} />
+                                    </BoxCampo>
+                                    <BoxCampo>
+                                        <TextBox>Fin Inscripcion</TextBox>
+                                        <InputBox type="date" valido={validarFin} id="fechaFin" onChange={(e) => { setFechaFin(e.target.value) }} onKeyUp={validarFechaFin}
+                                            onBlur={validarFechaFin} />
+                                        <IconoValidacion icon={validarFin === 'true' ? faCircleCheck : faCircleXmark} valido={validarFin} />
+                                    </BoxCampo>
+                                    <BoxCampo>
+                                        <TextBox>Inicio Liga</TextBox>
+                                        <InputBox type="date" valido={validarInicioLiga} id="fechaInicioLiga" onChange={(e) => { setFechaInicioLiga(e.target.value) }} onKeyUp={validarFechaInicioLiga}
+                                            onBlur={validarFechaInicioLiga} />
+                                        <IconoValidacion icon={validarInicioLiga === 'true' ? faCircleCheck : faCircleXmark} valido={validarInicioLiga} />
+                                    </BoxCampo>
+                                    <BoxCampo>
+                                        <TextBox>Fin Liga</TextBox>
+                                        <InputBox type="date" valido={validarFinLiga} id="fechaFinLiga" onChange={(e) => { setFechaFinLiga(e.target.value) }} onKeyUp={validarFechaFinLiga}
+                                            onBlur={validarFechaFinLiga} />
+                                        <IconoValidacion icon={validarFinLiga === 'true' ? faCircleCheck : faCircleXmark} valido={validarFinLiga} />
+                                    </BoxCampo>
+                                    <BotonAñadir disabled={inhabilitado} onClick={subirFechas}>
+                                        {espera == 'false' && nombreBoton}
+                                        {espera == 'true' && <Img src={require('../Imagenes/Carga.gif')} />}
+                                    </BotonAñadir>
+                                </Detalle>
+                            }
+                            {
+                                !obtuvoFechas &&
+                                <ImgCarga src={require('../Imagenes/Carga.gif')} />
+                            }
 
-                            </BoxCampo>
-                            <BoxCampo>
-                                <TextBox>Inicio Liga</TextBox>
-                                <InputBox type="date" valido={validarInicioLiga} id="fechaInicioLiga" onChange={(e) => { setFechaInicioLiga(e.target.value) }} onKeyUp={validarFechaInicioLiga}
-                                    onBlur={validarFechaInicioLiga} />
-                                <IconoValidacion icon={validarInicioLiga === 'true' ? faCircleCheck : faCircleXmark} valido={validarInicioLiga} />
-                            </BoxCampo>
-                            <BoxCampo>
-                                <TextBox>Fin Liga</TextBox>
-                                <InputBox type="date" valido={validarFinLiga} id="fechaFinLiga" onChange={(e) => { setFechaFinLiga(e.target.value) }} onKeyUp={validarFechaFinLiga}
-                                    onBlur={validarFechaFinLiga} />
-                                <IconoValidacion icon={validarFinLiga === 'true' ? faCircleCheck : faCircleXmark} valido={validarFinLiga} />
-                            </BoxCampo>
-                            <BotonAñadir onClick={subirFechas}>{nombreBoton}</BotonAñadir>
-                        </Detalle>
+                        </>
                     }
                     {
                         opcionL === '2' &&
-                        <Detalle>
-                            <ContenedorTable ventana='categoria'>
-                                <Table>
-                                    <TableHead className={classes.encabezado}>
-                                        <TableRow>
-                                            <TableCell><Letra>Categorias</Letra></TableCell>
-                                            <TableCell align='right'><Letra img1={'true'}><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {
-                                            listaCategorias.map(datos => {
-                                                return (
-                                                    <TableRow className={classes.bordes}>
-                                                        <TableCell><LetraCuerpo>{datos.NOMBRECATEGORIA}</LetraCuerpo></TableCell>
-                                                        <TableCell align='center'><BotonVer onClick={() => {
-                                                            axios.delete('http://127.0.0.1:8000/eliminar/' + datos.NOMBRECATEGORIA).then(response => {
-                                                                console.log("se Elimino")
-                                                            })
-                                                        }}><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
-                                                    </TableRow>)
-                                            })
-                                        }
-                                    </TableBody>
-                                </Table>
-                            </ContenedorTable>
-                            <BoxCampoBoton text='false'>
-                                <BotonAñadir onClick={() => setModalAñadirCategoria(!modalAñadirCategoria)}>Añadir Categoria</BotonAñadir>
-                            </BoxCampoBoton>
-                            <BoxCampoBoton text='false'>
-                                <BotonAñadir onClick={() => setModalAñadirReglamento(!modalAñadirReglamento)}>Añadir Reglamento</BotonAñadir>
-                            </BoxCampoBoton>
-                        </Detalle>
+                        <>
+                            {
+                                obtuvoC &&
+                                <Detalle>
+                                    <ContenedorTable ventana='categoria'>
+                                        <Table>
+                                            <TableHead className={classes.encabezado}>
+                                                <TableRow>
+                                                    <TableCell><Letra>Categorias</Letra></TableCell>
+                                                    <TableCell align='right'><Letra img1={'true'}><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {
+                                                    listaCategorias.map(datos => {
+                                                        if (obtuvoC) {
+                                                            return (
+                                                                <TableRow className={classes.bordes}>
+                                                                    <TableCell><LetraCuerpo>{datos.NOMBRECATEGORIA}</LetraCuerpo></TableCell>
+                                                                    <TableCell align='center'><BotonVer disabled={inhabilitado} onClick={() => {
+                                                                        setEspera('true')
+                                                                        setInhabilitado(true)
+                                                                        axios.delete(url + 'eliminarCategoria/' + datos.NOMBRECATEGORIA).then(response => {
+                                                                            setEspera('false')
+                                                                            setInhabilitado(false)
+                                                                            toast("Categoria Eliminada con Exito", {
+                                                                                icon: "✅", duration: 3000, style: {
+                                                                                    border: '2px solid #ff7c01',
+                                                                                    padding: '10px',
+                                                                                    color: '#fff',
+                                                                                    background: '#000',
+                                                                                    borderRadius: '4%',
+                                                                                },
+                                                                            })
+                                                                        })
+                                                                    }}>
+                                                                        {espera == 'false' && <FontAwesomeIcon icon={faTrashCan} />}
+                                                                        {espera == 'true' && <Img src={require('../Imagenes/Carga.gif')} />}                                                                                                                           </BotonVer></TableCell>
+                                                                </TableRow>
+                                                            )
+                                                        }
+
+                                                    })
+                                                }
+                                            </TableBody>
+                                        </Table>
+                                    </ContenedorTable>
+                                    <BoxCampoBoton text='false'>
+                                        <BotonAñadir onClick={() => setModalAñadirCategoria(!modalAñadirCategoria)}>Añadir Categoria</BotonAñadir>
+                                    </BoxCampoBoton>
+                                    <BoxCampoBoton text='false'>
+                                        <BotonAñadir onClick={() => setModalAñadirReglamento(!modalAñadirReglamento)}>Añadir Reglamento</BotonAñadir>
+                                    </BoxCampoBoton>
+                                </Detalle>
+                            }
+                            {
+                                !obtuvoC &&
+                                <ImgCarga src={require('../Imagenes/Carga.gif')} />
+                            }
+                        </>
+
                     }
                     {
                         opcionL === '3' &&
@@ -508,154 +564,157 @@ export default function Administrador() {
                     </Nav>
                     <ContenedorTable ventana='2'>
                         {opcion == '1' &&
-                            <Table>
-                                <TableHead className={classes.encabezado}>
-                                    <TableRow>
-                                        <TableCell><Letra equipo='true'>DELEGADO</Letra></TableCell>
-                                        <TableCell><Letra equipo='true'>EQUIPO</Letra></TableCell>
-                                        <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faTruckFast} /></Letra></TableCell>
-                                        <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        listaMedioPago.map(datos => {
-                                            if (obtuvoMP) {
-                                                return (
+                            <>
+                                {
+                                    obtuvoMP &&
+                                    <Table>
+                                        <TableHead className={classes.encabezado}>
+                                            <TableRow>
+                                                <TableCell><Letra equipo='true'>DELEGADO</Letra></TableCell>
+                                                <TableCell><Letra equipo='true'>EQUIPO</Letra></TableCell>
+                                                <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faTruckFast} /></Letra></TableCell>
+                                                <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {
+                                                listaMedioPago.map(datos => {
+                                                    if (obtuvoMP) {
+                                                        return (
 
-                                                    <TableRow className={classes.bordes}>
-                                                        <TableCell><LetraCuerpo equipo='true'>{datos.NOMBREDELEGADO}</LetraCuerpo></TableCell>
-                                                        <TableCell><LetraCuerpo equipo='true'>{datos.NOMBREEQUIPO}</LetraCuerpo></TableCell>
-                                                        <TableCell align='right'><BotonVer onClick={() => { setModalEquipo(!modalEquipo); setElEquipo(datos); settipoEquipo('medio') }}><FontAwesomeIcon icon={faEnvelopeOpenText} /></BotonVer></TableCell>
-                                                        <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
-                                                    </TableRow>
-                                                )
-                                            } else {
-                                                return (
-                                                    <TableRow className={classes.bordes}>
-                                                        <TableCell><LetraCuerpo equipo='true'></LetraCuerpo></TableCell>
-                                                        <TableCell><LetraCuerpo equipo='true'>hay</LetraCuerpo></TableCell>
-                                                        <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faEnvelopeOpenText} /></BotonVer></TableCell>
-                                                        <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
-                                                    </TableRow>
-                                                )
+                                                            <TableRow className={classes.bordes}>
+                                                                <TableCell><LetraCuerpo equipo='true'>{datos.NOMBREDELEGADO}</LetraCuerpo></TableCell>
+                                                                <TableCell><LetraCuerpo equipo='true'>{datos.NOMBREEQUIPO}</LetraCuerpo></TableCell>
+                                                                <TableCell align='right'><BotonVer onClick={() => { setModalEquipo(!modalEquipo); setElEquipo(datos); settipoEquipo('medio') }}><FontAwesomeIcon icon={faEnvelopeOpenText} /></BotonVer></TableCell>
+                                                                <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
+                                                            </TableRow>
+                                                        )
+                                                    }
+                                                })
                                             }
-                                        })
-                                    }
-                                </TableBody>
-                            </Table>
+                                        </TableBody>
+                                    </Table>
+                                }
+                                {
+                                    !obtuvoMP &&
+                                    <ImgCarga src={require('../Imagenes/Carga.gif')} />
+                                }
+                            </>
+
                         }
                         {opcion == '2' &&
-                            <Table>
-                                <TableHead className={classes.encabezado}>
-                                    <TableRow>
-                                        <TableCell><Letra>DELEGADO</Letra></TableCell>
-                                        <TableCell><Letra>EQUIPO</Letra></TableCell>
-                                        <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faCalendarCheck} /></Letra></TableCell>
-                                        <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        listaPagoCompleto.map(datos => {
-                                            if (obtuvoPC) {
-                                                return (
+                            <>
+                                {obtuvoPC &&
+                                    <Table>
+                                        <TableHead className={classes.encabezado}>
+                                            <TableRow>
+                                                <TableCell><Letra>DELEGADO</Letra></TableCell>
+                                                <TableCell><Letra>EQUIPO</Letra></TableCell>
+                                                <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faCalendarCheck} /></Letra></TableCell>
+                                                <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {
+                                                listaPagoCompleto.map(datos => {
+                                                    if (obtuvoPC) {
+                                                        return (
 
-                                                    <TableRow className={classes.bordes}>
-                                                        <TableCell><LetraCuerpo>{datos.NOMBREDELEGADO}</LetraCuerpo></TableCell>
-                                                        <TableCell><LetraCuerpo>{datos.NOMBREEQUIPO}</LetraCuerpo></TableCell>
-                                                        <TableCell align='right'><BotonVer onClick={() => { setModalEquipo(!modalEquipo); setElEquipo(datos); settipoEquipo('completo') }}><FontAwesomeIcon icon={faFileInvoice} /></BotonVer></TableCell>
-                                                        <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
-                                                    </TableRow>
-                                                )
-                                            } else {
-                                                return (
-                                                    <TableRow className={classes.bordes}>
-                                                        <TableCell><LetraCuerpo equipo='true'></LetraCuerpo></TableCell>
-                                                        <TableCell><LetraCuerpo equipo='true'></LetraCuerpo></TableCell>
-                                                        <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faEnvelopeOpenText} /></BotonVer></TableCell>
-                                                        <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
-                                                    </TableRow>
-                                                )
+                                                            <TableRow className={classes.bordes}>
+                                                                <TableCell><LetraCuerpo>{datos.NOMBREDELEGADO}</LetraCuerpo></TableCell>
+                                                                <TableCell><LetraCuerpo>{datos.NOMBREEQUIPO}</LetraCuerpo></TableCell>
+                                                                <TableCell align='right'><BotonVer onClick={() => { setModalEquipo(!modalEquipo); setElEquipo(datos); settipoEquipo('completo') }}><FontAwesomeIcon icon={faFileInvoice} /></BotonVer></TableCell>
+                                                                <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
+                                                            </TableRow>
+                                                        )
+                                                    }
+                                                })
                                             }
-                                        })
-                                    }
-                                </TableBody>
-                            </Table>
+                                        </TableBody>
+                                    </Table>
+                                }
+                                {
+                                    !obtuvoPC &&
+                                    <ImgCarga src={require('../Imagenes/Carga.gif')} />
+                                }
+                            </>
+
                         }
                         {opcion == '3' &&
-                            <Table>
-                                <TableHead className={classes.encabezado}>
-                                    <TableRow>
-                                        <TableCell><Letra>DELEGADO</Letra></TableCell>
-                                        <TableCell><Letra>EQUIPO</Letra></TableCell>
-                                        <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faCirclePlay} /></Letra></TableCell>
-                                        <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        listaHabilitadoSin.map(datos => {
-                                            if (obtuvoHS) {
-                                                return (
-                                                    <TableRow className={classes.bordes}>
-                                                        <TableCell><LetraCuerpo>{datos.NOMBREDELEGADO}</LetraCuerpo></TableCell>
-                                                        <TableCell><LetraCuerpo>{datos.NOMBREEQUIPO}</LetraCuerpo></TableCell>
-                                                        <TableCell align='right'><BotonVer onClick={() => { setModalEquipo(!modalEquipo); setElEquipo(datos); settipoEquipo('sinJugador') }}><FontAwesomeIcon icon={faCirclePlay} /></BotonVer></TableCell>
-                                                        <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
-                                                    </TableRow>
-                                                )
-                                            } else {
-                                                return (
-                                                    <TableRow className={classes.bordes}>
-                                                        <TableCell><LetraCuerpo equipo='true'></LetraCuerpo></TableCell>
-                                                        <TableCell><LetraCuerpo equipo='true'>hay</LetraCuerpo></TableCell>
-                                                        <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faEnvelopeOpenText} /></BotonVer></TableCell>
-                                                        <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
-                                                    </TableRow>
-                                                )
+                            <>
+                                {
+                                    obtuvoHS &&
+                                    <Table>
+                                        <TableHead className={classes.encabezado}>
+                                            <TableRow>
+                                                <TableCell><Letra>DELEGADO</Letra></TableCell>
+                                                <TableCell><Letra>EQUIPO</Letra></TableCell>
+                                                <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faCirclePlay} /></Letra></TableCell>
+                                                <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {
+                                                listaHabilitadoSin.map(datos => {
+                                                    if (obtuvoHS) {
+                                                        return (
+                                                            <TableRow className={classes.bordes}>
+                                                                <TableCell><LetraCuerpo>{datos.NOMBREDELEGADO}</LetraCuerpo></TableCell>
+                                                                <TableCell><LetraCuerpo>{datos.NOMBREEQUIPO}</LetraCuerpo></TableCell>
+                                                                <TableCell align='right'><BotonVer onClick={() => { setModalEquipo(!modalEquipo); setElEquipo(datos); settipoEquipo('sinJugador') }}><FontAwesomeIcon icon={faCirclePlay} /></BotonVer></TableCell>
+                                                                <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
+                                                            </TableRow>
+                                                        )
+                                                    }
+                                                })
                                             }
-                                        })
-                                    }
-                                </TableBody>
-                            </Table>
+                                        </TableBody>
+                                    </Table>
+                                }
+                                {
+                                    !obtuvoHS &&
+                                    <ImgCarga src={require('../Imagenes/Carga.gif')} />
+                                }
+                            </>
+
                         }
                         {opcion == '4' &&
-                            <Table>
-                                <TableHead className={classes.encabezado}>
-                                    <TableRow>
-                                        <TableCell><Letra>DELEGADO</Letra></TableCell>
-                                        <TableCell><Letra>EQUIPO</Letra></TableCell>
-                                        <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faCheckCircle} /></Letra></TableCell>
-                                        <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        listaHabilitado.map(datos => {
-                                            if (obtuvoH) {
-                                                return (
-                                                    <TableRow className={classes.bordes}>
-                                                        <TableCell><LetraCuerpo>{datos.NOMBREDELEGADO}</LetraCuerpo></TableCell>
-                                                        <TableCell><LetraCuerpo>{datos.NOMBREEQUIPO}</LetraCuerpo></TableCell>
-                                                        <TableCell align='right'><BotonVer onClick={() => { setModalEquipo(!modalEquipo); setElEquipo(datos); settipoEquipo('habilitado') }}><FontAwesomeIcon icon={faCheckCircle} /></BotonVer></TableCell>
-                                                        <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
-                                                    </TableRow>
-                                                )
-                                            } else {
-                                                return (
-                                                    <TableRow className={classes.bordes}>
-                                                        <TableCell><LetraCuerpo equipo='true'></LetraCuerpo></TableCell>
-                                                        <TableCell><LetraCuerpo equipo='true'>hay</LetraCuerpo></TableCell>
-                                                        <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faEnvelopeOpenText} /></BotonVer></TableCell>
-                                                        <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
-                                                    </TableRow>
-                                                )
+                            <>
+                                {
+                                    obtuvoH &&
+                                    <Table>
+                                        <TableHead className={classes.encabezado}>
+                                            <TableRow>
+                                                <TableCell><Letra>DELEGADO</Letra></TableCell>
+                                                <TableCell><Letra>EQUIPO</Letra></TableCell>
+                                                <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faCheckCircle} /></Letra></TableCell>
+                                                <TableCell align='right'><Letra img={'true'}><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {
+                                                listaHabilitado.map(datos => {
+                                                    if (obtuvoH) {
+                                                        return (
+                                                            <TableRow className={classes.bordes}>
+                                                                <TableCell><LetraCuerpo>{datos.NOMBREDELEGADO}</LetraCuerpo></TableCell>
+                                                                <TableCell><LetraCuerpo>{datos.NOMBREEQUIPO}</LetraCuerpo></TableCell>
+                                                                <TableCell align='right'><BotonVer onClick={() => { setModalEquipo(!modalEquipo); setElEquipo(datos); settipoEquipo('habilitado') }}><FontAwesomeIcon icon={faCheckCircle} /></BotonVer></TableCell>
+                                                                <TableCell align='right'><BotonVer><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
+                                                            </TableRow>
+                                                        )
+                                                    }
+                                                })
                                             }
-                                        })
-                                    }
-                                </TableBody>
-                            </Table>
+                                        </TableBody>
+                                    </Table>
+                                }
+                                {
+                                    !obtuvoH &&
+                                    <ImgCarga src={require('../Imagenes/Carga.gif')} />
+                                }
+                            </>
+
                         }
 
                     </ContenedorTable>
@@ -666,28 +725,36 @@ export default function Administrador() {
                 <ContenedorConfiguracion>
                     <Titulo2>ARBITRO</Titulo2>
                     <ContenedorTable ventana='1'>
-                        <Table>
-                            <TableHead className={classes.encabezado}>
-                                <TableRow>
-                                    <TableCell><Letra>NOMBRE DE ARBITRO</Letra></TableCell>
-                                    <TableCell align='right'><Letra img2='true'><FontAwesomeIcon icon={faCircleUser} /></Letra></TableCell>
-                                    <TableCell align='right'><Letra img2='true'><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {
-                                    listaArbitro.map(datos => {
-                                        return (
-                                            <TableRow className={classes.bordes}>
-                                                <TableCell><LetraCuerpo name='true'>{datos.NOMBRE}</LetraCuerpo></TableCell>
-                                                <TableCell align='right'><BotonVer onClick={() => { setModalVerArbitro(!modalVerArbitro); setDatos(datos); }}><FontAwesomeIcon icon={faUserTie} /></BotonVer></TableCell>
-                                                <TableCell align='right'><BotonVer onClick={() => { setEliminarArbitro(!eliminarArbitro); setDatos(datos); }}><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
-                                            </TableRow>
-                                        )
-                                    })
-                                }
-                            </TableBody>
-                        </Table>
+                        {
+                            obtuvoA &&
+                            <Table>
+                                <TableHead className={classes.encabezado}>
+                                    <TableRow>
+                                        <TableCell><Letra>NOMBRE DE ARBITRO</Letra></TableCell>
+                                        <TableCell align='right'><Letra img2='true'><FontAwesomeIcon icon={faCircleUser} /></Letra></TableCell>
+                                        <TableCell align='right'><Letra img2='true'><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        listaArbitro.map(datos => {
+                                            return (
+                                                <TableRow className={classes.bordes}>
+                                                    <TableCell><LetraCuerpo name='true'>{datos.NOMBRE}</LetraCuerpo></TableCell>
+                                                    <TableCell align='right'><BotonVer onClick={() => { setModalVerArbitro(!modalVerArbitro); setDatos(datos); }}><FontAwesomeIcon icon={faUserTie} /></BotonVer></TableCell>
+                                                    <TableCell align='right'><BotonVer onClick={() => { setEliminarArbitro(!eliminarArbitro); setDatos(datos); }}><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
+                                                </TableRow>
+                                            )
+                                        })
+                                    }
+                                </TableBody>
+                            </Table>
+                        }
+                        {
+                            !obtuvoA &&
+                            <ImgCarga src={require('../Imagenes/Carga.gif')} />
+                        }
+
                     </ContenedorTable>
                     <ContenedorBoton>
                         <BotonAñadir onClick={() => setModalRegistroArbitro(!modalRegistroArbitro)}>
@@ -701,22 +768,37 @@ export default function Administrador() {
                 <ContenedorConfiguracion>
                     <Titulo2>INFORMACIÓN</Titulo2>
                     <ContenedorTable ventana='1'>
-                        <Table>
-                            <TableHead className={classes.encabezado}>
-                                <TableRow>
-                                    <TableCell ><Letra imagen='true'>TITULO DE IMAGEN</Letra></TableCell>
-                                    <TableCell align='right'><Letra img='true'><FontAwesomeIcon icon={faCirclePlay} /></Letra></TableCell>
-                                    <TableCell align='right'><Letra img='true'><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                <TableRow className={classes.bordes}>
-                                    <TableCell><LetraCuerpo titulo='true'>Titulo</LetraCuerpo></TableCell>
-                                    <TableCell align='right'><BotonVer onClick={() => setModalVerFoto(!modalVerFoto)}><FontAwesomeIcon icon={faImage} /></BotonVer></TableCell>
-                                    <TableCell align='right'><BotonVer onClick={() => setEliminarFoto(!eliminarFoto)}><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
+                        {
+                            obtuvoI &&
+                            <Table>
+                                <TableHead className={classes.encabezado}>
+                                    <TableRow>
+                                        <TableCell ><Letra imagen='true'>TITULO DE IMAGEN</Letra></TableCell>
+                                        <TableCell align='right'><Letra img='true'><FontAwesomeIcon icon={faCirclePlay} /></Letra></TableCell>
+                                        <TableCell align='right'><Letra img='true'><FontAwesomeIcon icon={faTrash} /></Letra></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        listaInformacion.map(datos => {
+                                            return(
+                                                <TableRow className={classes.bordes}>
+                                                    <TableCell><LetraCuerpo titulo='true'>{datos.TITULO}</LetraCuerpo></TableCell>
+                                                    <TableCell align='right'><BotonVer onClick={() => setModalVerFoto(!modalVerFoto)}><FontAwesomeIcon icon={faImage} /></BotonVer></TableCell>
+                                                    <TableCell align='right'><BotonVer onClick={() => {setEliminarFoto(!eliminarFoto);setDatos(datos)}}><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
+                                                </TableRow>
+                                            ) 
+                                        })
+                                    }
+
+                                </TableBody>
+                            </Table>
+                        }
+                        {
+                            !obtuvoI &&
+                            <ImgCarga src={require('../Imagenes/Carga.gif')} />
+                        }
+
                     </ContenedorTable>
                     <ContenedorBoton>
                         <BotonAñadir onClick={() => setModalAñadirInfo(!modalAñadirInfo)}>
@@ -758,6 +840,7 @@ export default function Administrador() {
                 cambiarEstado={setEliminarFoto}
                 tipo={'eliminarFoto'}
                 mensaje={"¿Seguro de eliminar foto?"}
+                datos={datos}
             />
             <Modal
                 estado={eliminarArbitro}

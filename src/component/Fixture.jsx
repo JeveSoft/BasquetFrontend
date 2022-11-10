@@ -28,7 +28,7 @@ export default function Fixture() {
           </NavBtnLink>
         </NavBtn>
       </Nav>
-      <div>fixture</div>
+      <div>hola</div>
       <IniciarSesion
         estado={modal}
         cambiarEstado={setModal}
