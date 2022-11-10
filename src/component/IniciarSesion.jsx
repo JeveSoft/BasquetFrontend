@@ -142,27 +142,42 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
       setEspera('true')
       setInicio("")
       setInhabilitado(true)
-      if (id.substring(0, 1) > 0 && id.substring(0, 1) < 4) {
-        axios.get(url + 'administrador/' + id).then(response => {
-          if (response.data.length > 0) {
-            if (response.data[0].CIADMINISTRADOR === contraseña) {
-              toast("Inicio Correctamente", {
-                icon: "✔️", duration: 3000, style: {
-                  border: '2px solid #ff7c01',
-                  padding: '10px',
-                  color: '#fff',
-                  background: '#000',
-                  borderRadius: '4%',
-                },
-              });
-              document.title = response.data[0].NOMBREADMINISTRADOR
-              setEspera('false')
-              historial.push("/administrador")
+      if (!isNaN(id.substring(0, 1))) {
+        if (id.substring(0, 1) > 0 && id.substring(0, 1) < 4) {
+          axios.get(url + 'administrador/' + id).then(response => {
+            if (response.data.length > 0) {
+              if (response.data[0].CIADMINISTRADOR === contraseña) {
+                toast("Inicio Correctamente", {
+                  icon: "✔️", duration: 3000, style: {
+                    border: '2px solid #ff7c01',
+                    padding: '10px',
+                    color: '#fff',
+                    background: '#000',
+                    borderRadius: '4%',
+                  },
+                });
+                document.title = response.data[0].NOMBREADMINISTRADOR
+                setEspera('false')
+                historial.push("/administrador")
+              } else {
+                setInhabilitado(false)
+                setEspera('false')
+                setInicio("INICIAR SESION")
+                toast("Contraseña Incorrecta", {
+                  icon: "⚠️", duration: 3000, style: {
+                    border: '2px solid #ff7c01',
+                    padding: '10px',
+                    color: '#fff',
+                    background: '#000',
+                    borderRadius: '4%',
+                  },
+                });
+              }
             } else {
               setInhabilitado(false)
               setEspera('false')
               setInicio("INICIAR SESION")
-              toast("Contraseña Incorrecta", {
+              toast("Id Invalido", {
                 icon: "⚠️", duration: 3000, style: {
                   border: '2px solid #ff7c01',
                   padding: '10px',
@@ -172,41 +187,38 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
                 },
               });
             }
-          } else {
-            setInhabilitado(false)
-            setEspera('false')
-            setInicio("INICIAR SESION")
-            toast("Id Invalido", {
-              icon: "⚠️", duration: 3000, style: {
-                border: '2px solid #ff7c01',
-                padding: '10px',
-                color: '#fff',
-                background: '#000',
-                borderRadius: '4%',
-              },
-            });
-          }
-        })
-      }
-      if (id.substring(0, 1) > 3 && id.substring(0, 1) < 7) {
+          })
+        }
+        if (id.substring(0, 1) > 3 && id.substring(0, 1) < 7) {
 
-      }
-      if (id.substring(0, 1) > 6 && id.substring(0, 1) < 10) {
-        axios.get(url + 'delegado/' + id).then(response => {
-          if (response.data.length > 0) {
-            if (response.data[0].CI === contraseña) {
-              toast("Inicio Correctamente", {
-                icon: "✔️", duration: 3000, style: {
-                  border: '2px solid #ff7c01',
-                  padding: '10px',
-                  color: '#fff',
-                  background: '#000',
-                  borderRadius: '4%',
-                },
-              });
-              historial.push("/delegado")
+        }
+        if (id.substring(0, 1) > 6 && id.substring(0, 1) < 10) {
+          axios.get(url + 'delegado/' + id).then(response => {
+            if (response.data.length > 0) {
+              if (response.data[0].CI === contraseña) {
+                toast("Inicio Correctamente", {
+                  icon: "✔️", duration: 3000, style: {
+                    border: '2px solid #ff7c01',
+                    padding: '10px',
+                    color: '#fff',
+                    background: '#000',
+                    borderRadius: '4%',
+                  },
+                });
+                historial.push("/delegado")
+              } else {
+                toast("Contraseña Incorrecta", {
+                  icon: "⚠️", duration: 3000, style: {
+                    border: '2px solid #ff7c01',
+                    padding: '10px',
+                    color: '#fff',
+                    background: '#000',
+                    borderRadius: '4%',
+                  },
+                });
+              }
             } else {
-              toast("Contraseña Incorrecta", {
+              toast("Id Invalido", {
                 icon: "⚠️", duration: 3000, style: {
                   border: '2px solid #ff7c01',
                   padding: '10px',
@@ -216,19 +228,23 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
                 },
               });
             }
-          } else {
-            toast("Id Invalido", {
-              icon: "⚠️", duration: 3000, style: {
-                border: '2px solid #ff7c01',
-                padding: '10px',
-                color: '#fff',
-                background: '#000',
-                borderRadius: '4%',
-              },
-            });
-          }
-        })
+          })
+        }
+      } else {
+        toast("ID Invalido", {
+          icon: "⚠️", duration: 3000, style: {
+            border: '2px solid #ff7c01',
+            padding: '10px',
+            color: '#fff',
+            background: '#000',
+            borderRadius: '4%',
+          },
+        });
+        setInhabilitado(false)
+        setEspera('false')
+        setInicio("INICIAR SESION")
       }
+
     }
   }
 
@@ -283,7 +299,7 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
               <InputBox placeholder='CONTRASEÑA' type="password" required id='nombreCompleto' onChange={(e) => { setContraseña(e.target.value) }}></InputBox>
             </DetalleUsuario>
             <DetalleUsuario>
-              <Boton espera = {espera}disabled={inhabilitado} onClick={iniciarSesion}>{inicio}
+              <Boton espera={espera} disabled={inhabilitado} onClick={iniciarSesion}>{inicio}
                 {
                   espera == 'true' && <Img src={require('../Imagenes/Carga.gif')} />
                 }

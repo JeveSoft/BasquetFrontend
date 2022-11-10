@@ -167,6 +167,8 @@ export default function Administrador() {
         }
     }
     const subirPagos = () => {
+        setEspera('true')
+        setInhabilitado(true)
         axios.get(url + 'todosCampeonatos').then(response => {
             if (response.data.length > 0) {
                 var pagos = {
@@ -180,6 +182,20 @@ export default function Administrador() {
                     "PAGOMITAD": "pagomedio.jpg",
                     "PAGOCOMPLETO": "pagocompleto.jpg"
                 }
+                axios.put(url+'acutalizarPagos/'+response.data[0].IDCAMPEONATO,pagos).then(response => {
+                    setEspera('false')
+                    setInhabilitado(false)
+                    toast("Pagos Establecidas", {
+                        icon: "✅", duration: 3000, style: {
+                            border: '2px solid #ff7c01',
+                            padding: '10px',
+                            color: '#fff',
+                            background: '#000',
+                            borderRadius: '4%',
+                        },
+                    });
+                })
+
             } else {
                 var pagos = {
                     "DESCRIPCION": "",
@@ -193,7 +209,17 @@ export default function Administrador() {
                     "PAGOCOMPLETO": "pagocompleto.jpg"
                 }
                 axios.post(url + 'añadirCampeonato', pagos).then(response => {
-                    console.log("se subio")
+                    setEspera('false')
+                    setInhabilitado(false)
+                    toast("Pagos Establecidas", {
+                        icon: "✅", duration: 3000, style: {
+                            border: '2px solid #ff7c01',
+                            padding: '10px',
+                            color: '#fff',
+                            background: '#000',
+                            borderRadius: '4%',
+                        },
+                    });
                 })
             }
         })
@@ -547,7 +573,10 @@ export default function Administrador() {
                                 <InputFile type="file" name="" id="completo" hidden />
                                 <LabelFile for="completo" id='imagenCompleto'>Seleccionar Archivo</LabelFile>
                             </BoxCampo>
-                            <BotonAñadir onClick={subirPagos}>Guardar</BotonAñadir>
+                            <BotonAñadir disabled={inhabilitado} onClick={subirPagos}>
+                                {espera == 'false' && "Guardar"}
+                                {espera == 'true' && <Img src={require('../Imagenes/Carga.gif')} />}
+                            </BotonAñadir>
                         </Detalle>
                     }
                 </ContenedorConfiguracion>
@@ -781,13 +810,13 @@ export default function Administrador() {
                                 <TableBody>
                                     {
                                         listaInformacion.map(datos => {
-                                            return(
+                                            return (
                                                 <TableRow className={classes.bordes}>
                                                     <TableCell><LetraCuerpo titulo='true'>{datos.TITULO}</LetraCuerpo></TableCell>
                                                     <TableCell align='right'><BotonVer onClick={() => setModalVerFoto(!modalVerFoto)}><FontAwesomeIcon icon={faImage} /></BotonVer></TableCell>
-                                                    <TableCell align='right'><BotonVer onClick={() => {setEliminarFoto(!eliminarFoto);setDatos(datos)}}><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
+                                                    <TableCell align='right'><BotonVer onClick={() => { setEliminarFoto(!eliminarFoto); setDatos(datos) }}><FontAwesomeIcon icon={faTrashCan} /></BotonVer></TableCell>
                                                 </TableRow>
-                                            ) 
+                                            )
                                         })
                                     }
 

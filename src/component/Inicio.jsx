@@ -52,7 +52,6 @@ export const NavBtn = styled.nav`
     margin-right:24px;
     justify-content: flex-end;
     width: 100vw;
-    
 `
 export const NavBtnLink = styled.button`
     border-radius:4px;
