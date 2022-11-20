@@ -1,7 +1,9 @@
-import React from 'react'
+import React from "react";
 
 export default function Delegado() {
   return (
-    <div>Delegado</div>
-  )
+    <>
+      <div>Delegado</div>
+    </>
+  );
 }

@@ -10,6 +10,7 @@ import IniciarSesion from "./component/IniciarSesion"
 import Registro from "./component/Registro";
 import Administrador from "./component/Administrador";
 import Delegado from "./component/Delegado";
+import Arbitro from "./component/Arbitro";
 
 export function App() {
     return (
@@ -23,6 +24,7 @@ export function App() {
                 <Route path='/registro' component={Registro}/>
                 <Route path='/administrador' component={Administrador}/>
                 <Route path='/delegado' component={Delegado}/>
+                <Route path='/arbitro' component={Arbitro}/>
             </Switch>
         </Router>
 
