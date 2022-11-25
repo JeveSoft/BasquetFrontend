@@ -63,6 +63,7 @@ import { IconoValidacion } from "./EstiloRegistro";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import ModalEquipo from "./ModalEquipo";
+import InputValidar from "./InputValidar";
 
 const styles = makeStyles({
   encabezado: {
@@ -147,7 +148,34 @@ export default function Administrador() {
   const [inhabilitado, setInhabilitado] = useState(false);
   const [listaGrupos, setListaGrupos] = useState([]);
   const [categoria, setCategoria] = useState("");
+  const [partidos, setPartidos] = useState([]);
+  const [fixture1, setFixture1] = useState(true);
+  const [fixture2, setFixture2] = useState(false);
+  const [fixture3, setFixture3] = useState(false);
+  const [generoFixture, setGenerarFixture] = useState(false);
+  const [fechaDia1, setFechaDia1] = useState();
+  const [fechaDia2, setFechaDia2] = useState();
+  const [fechaDia3, setFechaDia3] = useState();
+  const [fechaDia4, setFechaDia4] = useState();
+  const [vfechaDia1, setvFechaDia1] = useState(null);
+  const [vfechaDia2, setvFechaDia2] = useState(null);
+  const [vfechaDia3, setvFechaDia3] = useState(null);
+  const [vfechaDia4, setvFechaDia4] = useState(null);
 
+  const [fechasLimite, setFechasLimite] = useState([]);
+  const [lugar1, setLugar1] = useState({ campo: "", valido: null });
+  const [lugar2, setLugar2] = useState({ campo: "", valido: null });
+  const [lugar3, setLugar3] = useState({ campo: "", valido: null });
+  const [lugar4, setLugar4] = useState({ campo: "", valido: null });
+
+  const [hora1, setHora1] = useState();
+  const [hora2, setHora2] = useState();
+  const [hora3, setHora3] = useState();
+  const [hora4, setHora4] = useState();
+  const [vhora1, setvHora1] = useState(null);
+  const [vhora2, setvHora2] = useState(null);
+  const [vhora3, setvHora3] = useState(null);
+  const [vhora4, setvHora4] = useState(null);
   const validarFechaFinLiga = () => {
     if (fechaFinLiga != "") {
       if (
@@ -356,7 +384,7 @@ export default function Administrador() {
           axios.post(url + "añadirCampeonato", fechas).then((response) => {
             setEspera("false");
             setInhabilitado(false);
-            
+
             toast("Fechas Establecidas", {
               icon: "✅",
               duration: 3000,
@@ -384,6 +412,16 @@ export default function Administrador() {
           background: "#000",
           borderRadius: "4%",
         },
+      });
+    }
+  };
+  const obtenerSoloFechas = () => {
+    if (fechas == null) {
+      axios.get(url + "todosCampeonatos").then((response) => {
+        setFechasLimite(response.data);
+        setEspera("false");
+        setFixture1(false);
+        setFixture2(true);
       });
     }
   };
@@ -463,6 +501,12 @@ export default function Administrador() {
         obtenerHabilitado();
       }
     }
+    if (titulo === "CREAR FIXTURE" && fixture3) {
+      validarDia1();
+      validarDia2();
+      validarDia3();
+      validarDia4();
+    }
     obtenerCategoria();
     if (titulo === "CONFIGURAR LIGA" && opcionL === "1") {
       validarFechaPreInicio();
@@ -513,7 +557,6 @@ export default function Administrador() {
     axios.get(url + "habilitado").then((response) => {
       setListaHabilitado(response.data);
       setObtuvoH(true);
-      //setListaFixture(listaHabilitado);
     });
   };
   const obtenerInformacion = () => {
@@ -522,70 +565,66 @@ export default function Administrador() {
       setObtuvoI(true);
     });
   };
-
   const obtenerEquiposCategoria = () => {
-    setObtuvoGrupos(false)
-    axios.get(url + "porCategoria/" + categoria).then((response) => {
-      listaGrupos.splice(0, listaGrupos.length);
-      //if (response.data.length % 4 === 0) {
-      var listaFixture = response.data;
-      var i = 0;
-      while (i < listaFixture.length) {
-        console.log(listaFixture.length);
-        var equipos = [];
-        var j = 0;
-        while (j < 4) {
-          var random = Math.floor(Math.random() * response.data.length);
-          var eq = listaFixture[random].NOMBRE;
-          equipos.push(eq);
-          j++;
-          listaFixture.splice(random, 1);
-        }
-        const grupo = {
-          Grupo: i + 1,
-          Equipo1: equipos[0],
-          Equipo2: equipos[1],
-          Equipo3: equipos[2],
-          Equipo4: equipos[3],
-        };
-        listaGrupos.push(grupo);
-        i++;
-      }
-      if (listaFixture.length > 0 && listaFixture.length < 4) {
-        if (listaFixture.length === 3) {
-          const grupo = {
-            Grupo: i + 1,
-            Equipo1: listaFixture[0].NOMBRE,
-            Equipo2: listaFixture[1].NOMBRE,
-            Equipo3: listaFixture[2].NOMBRE,
+    if (categoria != "") {
+      setObtuvoGrupos(false);
+      axios.get(url + "porCategoria/" + categoria).then((response) => {
+        listaGrupos.splice(0, listaGrupos.length);
+        if (response.data.length > 7) {
+          var listaFixture = response.data;
+          var total = listaFixture.length;
+          var mitad = listaFixture.length / 2;
+          var j = 0;
+          var equipoA = [];
+          var equipoB = [];
+          while (j < mitad) {
+            let random = Math.floor(Math.random() * response.data.length);
+            let eq = listaFixture[random].NOMBRE;
+            equipoA.push(eq);
+            listaFixture.splice(random, 1);
+            j++;
+          }
+          while (j < total) {
+            let random = Math.floor(Math.random() * response.data.length);
+            let eq = listaFixture[random].NOMBRE;
+            equipoB.push(eq);
+            listaFixture.splice(random, 1);
+            j++;
+          }
+          const grupoA = {
+            Grupo: "Grupo A",
+            Equipos: equipoA,
           };
-          listaFixture.splice(0, 1);
-          listaFixture.splice(1, 1);
-          listaFixture.splice(2, 1);
+          const grupoB = {
+            Grupo: "Grupo B",
+            Equipos: equipoB,
+          };
+          listaGrupos.push(grupoA);
+          listaGrupos.push(grupoB);
+        } else {
+          const grupo = {
+            Grupo: "Grupo",
+            Equipos: listaFixture,
+          };
           listaGrupos.push(grupo);
         }
-        if (listaFixture.length === 2) {
-          const grupo = {
-            Grupo: i + 1,
-            Equipo1: listaFixture[0].NOMBRE,
-            Equipo2: listaFixture[1].NOMBRE,
-          };
-          listaFixture.splice(0, 1);
-          listaFixture.splice(1, 1);
-          listaGrupos.push(grupo);
-        }
-        if (listaFixture.length === 1) {
-          const grupo = {
-            Grupo: i + 1,
-            Equipo1: listaFixture[0].NOMBRE,
-          };
-          listaFixture.splice(0, 1);
-          listaGrupos.push(grupo);
-        }
-      }
-      setObtuvoGrupos(true);
-      toast("Fixture de categoria " + categoria + " generada", {
-        icon: "✅",
+        setObtuvoGrupos(true);
+        setGenerarFixture(true);
+        toast("Fixture de categoria " + categoria + " generada", {
+          icon: "✅",
+          duration: 3000,
+          style: {
+            border: "2px solid #ff7c01",
+            padding: "10px",
+            color: "#fff",
+            background: "#000",
+            borderRadius: "4%",
+          },
+        });
+      });
+    } else {
+      toast("Ingresar Categoria", {
+        icon: "⚠️",
         duration: 3000,
         style: {
           border: "2px solid #ff7c01",
@@ -595,8 +634,295 @@ export default function Administrador() {
           borderRadius: "4%",
         },
       });
-    });
+    }
   };
+  const generarPartidos = () => {
+    if (generoFixture) {
+      setEspera("true");
+      var EqGrupoA = listaGrupos[0].Equipos.slice();
+      var EqGrupoB = listaGrupos[1].Equipos.slice();
+      var i = 0;
+      var partidosA = [];
+      var partidosB = [];
+      while (i < EqGrupoA.length + 2) {
+        let random = Math.floor(Math.random() * EqGrupoA.length);
+        let eq1 = EqGrupoA[random];
+        EqGrupoA.splice(random, 1);
+        random = Math.floor(Math.random() * EqGrupoA.length);
+        let eq2 = EqGrupoA[random];
+        EqGrupoA.splice(random, 1);
+        let partido = {
+          equipo1: eq1,
+          equipo2: eq2,
+          lugar: "",
+          fecha: "",
+          hora: "",
+        };
+        partidosA.push(partido);
+        i++;
+      }
+      i = 0;
+      while (i < EqGrupoB.length + 2) {
+        let random = Math.floor(Math.random() * EqGrupoB.length);
+        let eq1 = EqGrupoB[random];
+        EqGrupoB.splice(random, 1);
+        random = Math.floor(Math.random() * EqGrupoB.length);
+        let eq2 = EqGrupoB[random];
+        EqGrupoB.splice(random, 1);
+        let partido = {
+          equipo1: eq1,
+          equipo2: eq2,
+          lugar: "",
+          fecha: "",
+          hora: "",
+        };
+        partidosB.push(partido);
+        i++;
+      }
+      let lista1 = {
+        Grupo: "Grupo A " + categoria,
+        Partidos: partidosA,
+      };
+      let lista2 = {
+        Grupo: "Grupo B" + categoria,
+        Partidos: partidosB,
+      };
+      partidos.push(lista1);
+      partidos.push(lista2);
+      obtenerSoloFechas();
+    } else {
+      toast("Generar Fixture", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
+    }
+  };
+  const validarDia1 = () => {
+    if (fechaDia1 !== undefined) {
+      let fechaInicio = fechasLimite[0].INICIOLIGA;
+      let fechaFin = fechasLimite[0].FINLIGA;
+      if (fechaDia1 >= fechaInicio && fechaDia1 < fechaFin) {
+        setvFechaDia1("true");
+      } else {
+        setvFechaDia1("false");
+      }
+    }
+  };
+  const validarDia2 = () => {
+    if (fechaDia2 !== undefined) {
+      let fechaFin = fechasLimite[0].FINLIGA;
+      if (
+        fechaDia2 > fechaDia1 &&
+        fechaDia2 < fechaFin &&
+        vfechaDia1 === "true"
+      ) {
+        setvFechaDia2("true");
+      } else {
+        setvFechaDia2("false");
+      }
+    }
+  };
+  const validarDia3 = () => {
+    if (fechaDia3 !== undefined) {
+      let fechaFin = fechasLimite[0].FINLIGA;
+      if (
+        fechaDia3 > fechaDia2 &&
+        fechaDia3 < fechaFin &&
+        vfechaDia2 === "true" &&
+        vfechaDia1 === "true"
+      ) {
+        setvFechaDia3("true");
+      } else {
+        setvFechaDia3("false");
+      }
+    }
+  };
+  const validarDia4 = () => {
+    if (fechaDia4 !== undefined) {
+      let fechaFin = fechasLimite[0].FINLIGA;
+      if (
+        fechaDia4 > fechaDia3 &&
+        fechaDia4 < fechaFin &&
+        vfechaDia3 === "true" &&
+        vfechaDia2 === "true" &&
+        vfechaDia1 === "true"
+      ) {
+        setvFechaDia4("true");
+      } else {
+        setvFechaDia4("false");
+      }
+    }
+  };
+  const validarHora1 = () => {
+    console.log(hora1);
+    if (hora1 !== undefined) {
+      setvHora1("true");
+    } else {
+      setvHora1("false");
+    }
+  };
+  const validarHora2 = () => {
+    if (hora2 !== undefined) {
+      setvHora2("true");
+    } else {
+      setvHora2("false");
+    }
+  };
+  const validarHora3 = () => {
+    if (hora3 !== undefined) {
+      setvHora3("true");
+    } else {
+      setvHora3("false");
+    }
+  };
+  const validarHora4 = () => {
+    if (hora4 !== undefined) {
+      setvHora4("true");
+    } else {
+      setvHora4("false");
+    }
+  };
+  function esValidoFixture() {
+    var valido = true;
+    if (vfechaDia1 === "false" || vfechaDia1 === null) {
+      valido = false;
+    }
+    if (vfechaDia2 === "false" || vfechaDia2 === null) {
+      valido = false;
+    }
+    if (vfechaDia3 === "false" || vfechaDia3 === null) {
+      valido = false;
+    }
+    if (vfechaDia4 === "false" || vfechaDia4 === null) {
+      valido = false;
+    }
+    if (lugar1.valido === "false") {
+      valido = false;
+    }
+    if (lugar2.valido === "false") {
+      valido = false;
+    }
+    if (lugar3.valido === "false") {
+      valido = false;
+    }
+    if (lugar4.valido === "false") {
+      valido = false;
+    }
+    if (vhora1 === "false" || vhora1 === null) {
+      valido = false;
+    }
+    if (vhora2 === "false" || vhora2 === null) {
+      valido = false;
+    }
+    if (vhora3 === "false" || vhora3 === null) {
+      valido = false;
+    }
+    if (vhora4 === "false" || vhora4 === null) {
+      valido = false;
+    }
+    return valido;
+  }
+  const asignacionLugarHora = () => {
+    if (esValidoFixture()) {
+      let fechas = [fechaDia1, fechaDia2, fechaDia3, fechaDia4];
+      let horas = [hora1, hora2, hora3, hora4];
+      let lugares = [lugar1.campo, lugar2.campo, lugar3.campo, lugar4.campo];
+      let fecha = 0;
+      let lugar = 0;
+      let hora = 0;
+      let cont = 0;
+      partidos[0].Partidos.map((dato) => {
+        dato.fecha = fechas[fecha];
+        dato.lugar = lugares[lugar];
+        dato.hora = horas[hora];
+        lugar++;
+        hora++;
+        cont++;
+        if (cont > 3) {
+          fecha++;
+          cont = 0;
+        }
+      });
+      fecha = 2;
+      lugar = 1;
+      hora = 0;
+      cont = 0;
+      partidos[1].Partidos.map((dato) => {
+        dato.fecha = fechas[fecha];
+        dato.lugar = lugares[lugar];
+        dato.hora = horas[hora];
+        lugar++;
+        hora++;
+        cont++;
+        if (cont > 3) {
+          fecha++;
+          cont = 0;
+        }
+        if (lugar > 3) {
+          lugar = 0;
+        }
+        if (hora > 3) {
+          hora = 0;
+        }
+      });
+      subirBaseDatos();
+    }else{
+      setvFechaDia1("false")
+      setvFechaDia2("false")
+      setvFechaDia3("false")
+      setvFechaDia4("false")
+      setvHora1("false")
+      setvHora2("false")
+      setvHora3("false")
+      setvHora4("false")
+      lugar1.valido = "false"
+      lugar2.valido = "false"
+      lugar3.valido = "false"
+      lugar4.valido = "false"
+      toast("Verificar Datos", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
+    }
+  };
+  const subirBaseDatos = () => {
+    var partidosLleno = [];
+    partidos.map((datos) => {
+      datos.Partidos.map((eq) => {
+        const par = {
+          GRUPO: datos.Grupo,
+          EQUIPO1: eq.equipo1,
+          EQUIPO2: eq.equipo2,
+          GANADOR: "",
+          PERDEDOR: "",
+          ANOTACIONESEQ1: "",
+          ANOTACIONESEQ2: "",
+          LUGAR: eq.lugar,
+          HORA: eq.hora,
+          DIA: eq.fecha,
+        };
+        partidosLleno.push(par);
+      });
+    });
+    console.log(partidosLleno);
+  };
+
+  const cuartos = () => {};
+
   return (
     <ContenedorPrincipal>
       <ContenedorOpciones>
@@ -1460,59 +1786,295 @@ export default function Administrador() {
       {titulo === "CREAR FIXTURE" && (
         <ContenedorConfiguracion>
           <Titulo2>FIXTURE</Titulo2>
-          <Detalle sin={"true"}>
-            {obtuvoC && (
-              <BoxCampo>
-                <TextBox>Categoria</TextBox>
-                <SelectNacionalidad
-                  type="text"
-                  placeholder="Categoria"
-                  required
-                  id="categoria"
-                  onChange={(e) => {
-                    setCategoria(e.target.value);
-                  }}
-                >
-                  <option value="">Categoria</option>
-                  {listaCategorias.map((datos) => {
-                    return (
-                      <option value={datos.NOMBRECATEGORIA}>
-                        {datos.NOMBRECATEGORIA}
-                      </option>
-                    );
-                  })}
-                </SelectNacionalidad>
-                <BotonAñadir onClick={obtenerEquiposCategoria}>
-                  Generar Fixture
+          {fixture1 && (
+            <>
+              <Detalle sin={"true"}>
+                {obtuvoC && (
+                  <BoxCampo>
+                    <TextBox>Categoria</TextBox>
+                    <SelectNacionalidad
+                      type="text"
+                      placeholder="Categoria"
+                      required
+                      id="categoria"
+                      onChange={(e) => {
+                        setCategoria(e.target.value);
+                      }}
+                    >
+                      <option value="">Categoria</option>
+                      {listaCategorias.map((datos) => {
+                        return (
+                          <option value={datos.NOMBRECATEGORIA}>
+                            {datos.NOMBRECATEGORIA}
+                          </option>
+                        );
+                      })}
+                    </SelectNacionalidad>
+                    <BotonAñadir onClick={obtenerEquiposCategoria}>
+                      Generar Fixture
+                    </BotonAñadir>
+                  </BoxCampo>
+                )}
+                {!obtuvoC && (
+                  <ImgCarga
+                    grupo={"false"}
+                    src={require("../Imagenes/Carga.gif")}
+                  />
+                )}
+              </Detalle>
+              <Detalle grupo={"true"}>
+                {obtuvoGrupos && (
+                  <>
+                    {listaGrupos.map((datos) => {
+                      return (
+                        <BoxCampo grupo={"true"}>
+                          <TextBox grupo={"true"}>{datos.Grupo}</TextBox>
+                          {datos.Equipos.map((enco) => {
+                            return <TextBox>{enco}</TextBox>;
+                          })}
+                        </BoxCampo>
+                      );
+                    })}
+                  </>
+                )}
+                {!obtuvoGrupos && (
+                  <ImgCarga
+                    grupo={"true"}
+                    src={require("../Imagenes/Carga.gif")}
+                  />
+                )}
+              </Detalle>
+              {obtuvoC && (
+                <BotonAñadir disabled={inhabilitado} onClick={generarPartidos}>
+                  {espera === "false" && "Siguiente"}
+                  {espera === "true" && (
+                    <Img src={require("../Imagenes/Carga.gif")} />
+                  )}
                 </BotonAñadir>
-              </BoxCampo>
-            )}
-            {!obtuvoC && <ImgCarga src={require("../Imagenes/Carga.gif")} />}
-          </Detalle>
-          <Detalle grupo={"true"}>
-            {obtuvoGrupos && (
-              <>
-                {listaGrupos.map((datos) => {
+              )}
+            </>
+          )}
+          {fixture2 && (
+            <>
+              <Detalle grupo={"false"} sin={"true"}>
+                {partidos.map((grupo) => {
                   return (
-                    <BoxCampo>
-                      <TextBox grupo={"true"}>Grupo: {datos.Grupo}</TextBox>
-                      <TextBox>{datos.Equipo1}</TextBox>
-                      <TextBox>{datos.Equipo2}</TextBox>
-                      <TextBox>{datos.Equipo3}</TextBox>
-                      <TextBox>{datos.Equipo4}</TextBox>
+                    <BoxCampo grupo={"true"}>
+                      <TextBox grupo={"true"}>{grupo.Grupo}</TextBox>
+                      {grupo.Partidos.map((enco) => {
+                        return (
+                          <TextBox ultimo={"true"}>
+                            {enco.equipo1} Vs {enco.equipo2}
+                          </TextBox>
+                        );
+                      })}
                     </BoxCampo>
                   );
                 })}
-              </>
-            )}
-            {!obtuvoGrupos && <ImgCarga src={require("../Imagenes/Carga.gif")} />}
-          </Detalle>
-          <BotonAñadir disabled={inhabilitado} onClick={""}>
-            {espera === "false" && nombreBoton}
-            {espera === "true" && (
-              <Img src={require("../Imagenes/Carga.gif")} />
-            )}
-          </BotonAñadir>
+              </Detalle>
+              <BotonAñadir
+                disabled={inhabilitado}
+                onClick={() => {
+                  setFixture2(false);
+                  setFixture3(true);
+                }}
+              >
+                {espera === "false" && "Siguiente"}
+                {espera === "true" && (
+                  <Img src={require("../Imagenes/Carga.gif")} />
+                )}
+              </BotonAñadir>
+            </>
+          )}
+          {fixture3 && (
+            <Detalle fecha={"true"}>
+              <BoxCampo lugar={"true"}>
+                <TextBox>Fecha Dia 1</TextBox>
+                <InputBox
+                  type="date"
+                  valido={vfechaDia1}
+                  id="fechadia1"
+                  onChange={(e) => {
+                    setFechaDia1(e.target.value);
+                  }}
+                  onKeyUp={validarDia1}
+                  onBlur={validarDia1}
+                />
+                <IconoValidacion
+                  icon={vfechaDia1 === "true" ? faCircleCheck : faCircleXmark}
+                  valido={vfechaDia1}
+                />
+              </BoxCampo>
+              <BoxCampo lugar={"true"}>
+                <TextBox>Fecha Dia 2</TextBox>
+                <InputBox
+                  type="date"
+                  valido={vfechaDia2}
+                  id="fechadia2"
+                  onChange={(e) => {
+                    setFechaDia2(e.target.value);
+                  }}
+                  onKeyUp={validarDia2}
+                  onBlur={validarDia2}
+                />
+                <IconoValidacion
+                  icon={vfechaDia2 === "true" ? faCircleCheck : faCircleXmark}
+                  valido={vfechaDia2}
+                />
+              </BoxCampo>
+              <BoxCampo lugar={"true"}>
+                <TextBox>Fecha Dia 3</TextBox>
+                <InputBox
+                  type="date"
+                  valido={vfechaDia3}
+                  id="fechadia3"
+                  onChange={(e) => {
+                    setFechaDia3(e.target.value);
+                  }}
+                  onKeyUp={validarDia3}
+                  onBlur={validarDia3}
+                />
+                <IconoValidacion
+                  icon={vfechaDia3 === "true" ? faCircleCheck : faCircleXmark}
+                  valido={vfechaDia3}
+                />
+              </BoxCampo>
+              <BoxCampo lugar={"true"}>
+                <TextBox>Fecha Dia 4</TextBox>
+                <InputBox
+                  type="date"
+                  valido={vfechaDia4}
+                  id="fechadia4"
+                  onChange={(e) => {
+                    setFechaDia4(e.target.value);
+                  }}
+                  onKeyUp={validarDia4}
+                  onBlur={validarDia4}
+                />
+                <IconoValidacion
+                  icon={vfechaDia4 === "true" ? faCircleCheck : faCircleXmark}
+                  valido={vfechaDia4}
+                />
+              </BoxCampo>
+              <InputValidar
+                estado={lugar1}
+                cambiarEstado={setLugar1}
+                tipo="text"
+                label="Lugar 1"
+                placeholder="Lugar 1"
+                name="lugar1"
+                expresionRegular={/^[a-zA-Z0-9-]{6,100}/}
+                classe={"lugar"}
+              />
+              <InputValidar
+                estado={lugar2}
+                cambiarEstado={setLugar2}
+                tipo="text"
+                label="Lugar 2"
+                placeholder="Lugar 2"
+                name="lugar2"
+                expresionRegular={/^[a-zA-Z0-9-]{6,100}/}
+                classe={"lugar"}
+              />
+              <InputValidar
+                estado={lugar3}
+                cambiarEstado={setLugar3}
+                tipo="text"
+                label="Lugar 3"
+                placeholder="Lugar 3"
+                name="lugar3"
+                expresionRegular={/^[a-zA-Z0-9-]{6,100}/}
+                classe={"lugar"}
+              />
+              <InputValidar
+                estado={lugar4}
+                cambiarEstado={setLugar4}
+                tipo="text"
+                label="Lugar 4"
+                placeholder="Lugar 4"
+                name="lugar4"
+                expresionRegular={/^[a-zA-Z0-9-]{6,100}/}
+                classe={"lugar"}
+              />
+              <BoxCampo lugar={"false"}>
+                <TextBox>Hora 1</TextBox>
+                <InputBox
+                  type="time"
+                  valido={vhora1}
+                  id="hora1"
+                  onChange={(e) => {
+                    setHora1(e.target.value);
+                  }}
+                  onKeyUp={validarHora1}
+                  onBlur={validarHora1}
+                />
+                <IconoValidacion
+                  icon={vhora1 === "true" ? faCircleCheck : faCircleXmark}
+                  valido={vhora1}
+                />
+              </BoxCampo>
+              <BoxCampo lugar={"false"}>
+                <TextBox>Hora 2</TextBox>
+                <InputBox
+                  type="time"
+                  valido={vhora2}
+                  id="hora2"
+                  onChange={(e) => {
+                    setHora2(e.target.value);
+                  }}
+                  onKeyUp={validarHora2}
+                  onBlur={validarHora2}
+                />
+                <IconoValidacion
+                  icon={vhora2 === "true" ? faCircleCheck : faCircleXmark}
+                  valido={vhora2}
+                />
+              </BoxCampo>
+              <BoxCampo lugar={"false"}>
+                <TextBox>Hora 3</TextBox>
+                <InputBox
+                  type="time"
+                  valido={vhora3}
+                  id="hora3"
+                  onChange={(e) => {
+                    setHora3(e.target.value);
+                  }}
+                  onKeyUp={validarHora3}
+                  onBlur={validarHora3}
+                />
+                <IconoValidacion
+                  icon={vhora3 === "true" ? faCircleCheck : faCircleXmark}
+                  valido={vhora3}
+                />
+              </BoxCampo>
+              <BoxCampo lugar={"false"}>
+                <TextBox>Hora 4</TextBox>
+                <InputBox
+                  type="time"
+                  valido={vhora4}
+                  id="hora4"
+                  onChange={(e) => {
+                    setHora4(e.target.value);
+                  }}
+                  onKeyUp={validarHora4}
+                  onBlur={validarHora4}
+                />
+                <IconoValidacion
+                  icon={vhora4 === "true" ? faCircleCheck : faCircleXmark}
+                  valido={vhora4}
+                />
+              </BoxCampo>
+              <BotonAñadir
+                disabled={inhabilitado}
+                onClick={asignacionLugarHora}
+              >
+                {espera === "false" && "Siguiente"}
+                {espera === "true" && (
+                  <Img src={require("../Imagenes/Carga.gif")} />
+                )}
+              </BotonAñadir>
+            </Detalle>
+          )}
         </ContenedorConfiguracion>
       )}
       <Modal
