@@ -108,13 +108,26 @@ export const Detalle = styled.div`
       text-align: center;
       align-items: center;
     `}
+    ${(props) =>
+    props.fecha === "true" &&
+    css`
+      margin-top: 0px;
+    `}
   ${(props) =>
     props.grupo === "true" &&
     css`
-      margin-top: -20px;
+      margin-top: 0px;
       overflow-y: auto;
-      max-height: 285px;
-      height: 285px;
+      max-height: 272px;
+      height: 272px;
+    `}
+    ${(props) =>
+    props.grupo === "false" &&
+    css`
+      margin-top: 15px;
+      overflow-y: auto;
+      max-height: 420px;
+      height: 420px;
     `}
 `;
 export const BoxCampo = styled.div`
@@ -123,12 +136,22 @@ export const BoxCampo = styled.div`
   position: relative;
   z-index: 90;
   ${(props) =>
+    props.lugar === "true" &&
+    css`
+      margin: 10px 0 0 0;
+    `}
+    ${(props) =>
+    props.lugar === "false" &&
+    css`
+      margin: 0px 0 0 0;
+      width: 130px;
+    `}
+  ${(props) =>
     props.grupo === "true" &&
     css`
-      margin-top: 15px;
+      margin-top: 0px;
       margin-bottom: 0px;
-      overflow-y: auto;
-      max-height: 300px;
+      text-align: center;
     `}
 `;
 export const BoxCampoBoton = styled.div`
@@ -154,12 +177,18 @@ export const TextBox = styled.span`
   ${(props) =>
     props.grupo === "true" &&
     css`
+      margin-top: 0px;
       text-align: center;
       border-top: 5px solid #000000;
       border-bottom: 5px solid #000000;
-      border-left: 5px solid #fc4415;
-      border-right: 5px solid #fc4415;
+      border-left: 5px solid #000000;
+      border-right: 5px solid #000000;
 
+    `}
+    ${(props) =>
+    props.ultimo === "true" &&
+    css`
+      border-bottom: 5px solid black;
     `}
 `;
 export const InputBox = styled.input`
@@ -224,6 +253,24 @@ export const ImgCarga = styled.img`
   height: 75%;
   margin-left: 10%;
   margin-top: 10%;
+  ${(props) =>
+    props.grupo === "true" &&
+    css`
+      margin-top: 0px;
+      width: 95%;
+      height: 125%;
+      margin-left: 0%;
+      margin-top: -68px;
+    `}
+    ${(props) =>
+    props.grupo === "false" &&
+    css`
+      margin-top: 0px;
+      width: 95%;
+      height: 95%;
+      margin-left: 0%;
+      margin-top: -10%;
+    `}
 `;
 export const ContenedorBoton = styled.div`
   width: 32%;

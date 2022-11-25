@@ -87,6 +87,14 @@ export const BoxCampo = styled.div`
       position: relative;
       z-index: 90;
     `}
+    ${(props) =>
+    props.tipo == "lugar" &&
+    css`
+      margin: 5px 0 5px 0;
+      width: 300px;
+      position: relative;
+      z-index: 90;
+    `}
 `;
 export const BoxBoton = styled.div`
   margin: 20px 0 12px 0;
