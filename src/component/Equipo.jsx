@@ -4,11 +4,14 @@ import IniciarSesion from './IniciarSesion';
 import {Button, Contenedor,ContenedorMain, Equipos, EquipoModal, ImgEquipo, Select} from "./EstiloEquipos"
 import { useEffect } from 'react';
 import axios from 'axios';
+import { PopUpEquipo } from './PopUpEquipo';
 
 export default function Equipo() {
   const [modal, setModal] = useState(false)
   const [equipos, setEquipos] = useState([]);
+  const [equipo, setEquipo] = useState({});
   const [categoria, setCategoria] = useState("+35");
+  const [popUp, setpopUp] = useState(false);
   
   useEffect(()=>{
     getDatos();
@@ -27,6 +30,19 @@ export default function Equipo() {
     //console.log(categoria);
   }
 
+  function cambiarEstadoPopUp(equipo){
+    /* if(popUp){
+       setpopUp(false);
+    }else{
+       setpopUp(true);
+    } */
+    setEquipo(equipo);
+    cerrarPopup(true);
+  }
+
+  function cerrarPopup(e){
+    setpopUp(e);
+  }
 
   document.title = "Equipo";
   return (
@@ -73,21 +89,20 @@ export default function Equipo() {
               equipos.map(equipo => {  
                 return (
                   
-                    <EquipoModal key={equipo.IDEQUIPO}>
+                    <EquipoModal key={equipo.IDEQUIPO} onClick={()=>cambiarEstadoPopUp(equipo)}>
                       <h2>{equipo.NOMBRE}</h2>
                   {/*<img src={require(equipo.LOGO)} />*/}
                       <ImgEquipo src={require('../Imagenes/LakersImage.jpg')} />
                     </EquipoModal>
+                    
                  
                 )
               })
             }
           </Equipos>
         </ContenedorMain>
-
-        
-
       </Contenedor >
+      <b>{popUp ? <PopUpEquipo equipo={equipo} cerrarPopup={cerrarPopup}/> : ''}</b>
       <IniciarSesion
         estado={modal}
         cambiarEstado={setModal}

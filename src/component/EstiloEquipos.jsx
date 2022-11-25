@@ -45,3 +45,28 @@ export const ImgEquipo = styled.img`
     max-width: 400px;
     height: 400px;
 `
+export const PopUpContainer = styled.div`
+   background: white;
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   width: 500px;
+   height: 500px;
+   padding: 15px;
+   color: #555;
+   border-radius: 10px;
+   box-shadow: 2px 3px 7px -1px rgba(0,0,0,0.76);
+-webkit-box-shadow: 2px 3px 7px -1px rgba(0,0,0,0.76);
+-moz-box-shadow: 2px 3px 7px -1px rgba(0,0,0,0.76);
+`
+
+export const BotonPopup = styled.button `
+    border: none;
+    background: red;
+    border-radius: 2px;
+    color: white;
+    font-size: 30px;
+    margin-bottom: 5px;
+    padding: 0px 12px;
+`
