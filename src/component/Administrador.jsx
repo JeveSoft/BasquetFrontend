@@ -641,10 +641,11 @@ export default function Administrador() {
       setEspera("true");
       var EqGrupoA = listaGrupos[0].Equipos.slice();
       var EqGrupoB = listaGrupos[1].Equipos.slice();
-      var i = 0;
       var partidosA = [];
       var partidosB = [];
-      while (i < EqGrupoA.length + 2) {
+      var tamañoA = EqGrupoA.length
+      var tamañoB = EqGrupoB.length
+      while (tamañoA > 0) {
         let random = Math.floor(Math.random() * EqGrupoA.length);
         let eq1 = EqGrupoA[random];
         EqGrupoA.splice(random, 1);
@@ -659,10 +660,9 @@ export default function Administrador() {
           hora: "",
         };
         partidosA.push(partido);
-        i++;
+        tamañoA = tamañoA - 2;
       }
-      i = 0;
-      while (i < EqGrupoB.length + 2) {
+      while (tamañoB > 0) {
         let random = Math.floor(Math.random() * EqGrupoB.length);
         let eq1 = EqGrupoB[random];
         EqGrupoB.splice(random, 1);
@@ -677,7 +677,7 @@ export default function Administrador() {
           hora: "",
         };
         partidosB.push(partido);
-        i++;
+        tamañoB = tamañoB - 2;
       }
       let lista1 = {
         Grupo: "Grupo A " + categoria,
@@ -761,7 +761,6 @@ export default function Administrador() {
     }
   };
   const validarHora1 = () => {
-    console.log(hora1);
     if (hora1 !== undefined) {
       setvHora1("true");
     } else {
@@ -793,39 +792,171 @@ export default function Administrador() {
     var valido = true;
     if (vfechaDia1 === "false" || vfechaDia1 === null) {
       valido = false;
+      toast("Verificar Fecha Dia 1", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
     }
     if (vfechaDia2 === "false" || vfechaDia2 === null) {
       valido = false;
+      toast("Verificar Fecha Dia 2", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
     }
     if (vfechaDia3 === "false" || vfechaDia3 === null) {
       valido = false;
+      toast("Verificar Fecha Dia 3", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
     }
     if (vfechaDia4 === "false" || vfechaDia4 === null) {
       valido = false;
+      toast("Verificar Fecha Dia 4", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
     }
     if (lugar1.valido === "false") {
       valido = false;
+      toast("Verificar Lugar 1", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
     }
     if (lugar2.valido === "false") {
       valido = false;
+      toast("Verificar Lugar 2", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
     }
     if (lugar3.valido === "false") {
       valido = false;
+      toast("Verificar Lugar 3", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
     }
     if (lugar4.valido === "false") {
       valido = false;
+      toast("Verificar Lugar 4", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
     }
     if (vhora1 === "false" || vhora1 === null) {
       valido = false;
+      toast("Verificar Hora 1", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
     }
     if (vhora2 === "false" || vhora2 === null) {
       valido = false;
+      toast("Verificar Hora 2", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
     }
     if (vhora3 === "false" || vhora3 === null) {
       valido = false;
+      toast("Verificar Hora 3", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
     }
     if (vhora4 === "false" || vhora4 === null) {
       valido = false;
+      toast("Verificar Hora 4", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
     }
     return valido;
   }
@@ -873,30 +1004,6 @@ export default function Administrador() {
         }
       });
       subirBaseDatos();
-    }else{
-      setvFechaDia1("false")
-      setvFechaDia2("false")
-      setvFechaDia3("false")
-      setvFechaDia4("false")
-      setvHora1("false")
-      setvHora2("false")
-      setvHora3("false")
-      setvHora4("false")
-      lugar1.valido = "false"
-      lugar2.valido = "false"
-      lugar3.valido = "false"
-      lugar4.valido = "false"
-      toast("Verificar Datos", {
-        icon: "⚠️",
-        duration: 3000,
-        style: {
-          border: "2px solid #ff7c01",
-          padding: "10px",
-          color: "#fff",
-          background: "#000",
-          borderRadius: "4%",
-        },
-      });
     }
   };
   const subirBaseDatos = () => {
@@ -904,11 +1011,13 @@ export default function Administrador() {
     partidos.map((datos) => {
       datos.Partidos.map((eq) => {
         const par = {
+          IDCATEGORIA: categoria,
           GRUPO: datos.Grupo,
           EQUIPO1: eq.equipo1,
           EQUIPO2: eq.equipo2,
           GANADOR: "",
           PERDEDOR: "",
+          EMPATE: "",
           ANOTACIONESEQ1: "",
           ANOTACIONESEQ2: "",
           LUGAR: eq.lugar,

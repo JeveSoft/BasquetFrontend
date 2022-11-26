@@ -228,6 +228,7 @@ export default function ModalAñadirInformacion({
         setEspera("true");
         setInhabilitado(true);
         const datos = {
+          IDCATEGORIA:categoria.campo,
           NOMBRECATEGORIA: categoria.campo,
           EDADMIN: edadMin.campo,
           EDADMAX: edadMax.campo,
