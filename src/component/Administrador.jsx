@@ -146,6 +146,8 @@ export default function Administrador() {
   const url = "http://127.0.0.1:8000/";
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
+  const [esperaF, setEsperaF] = useState("false");
+  const [inhabilitadoF, setInhabilitadoF] = useState(false);
   const [listaGrupos, setListaGrupos] = useState([]);
   const [categoria, setCategoria] = useState("");
   const [partidos, setPartidos] = useState([]);
@@ -567,60 +569,84 @@ export default function Administrador() {
   };
   const obtenerEquiposCategoria = () => {
     if (categoria != "") {
-      setObtuvoGrupos(false);
-      axios.get(url + "porCategoria/" + categoria).then((response) => {
-        listaGrupos.splice(0, listaGrupos.length);
-        if (response.data.length > 7) {
-          var listaFixture = response.data;
-          var total = listaFixture.length;
-          var mitad = listaFixture.length / 2;
-          var j = 0;
-          var equipoA = [];
-          var equipoB = [];
-          while (j < mitad) {
-            let random = Math.floor(Math.random() * response.data.length);
-            let eq = listaFixture[random].NOMBRE;
-            equipoA.push(eq);
-            listaFixture.splice(random, 1);
-            j++;
-          }
-          while (j < total) {
-            let random = Math.floor(Math.random() * response.data.length);
-            let eq = listaFixture[random].NOMBRE;
-            equipoB.push(eq);
-            listaFixture.splice(random, 1);
-            j++;
-          }
-          const grupoA = {
-            Grupo: "Grupo A",
-            Equipos: equipoA,
-          };
-          const grupoB = {
-            Grupo: "Grupo B",
-            Equipos: equipoB,
-          };
-          listaGrupos.push(grupoA);
-          listaGrupos.push(grupoB);
+      setEspera("true");
+      setInhabilitado(true);
+      axios.get(url + "obtenercategoriafixture/" + categoria).then((data) => {
+        if (data.data.length <= 0) {
+          setObtuvoGrupos(false);
+          axios.get(url + "porCategoria/" + categoria).then((response) => {
+            listaGrupos.splice(0, listaGrupos.length);
+            if (response.data.length > 7) {
+              var listaFixture = response.data;
+              var total = listaFixture.length;
+              var mitad = listaFixture.length / 2;
+              var j = 0;
+              var equipoA = [];
+              var equipoB = [];
+              while (j < mitad) {
+                let random = Math.floor(Math.random() * response.data.length);
+                let eq = listaFixture[random].NOMBRE;
+                equipoA.push(eq);
+                listaFixture.splice(random, 1);
+                j++;
+              }
+              while (j < total) {
+                let random = Math.floor(Math.random() * response.data.length);
+                let eq = listaFixture[random].NOMBRE;
+                equipoB.push(eq);
+                listaFixture.splice(random, 1);
+                j++;
+              }
+              const grupoA = {
+                Grupo: "Grupo A",
+                Equipos: equipoA,
+              };
+              const grupoB = {
+                Grupo: "Grupo B",
+                Equipos: equipoB,
+              };
+              listaGrupos.push(grupoA);
+              listaGrupos.push(grupoB);
+            } else {
+              const grupo = {
+                Grupo: "Grupo",
+                Equipos: listaFixture,
+              };
+              listaGrupos.push(grupo);
+              
+            }
+            console.log(listaGrupos)
+            setObtuvoGrupos(true);
+            setGenerarFixture(true);
+            setEspera("false");
+            setInhabilitado(false);
+            toast("Fixture de categoria " + categoria + " generada", {
+              icon: "✅",
+              duration: 3000,
+              style: {
+                border: "2px solid #ff7c01",
+                padding: "10px",
+                color: "#fff",
+                background: "#000",
+                borderRadius: "4%",
+              },
+            });
+          });
         } else {
-          const grupo = {
-            Grupo: "Grupo",
-            Equipos: listaFixture,
-          };
-          listaGrupos.push(grupo);
+          setEspera("false");
+          setInhabilitado(false);
+          toast("Fixture ya generado", {
+            icon: "⚠️",
+            duration: 3000,
+            style: {
+              border: "2px solid #ff7c01",
+              padding: "10px",
+              color: "#fff",
+              background: "#000",
+              borderRadius: "4%",
+            },
+          });
         }
-        setObtuvoGrupos(true);
-        setGenerarFixture(true);
-        toast("Fixture de categoria " + categoria + " generada", {
-          icon: "✅",
-          duration: 3000,
-          style: {
-            border: "2px solid #ff7c01",
-            padding: "10px",
-            color: "#fff",
-            background: "#000",
-            borderRadius: "4%",
-          },
-        });
       });
     } else {
       toast("Ingresar Categoria", {
@@ -643,8 +669,8 @@ export default function Administrador() {
       var EqGrupoB = listaGrupos[1].Equipos.slice();
       var partidosA = [];
       var partidosB = [];
-      var tamañoA = EqGrupoA.length
-      var tamañoB = EqGrupoB.length
+      var tamañoA = EqGrupoA.length;
+      var tamañoB = EqGrupoB.length;
       while (tamañoA > 0) {
         let random = Math.floor(Math.random() * EqGrupoA.length);
         let eq1 = EqGrupoA[random];
@@ -961,6 +987,8 @@ export default function Administrador() {
     return valido;
   }
   const asignacionLugarHora = () => {
+    setEsperaF("true");
+    setInhabilitadoF(true);
     if (esValidoFixture()) {
       let fechas = [fechaDia1, fechaDia2, fechaDia3, fechaDia4];
       let horas = [hora1, hora2, hora3, hora4];
@@ -979,6 +1007,12 @@ export default function Administrador() {
         if (cont > 3) {
           fecha++;
           cont = 0;
+        }
+        if (lugar > 3) {
+          lugar = 0;
+        }
+        if (hora > 3) {
+          hora = 0;
         }
       });
       fecha = 2;
@@ -1027,10 +1061,22 @@ export default function Administrador() {
         partidosLleno.push(par);
       });
     });
-    console.log(partidosLleno);
+    partidosLleno.map((partido) => {
+      axios.post(url + "añadirPartido", partido).then((response) => {
+        setEsperaF("false");
+        setInhabilitadoF(false);
+      });
+    });
+    setTitulo("ADMINISTRADOR");
+    setFixture1(true);
+    setFixture2(false);
+    setFixture3(false);
+    setActivoCL("");
+    setActivoE("");
+    setActivoA("");
+    setActivoI("");
+    listaGrupos.splice(0, listaGrupos.length);
   };
-
-  const cuartos = () => {};
 
   return (
     <ContenedorPrincipal>
@@ -1044,6 +1090,11 @@ export default function Administrador() {
             setActivoE("");
             setActivoA("");
             setActivoI("");
+            setFixture1(true);
+            setFixture2(false);
+            setFixture3(false);
+            setGenerarFixture(false)
+            partidos.splice(0, partidos.length);
             listaGrupos.splice(0, listaGrupos.length);
           }}
         />
@@ -1058,6 +1109,11 @@ export default function Administrador() {
               setActivoI("");
               setActivoCF("");
               obtenerFechas();
+              setFixture1(true);
+              setFixture2(false);
+              setFixture3(false);
+              setGenerarFixture(false)
+              partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
           >
@@ -1073,6 +1129,11 @@ export default function Administrador() {
               setActivoI("");
               setActivoCF("");
               obtenerMedioPago();
+              setFixture1(true);
+              setFixture2(false);
+              setFixture3(false);
+              setGenerarFixture(false)
+              partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
           >
@@ -1088,6 +1149,11 @@ export default function Administrador() {
               setActivoI("");
               setActivoCF("");
               obtenerArbitro();
+              setFixture1(true);
+              setFixture2(false);
+              setFixture3(false);
+              setGenerarFixture(false)
+              partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
           >
@@ -1102,6 +1168,11 @@ export default function Administrador() {
               setActivoA("");
               setActivoCF("");
               setActivoI("true");
+              setFixture1(true);
+              setFixture2(false);
+              setFixture3(false);
+              setGenerarFixture(false)
+              partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
           >
@@ -1117,6 +1188,11 @@ export default function Administrador() {
               setActivoI("");
               obtenerHabilitado();
               setActivoCF("true");
+              setFixture1(true);
+              setFixture2(false);
+              setFixture3(false);
+              setGenerarFixture(false)
+              partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
           >
@@ -1131,6 +1207,11 @@ export default function Administrador() {
               setActivoI("");
               setActivoCF("");
               setModal(!modal);
+              setFixture1(true);
+              setFixture2(false);
+              setFixture3(false);
+              setGenerarFixture(false)
+              partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
           >
@@ -1919,8 +2000,14 @@ export default function Administrador() {
                         );
                       })}
                     </SelectNacionalidad>
-                    <BotonAñadir onClick={obtenerEquiposCategoria}>
-                      Generar Fixture
+                    <BotonAñadir
+                      onClick={obtenerEquiposCategoria}
+                      disabled={inhabilitado}
+                    >
+                      {espera === "false" && "Generar Fixture"}
+                      {espera === "true" && (
+                        <Img src={require("../Imagenes/Carga.gif")} />
+                      )}
                     </BotonAñadir>
                   </BoxCampo>
                 )}
@@ -1953,7 +2040,7 @@ export default function Administrador() {
                   />
                 )}
               </Detalle>
-              {obtuvoC && (
+              {generoFixture && (
                 <BotonAñadir disabled={inhabilitado} onClick={generarPartidos}>
                   {espera === "false" && "Siguiente"}
                   {espera === "true" && (
@@ -2174,11 +2261,11 @@ export default function Administrador() {
                 />
               </BoxCampo>
               <BotonAñadir
-                disabled={inhabilitado}
+                disabled={inhabilitadoF}
                 onClick={asignacionLugarHora}
               >
-                {espera === "false" && "Siguiente"}
-                {espera === "true" && (
+                {esperaF === "false" && "Siguiente"}
+                {esperaF === "true" && (
                   <Img src={require("../Imagenes/Carga.gif")} />
                 )}
               </BotonAñadir>
