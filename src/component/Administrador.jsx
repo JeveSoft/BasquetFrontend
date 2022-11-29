@@ -608,14 +608,24 @@ export default function Administrador() {
               listaGrupos.push(grupoA);
               listaGrupos.push(grupoB);
             } else {
-              const grupo = {
-                Grupo: "Grupo",
-                Equipos: listaFixture,
+              var listaFixtureP = response.data;
+              var tamaño = listaFixtureP.length;
+              var i = 0;
+              var equipo = [];
+              while (i < tamaño) {
+                let random = Math.floor(Math.random() * response.data.length);
+                let eq = listaFixtureP[random].NOMBRE;
+                equipo.push(eq);
+                listaFixtureP.splice(random, 1);
+                i++;
+              }
+              const grupoA = {
+                Grupo: "Grupo A",
+                Equipos: equipo,
               };
-              listaGrupos.push(grupo);
-              
+
+              listaGrupos.push(grupoA);
             }
-            console.log(listaGrupos)
             setObtuvoGrupos(true);
             setGenerarFixture(true);
             setEspera("false");
@@ -664,58 +674,87 @@ export default function Administrador() {
   };
   const generarPartidos = () => {
     if (generoFixture) {
-      setEspera("true");
-      var EqGrupoA = listaGrupos[0].Equipos.slice();
-      var EqGrupoB = listaGrupos[1].Equipos.slice();
-      var partidosA = [];
-      var partidosB = [];
-      var tamañoA = EqGrupoA.length;
-      var tamañoB = EqGrupoB.length;
-      while (tamañoA > 0) {
-        let random = Math.floor(Math.random() * EqGrupoA.length);
-        let eq1 = EqGrupoA[random];
-        EqGrupoA.splice(random, 1);
-        random = Math.floor(Math.random() * EqGrupoA.length);
-        let eq2 = EqGrupoA[random];
-        EqGrupoA.splice(random, 1);
-        let partido = {
-          equipo1: eq1,
-          equipo2: eq2,
-          lugar: "",
-          fecha: "",
-          hora: "",
+      if (listaGrupos.length > 1) {
+        setEspera("true");
+        var EqGrupoA = listaGrupos[0].Equipos.slice();
+        var EqGrupoB = listaGrupos[1].Equipos.slice();
+        var partidosA = [];
+        var partidosB = [];
+        var tamañoA = EqGrupoA.length;
+        var tamañoB = EqGrupoB.length;
+        while (tamañoA > 0) {
+          let random = Math.floor(Math.random() * EqGrupoA.length);
+          let eq1 = EqGrupoA[random];
+          EqGrupoA.splice(random, 1);
+          random = Math.floor(Math.random() * EqGrupoA.length);
+          let eq2 = EqGrupoA[random];
+          EqGrupoA.splice(random, 1);
+          let partido = {
+            equipo1: eq1,
+            equipo2: eq2,
+            lugar: "",
+            fecha: "",
+            hora: "",
+          };
+          partidosA.push(partido);
+          tamañoA = tamañoA - 2;
+        }
+        while (tamañoB > 0) {
+          let random = Math.floor(Math.random() * EqGrupoB.length);
+          let eq1 = EqGrupoB[random];
+          EqGrupoB.splice(random, 1);
+          random = Math.floor(Math.random() * EqGrupoB.length);
+          let eq2 = EqGrupoB[random];
+          EqGrupoB.splice(random, 1);
+          let partido = {
+            equipo1: eq1,
+            equipo2: eq2,
+            lugar: "",
+            fecha: "",
+            hora: "",
+          };
+          partidosB.push(partido);
+          tamañoB = tamañoB - 2;
+        }
+        let lista1 = {
+          Grupo: "Grupo A " + categoria,
+          Partidos: partidosA,
         };
-        partidosA.push(partido);
-        tamañoA = tamañoA - 2;
-      }
-      while (tamañoB > 0) {
-        let random = Math.floor(Math.random() * EqGrupoB.length);
-        let eq1 = EqGrupoB[random];
-        EqGrupoB.splice(random, 1);
-        random = Math.floor(Math.random() * EqGrupoB.length);
-        let eq2 = EqGrupoB[random];
-        EqGrupoB.splice(random, 1);
-        let partido = {
-          equipo1: eq1,
-          equipo2: eq2,
-          lugar: "",
-          fecha: "",
-          hora: "",
+        let lista2 = {
+          Grupo: "Grupo B" + categoria,
+          Partidos: partidosB,
         };
-        partidosB.push(partido);
-        tamañoB = tamañoB - 2;
+        partidos.push(lista1);
+        partidos.push(lista2);
+        obtenerSoloFechas();
+      } else {
+        var EqGrupoA = listaGrupos[0].Equipos.slice();
+        var partidosA = [];
+        var tamañoA = EqGrupoA.length;
+        while (tamañoA > 0) {
+          let random = Math.floor(Math.random() * EqGrupoA.length);
+          let eq1 = EqGrupoA[random];
+          EqGrupoA.splice(random, 1);
+          random = Math.floor(Math.random() * EqGrupoA.length);
+          let eq2 = EqGrupoA[random];
+          EqGrupoA.splice(random, 1);
+          let partido = {
+            equipo1: eq1,
+            equipo2: eq2,
+            lugar: "",
+            fecha: "",
+            hora: "",
+          };
+          partidosA.push(partido);
+          tamañoA = tamañoA - 2;
+        }
+        let lista1 = {
+          Grupo: "Grupo A " + categoria,
+          Partidos: partidosA,
+        };
+        partidos.push(lista1);
+        obtenerSoloFechas();
       }
-      let lista1 = {
-        Grupo: "Grupo A " + categoria,
-        Partidos: partidosA,
-      };
-      let lista2 = {
-        Grupo: "Grupo B" + categoria,
-        Partidos: partidosB,
-      };
-      partidos.push(lista1);
-      partidos.push(lista2);
-      obtenerSoloFechas();
     } else {
       toast("Generar Fixture", {
         icon: "⚠️",
@@ -1015,28 +1054,30 @@ export default function Administrador() {
           hora = 0;
         }
       });
-      fecha = 2;
-      lugar = 1;
-      hora = 0;
-      cont = 0;
-      partidos[1].Partidos.map((dato) => {
-        dato.fecha = fechas[fecha];
-        dato.lugar = lugares[lugar];
-        dato.hora = horas[hora];
-        lugar++;
-        hora++;
-        cont++;
-        if (cont > 3) {
-          fecha++;
-          cont = 0;
-        }
-        if (lugar > 3) {
-          lugar = 0;
-        }
-        if (hora > 3) {
-          hora = 0;
-        }
-      });
+      if (partidos.length > 1) {
+        fecha = 2;
+        lugar = 1;
+        hora = 0;
+        cont = 0;
+        partidos[1].Partidos.map((dato) => {
+          dato.fecha = fechas[fecha];
+          dato.lugar = lugares[lugar];
+          dato.hora = horas[hora];
+          lugar++;
+          hora++;
+          cont++;
+          if (cont > 3) {
+            fecha++;
+            cont = 0;
+          }
+          if (lugar > 3) {
+            lugar = 0;
+          }
+          if (hora > 3) {
+            hora = 0;
+          }
+        });
+      }
       subirBaseDatos();
     }
   };
@@ -1093,7 +1134,7 @@ export default function Administrador() {
             setFixture1(true);
             setFixture2(false);
             setFixture3(false);
-            setGenerarFixture(false)
+            setGenerarFixture(false);
             partidos.splice(0, partidos.length);
             listaGrupos.splice(0, listaGrupos.length);
           }}
@@ -1112,7 +1153,7 @@ export default function Administrador() {
               setFixture1(true);
               setFixture2(false);
               setFixture3(false);
-              setGenerarFixture(false)
+              setGenerarFixture(false);
               partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
@@ -1132,7 +1173,7 @@ export default function Administrador() {
               setFixture1(true);
               setFixture2(false);
               setFixture3(false);
-              setGenerarFixture(false)
+              setGenerarFixture(false);
               partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
@@ -1152,7 +1193,7 @@ export default function Administrador() {
               setFixture1(true);
               setFixture2(false);
               setFixture3(false);
-              setGenerarFixture(false)
+              setGenerarFixture(false);
               partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
@@ -1171,7 +1212,7 @@ export default function Administrador() {
               setFixture1(true);
               setFixture2(false);
               setFixture3(false);
-              setGenerarFixture(false)
+              setGenerarFixture(false);
               partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
@@ -1191,7 +1232,7 @@ export default function Administrador() {
               setFixture1(true);
               setFixture2(false);
               setFixture3(false);
-              setGenerarFixture(false)
+              setGenerarFixture(false);
               partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
@@ -1210,7 +1251,7 @@ export default function Administrador() {
               setFixture1(true);
               setFixture2(false);
               setFixture3(false);
-              setGenerarFixture(false)
+              setGenerarFixture(false);
               partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
