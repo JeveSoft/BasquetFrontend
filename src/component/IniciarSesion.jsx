@@ -262,7 +262,7 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
                     borderRadius: "4%",
                   },
                 });
-                historial.push("/delegado");
+                historial.push("/delegado/"+id);
               } else {
                 toast("Contraseña Incorrecta", {
                   icon: "⚠️",

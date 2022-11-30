@@ -70,3 +70,36 @@ export const BotonPopup = styled.button `
     margin-bottom: 5px;
     padding: 0px 12px;
 `
+
+export const SelectJugador = styled.select `
+display: block;
+height: 45px;
+width: 100%;
+outline: none;
+border-radius: 5px;
+border: 2px solid #ff7c01;
+padding-left: 15px;
+padding-right: 15px;
+font-size: 16px;
+border-bottom-width: 2px;
+transition: all 0.3s ease;
+`
+
+export const ContenedorJugadores = styled.div `
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    place-items: center;
+    text-align: center;
+`
+export const ImgJugador = styled.img `
+    width: 100px;
+    height: 75px;
+    place-items: center;
+    text-align: center;
+    margin: 10px;
+`
+
+export const ContenedorJugador = styled.div`
+    /* margin-bottom: 20px; */
+`
