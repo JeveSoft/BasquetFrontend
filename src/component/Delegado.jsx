@@ -71,7 +71,7 @@ import {DetalleUsuario} from "./EstiloRegistro";
 import PhoneInput from "react-phone-number-input";
 import { Boton } from "./IniciarSesion";
 import { SelectJugador,ContenedorJugadores, ImgJugador , ContenedorJugador} from "./EstiloEquipos"
-
+import ModalJugador from "./ModalJugador"
 const styles = makeStyles({
   encabezado: {
     padding: "0 30px",
@@ -131,35 +131,11 @@ export default function Delegado() {
   var fechas = null;
   const [nombreBoton, setNombreBoton] = useState("Guardar");
   const [empezo, setEmpezo] = useState(false);
-  const [listaCategorias, setListaCategoria] = useState(null);
-  const [listaMedioPago, setListaMedioPago] = useState([]);
-  const [obtuvoMP, setObtuvoMP] = useState(false);
-  const [obtuvoPC, setObtuvoPC] = useState(false);
-  const [listaPagoCompleto, setListaPagoCompleto] = useState([]);
-  const [obtuvoHS, setObtuvoHS] = useState(false);
-  const [listaHabilitadoSin, setListaHabilitadoSin] = useState([]);
-  const [obtuvoGrupos, setObtuvoGrupos] = useState(true);
-  const [obtuvoH, setObtuvoH] = useState(false);
-  const [datos, setDatos] = useState([]);
-  const [obtuvoC, setObtuvoC] = useState(false);
-  const [obtuvoFechas, setObtuvoFechas] = useState(false);
-  const [obtuvoA, setObtuvoA] = useState(false);
-  const [obtuvoI, setObtuvoI] = useState(false);
-  const [listaArbitro, setListaArbitro] = useState([]);
-  const [listaHabilitado, setListaHabilitado] = useState([]);
-  const [listaInformacion, setListaInformacion] = useState([]);
-  const [elEquipo, setElEquipo] = useState([]);
-  const [tipoEquipo, settipoEquipo] = useState([]);
+ 
   const url = "http://127.0.0.1:8000/";
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
   const [listaGrupos, setListaGrupos] = useState([]);
-
-
-
-
-
-
 
 
 /* DELEGADO  */
@@ -190,6 +166,10 @@ let location = useLocation();
   const [fotoCiJ, setFotoCiJ] = useState(null);
   const [fotoJ,setFotoJ] = useState(null);
   const [jugadores,setJugadores] = useState([]);
+  const [cantidadMaxima,setCantidadMaxima] = useState("");
+  const [cantidadActual,setCantidadActual] = useState("");
+  const [editarJugador,setEditarJugador] = useState(false);
+  const [jugador,setJugador] = useState({});
 
 
   const expresiones = {
@@ -247,27 +227,6 @@ let location = useLocation();
         NACIONALIDAD: nacionalidad,
     }; 
     console.log(data);
-    /*axios.put(url + "actualizarDelegado/"+idDelegado, {
-      NOMBRE: nombre,
-      CI: carnet,
-      EMAIL: correo,
-      CELULAR: numeroCel,
-      FECHANACIMIENTO: fechaNacimientoDel,
-      NACIONALIDAD: nacionalidad,
-      }).then((response) => {
-      
-      toast("Pagos Establecidas", {
-        icon: "✅",
-        duration: 3000,
-        style: {
-          border: "2px solid #ff7c01",
-          padding: "10px",
-          color: "#fff",
-          background: "#000",
-          borderRadius: "4%",
-        },
-      });
-    });*/
 
     //console.log(delegado);
     const response = await fetch(url+"actualizarDelegado/"+idDelegado, {
@@ -316,10 +275,10 @@ let location = useLocation();
      const data = await response.json();
      console.log(data);
      setInfoInscripcion(data);
-     setPagoMedio(data.PAGOMEDIO);
-     setPagoMedioValido(data.COMPROPAGOMEDIOVALIDO);
-     console.log(pagoMedio);
-     console.log(pagoMedioValido);
+     //setPagoMedio(data.PAGOMEDIO);
+     //setPagoMedioValido(data.COMPROPAGOMEDIOVALIDO);
+     setCantidadMaxima(infoInscripcion[0].CANTIDAD);
+     console.log(cantidadMaxima);
  }
 
  const guardarPagoMedio = (e) => {
@@ -357,71 +316,94 @@ let location = useLocation();
   return codigo;
 }
   const enviarJugador = async () =>{
-       var  IDJUGADORR = generarIdJugador();      
-      var dataJugador = {
-        IDJUGADOR : IDJUGADORR,
-        IDEQUIPO  : infoInscripcion.IDEQUIPO,          
-        NOMBREJUGADOR : nombreJ,
-        CIJUGADOR : carnetJ,          
-        CELULAR : numeroCelJ,       
-        EMAIL : correoJ,              
-        FOTOCIJUGADOR : "vacio",      
-        ROL : rolJ,                
-        FOTOQR : "vacio",        
-        FOTOJUGADOR : "vacio", 
-        FECHANACIMIENTO : fechaNacimientoJug
-      }
-      console.log(dataJugador);
+    console.log(cantidadActual);
+    console.log(cantidadMaxima);
+
+    if(cantidadActual < cantidadMaxima){
+          var  IDJUGADORR = generarIdJugador();      
+          var dataJugador = {
+            IDJUGADOR : IDJUGADORR,
+            IDEQUIPO  : infoInscripcion.IDEQUIPO,          
+            NOMBREJUGADOR : nombreJ,
+            CIJUGADOR : carnetJ,          
+            CELULAR : numeroCelJ,       
+            EMAIL : correoJ,              
+            FOTOCIJUGADOR : "vacio",      
+            ROL : rolJ,                
+            FOTOQR : "vacio",        
+            FOTOJUGADOR : "vacio", 
+            FECHANACIMIENTO : fechaNacimientoJug
+          }
+          console.log(dataJugador);
 
 
-      const response = await fetch(url+"agregarJugador/", {
-        method: 'POST', 
-        mode: 'cors',
-       
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(dataJugador) 
-      })
-      
-      const data = await response.json();
-      console.log(data);
-      limpiarCampos();
-      limpiarVariables();
+          const response = await fetch(url+"agregarJugador/", {
+            method: 'POST', 
+            mode: 'cors',
+          
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataJugador) 
+          })
+          
+          const data = await response.json();
+          console.log(data);
+          limpiarCampos();
+          limpiarVariables();
 
-      /* Envio imagen ci jugador */
-      const f = new FormData();
-      f.append("imagen",fotoCiJ);
-      console.log(fotoCiJ);
-      const response2 = await fetch(url + "setImgCi/"+ IDJUGADORR,
-      {
-        method: "POST",
-        body: f
-      }) 
+          /* Envio imagen ci jugador */
+          const f = new FormData();
+          f.append("imagen",fotoCiJ);
+          console.log(fotoCiJ);
+          const response2 = await fetch(url + "setImgCi/"+ IDJUGADORR,
+          {
+            method: "POST",
+            body: f
+          }) 
 
-      //const data2 = await response2.json();
-      //console.log(data2);
+          //const data2 = await response2.json();
+          //console.log(data2);
 
-      /* Envio imagen Jugador */
-      const f2 = new FormData();
-      f2.append("imagen",fotoJ);
-      console.log(fotoJ);
-      const response3 = await fetch(url + "setImgJugador/"+ IDJUGADORR,
-      {
-        method: "POST",
-        body: f2
-      }) 
-
-      //const data3 = await response3.json();
-      //console.log(data3);
+          /* Envio imagen Jugador */
+          const f2 = new FormData();
+          f2.append("imagen",fotoJ);
+          console.log(fotoJ);
+          const response3 = await fetch(url + "setImgJugador/"+ IDJUGADORR,
+          {
+            method: "POST",
+            body: f2
+          }) 
+          mensajeDeRespuesta("Jugador Ingresado Correctamente");
+          //const data3 = await response3.json();
+          //console.log(data3);
+    }else{
+          mensajeDeRespuesta("Cantidad Maxima de jugadores ingresados");
+          limpiarCampos();
+          limpiarVariables();
+    }
  }
-
+ const mensajeDeRespuesta = (txt) =>{
+  toast(txt, {
+    icon: "✅",
+    duration: 3000,
+    style: {
+      border: "2px solid #ff7c01",
+      padding: "10px",
+      color: "#fff",
+      background: "#000",
+      borderRadius: "4%",
+    },
+  });
+ }
  const limpiarCampos = () =>{
   document.getElementById("nombreJugador").value = "";
   document.getElementById("carnetJugador").value = "";
   document.getElementById("correoJugador").value = "";
   document.getElementById("numeroJugador").value = "";
   document.getElementById("fechaNacJ").value = "";
+  document.getElementById("fotoCiJ").value = "";
+  document.getElementById("fotoJ").value = "";
  }
 
  const limpiarVariables = () => {
@@ -437,39 +419,29 @@ let location = useLocation();
  const obtenerJugadores = async () => {
     const response = await fetch(url + "obtenerJugadores");
     const data = await response.json();
-    await setJugadores(data);
+    setJugadores(data);
+    setCantidadActual(data.length);
+    console.log(cantidadActual);
     console.log(jugadores);
  }
 
+   const infoJugador = (jugador) => {
+      setJugador(jugador);
+      if(editarJugador){
+        setEditarJugador(false);
+      }else{
+        setEditarJugador(true);
+      }
 
+      //console.log(jugador.IDJUGADOR);
+   }
+
+   const cerrarModalJugador = (b) =>{
+      setEditarJugador(b);
+   }
+
+ 
   useEffect(function () {
-   /*  if (
-      titulo === "PERFIL" &&
-      nombreBoton !== "Editar" &&
-      opcionL === "1"
-    ) {
-      if (!obtuvoFechas) {
-        //obtenerFechas();
-      } else {
-        document.getElementById("fechaPreInicio").value = fechaPreInicio;
-        document.getElementById("fechaPreFin").value = fechaPreFin;
-        document.getElementById("fechaInicio").value = fechaInicio;
-        document.getElementById("fechaFin").value = fechaFin;
-        document.getElementById("fechaInicioLiga").value = fechaInicioLiga;
-        document.getElementById("fechaFinLiga").value = fechaFinLiga;
-      }
-    } else {
-      if (titulo === "CONFIGURAR LIGA" && opcionL === "1") {
-        document.getElementById("fechaPreInicio").value = fechaPreInicio;
-        document.getElementById("fechaPreFin").value = fechaPreFin;
-        document.getElementById("fechaInicio").value = fechaInicio;
-        document.getElementById("fechaFin").value = fechaFin;
-        document.getElementById("fechaInicioLiga").value = fechaInicioLiga;
-        document.getElementById("fechaFinLiga").value = fechaFinLiga;
-      }
-    }
-    if (titulo === "PERFIL" || titulo === "ESTADO DE INSCRIPCION") {
-    } */
    
     obtenerDelegado();
     obtenerJugadores();
@@ -841,10 +813,10 @@ let location = useLocation();
                 <TextBox>Foto Carnet de Identidad</TextBox>
                 <InputFile
                   type="file"
-               
+                  
                   required
                   name=""
-                  id=""
+                  id="fotoCiJ"
                   onChange={(e) => {
                     setFotoCiJ(e.target.files[0]);
                   }}
@@ -856,15 +828,17 @@ let location = useLocation();
                 <TextBox>Foto Jugador</TextBox>
                 <InputFile
                   type="file"
-               
                   required
                   name=""
-                  id=""
+                  id="fotoJ"
+                 
                   onChange={(e) => {
                     setFotoJ(e.target.files[0]);
                   }}
                 />
+                
               </BoxCampo>
+
               <Boton onClick={()=>enviarJugador()}>Enviar</Boton>
             </DetalleUsuario>
             )
@@ -893,20 +867,27 @@ let location = useLocation();
            {
             jugadores.map( jugador =>{
               return (
-                <ContenedorJugador>
-                 {/* <ImgJugador src={require("../Imagenes/imagenJugador.jpg")} alt="" /> */}
+                <ContenedorJugador key={jugador.CIJUGADOR} onClick={()=>infoJugador(jugador)}>
+                 
                  {
-                    jugador.FOTOCIJUGADOR == "vacio" ? 
+                    jugador.FOTOJUGADOR == "vacio" ? 
                     <ImgJugador src={require("../Imagenes/imagenJugador.jpg")} alt="ATR" />
                     :
                      <ImgJugador src={url+"storage/"+jugador.FOTOJUGADOR} alt="ATR" />
                  }
                  <h5>{jugador.NOMBREJUGADOR}</h5>
                  <p>{jugador.CIJUGADOR}</p>
+
                 </ContenedorJugador>
               )
             })
-           }
+          }
+           <b> {editarJugador ? 
+            <ModalJugador 
+            jugador={jugador} 
+            idDelegado= {idDelegado}
+            cerrarModalJugador = {cerrarModalJugador}
+            ></ModalJugador> : ""}</b>
           </ContenedorJugadores>
         </ContenedorConfiguracion>
       )}
@@ -916,7 +897,7 @@ let location = useLocation();
         cambiarEstado={setModal}
         mensaje={"¿Seguro de cerrar sesion?"}
       />
-      <ModalRegistroArbitro
+      {/* <ModalRegistroArbitro
         estado={modalRegistroArbitro}
         cambiarEstado={setModalRegistroArbitro}
         codigo={codigoArbitro}
@@ -964,7 +945,7 @@ let location = useLocation();
         cambiarEstado={setModalEquipo}
         datos={elEquipo}
         tipo={tipoEquipo}
-      />
+      /> */}
     </ContenedorPrincipal>
   );
 }
