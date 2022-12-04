@@ -13,7 +13,7 @@ import {
 import {DetalleUsuario} from "./EstiloRegistro";
 import PhoneInput from "react-phone-number-input";
 import { Boton } from "./IniciarSesion";
-import { SelectJugador, BotonPopup} from "./EstiloEquipos"
+import { SelectJugador, BotonPopup, ImgJugador} from "./EstiloEquipos"
 
 
  export const ModalEditarJugador = styled.div`
@@ -32,7 +32,7 @@ import { SelectJugador, BotonPopup} from "./EstiloEquipos"
           -moz-box-shadow: 2px 3px 7px -1px rgba(0,0,0,0.76);
  `
 
-export default function ModalJugador( {jugador, idDelegado, idEquipo, cerrarModalJugador}) {
+export default function ModalJugador( {jugador, idDelegado, idEquipo, cerrarModalJugador, obtenerJugadores}) {
   const url = "http://127.0.0.1:8000/";
   const [nombreJ,setNombreJ] = useState("");
   const [carnetJ,setCarnetJ] = useState("");
@@ -83,35 +83,36 @@ export default function ModalJugador( {jugador, idDelegado, idEquipo, cerrarModa
                     
                const data = await response.json();
                console.log(data);
-                    //limpiarCampos();
-                //limpiarVariables();
-      
-                /* Envio imagen ci jugador */
-                /*const f = new FormData();
-                f.append("imagen",fotoCiJ);
-                console.log(fotoCiJ);
-                const response2 = await fetch(url + "setImgCi/"+ jugador.CIJUGADOR,
-                {
-                  method: "POST",
-                  body: f
-                }) */
-      
-                //const data2 = await response2.json();
-                //console.log(data2);
-      
+
+                
+                  /* Envio imagen ci jugador */
+                if(fotoCiJ != null){
+                  const f = new FormData();
+                  f.append("imagen",fotoCiJ);
+                  console.log(fotoCiJ);
+                  const response2 = await fetch(url + "setImgCi/"+ jugador.CIJUGADOR,
+                  {
+                    method: "POST",
+                    body: f
+                  })
+                }
+
                 /* Envio imagen Jugador */
-                /*const f2 = new FormData();
-                f2.append("imagen",fotoJ);
-                console.log(fotoJ);
-                const response3 = await fetch(url + "setImgJugador/"+ jugador.CIJUGADOR,
-                {
-                  method: "POST",
-                  body: f2
-                }) 
-                mensajeDeRespuesta("Jugador Ingresado Correctamente");
-                //const data3 = await response3.json();
-                //console.log(data3);*/
-                cerrarModalJugador(false)
+                if(fotoJ != null){
+                  const f2 = new FormData();
+                  f2.append("imagen",fotoJ);
+                  console.log(fotoJ);
+                  const response3 = await fetch(url + "setImgJugador/"+ jugador.CIJUGADOR,
+                  {
+                    method: "POST",
+                    body: f2
+                  }) 
+                  //const data3 = await response3.json();
+                }
+                //console.log(data3);
+                mensajeDeRespuesta("Jugador actualizado Correctamente");
+                obtenerJugadores();
+                cerrarModalJugador(false);
        }
 
        const mensajeDeRespuesta = (txt) =>{
@@ -135,6 +136,8 @@ export default function ModalJugador( {jugador, idDelegado, idEquipo, cerrarModa
            });
            
            cerrarModalJugador(false); 
+           mensajeDeRespuesta("Jugador eliminado Correctamente");
+           obtenerJugadores();
         }
 
         const llenarVariableJ = () =>{
@@ -243,7 +246,7 @@ export default function ModalJugador( {jugador, idDelegado, idEquipo, cerrarModa
               </BoxCampo>
              
               <BoxCampo>
-                <TextBox>Foto Carnet de Identidad</TextBox>
+                <TextBox>Cambiar foto Carnet de Identidad</TextBox>
                 <InputFile
                   type="file"
                   
@@ -255,10 +258,16 @@ export default function ModalJugador( {jugador, idDelegado, idEquipo, cerrarModa
                   }}
                 
                 />
-              </BoxCampo>
+                </BoxCampo>
+                {
+                  jugador.FOTOCIJUGADOR == "vacio" ? 
+                  <ImgJugador src={require("../Imagenes/imagenJugador.jpg")} alt="ATR" />
+                  :
+                  <ImgJugador src={url+"storage/"+jugador.FOTOCIJUGADOR} alt="ATR" />
+                }
 
               <BoxCampo>
-                <TextBox>Foto Jugador</TextBox>
+                <TextBox>Cambiar Foto Jugador</TextBox>
                 <InputFile
                   type="file"
                   required
@@ -269,8 +278,13 @@ export default function ModalJugador( {jugador, idDelegado, idEquipo, cerrarModa
                     setFotoJ(e.target.files[0]);
                   }}
                 />
-                
-              </BoxCampo>
+                </BoxCampo>
+                {
+                    jugador.FOTOJUGADOR == "vacio" ? 
+                    <ImgJugador src={require("../Imagenes/imagenJugador.jpg")} alt="ATR" />
+                    :
+                     <ImgJugador src={url+"storage/"+jugador.FOTOJUGADOR} alt="ATR" />
+                 }
 
             </DetalleUsuario>
               <Boton style={{margin:"10px 5px"}} onClick={()=>actualizarJugador()}>Actualizar</Boton>

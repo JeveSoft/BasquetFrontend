@@ -70,7 +70,7 @@ import InputValidar from "./InputValidar";
 import {DetalleUsuario} from "./EstiloRegistro";
 import PhoneInput from "react-phone-number-input";
 import { Boton } from "./IniciarSesion";
-import { SelectJugador,ContenedorJugadores, ImgJugador , ContenedorJugador} from "./EstiloEquipos"
+import { SelectJugador,ContenedorJugadores, ImgJugador , ContenedorJugador, BotonDescarga} from "./EstiloEquipos"
 import ModalJugador from "./ModalJugador"
 const styles = makeStyles({
   encabezado: {
@@ -277,7 +277,7 @@ let location = useLocation();
      setInfoInscripcion(data);
      //setPagoMedio(data.PAGOMEDIO);
      //setPagoMedioValido(data.COMPROPAGOMEDIOVALIDO);
-     setCantidadMaxima(infoInscripcion[0].CANTIDAD);
+     setCantidadMaxima(data[0].CANTIDAD);
      console.log(cantidadMaxima);
  }
 
@@ -286,9 +286,17 @@ let location = useLocation();
     setPagoMedioImg(e.target.files[0]);
  }
 
- const guardarExcel = (e) => {
-  console.log(e.target.files[0]);
-  setPagoMedioImg(e.target.files[0]);
+ const enviarExcel = async () => {
+  console.log(excel);
+  const f = new FormData();
+  f.append("file",excel);
+  const response = await fetch(url + "addJugadoresExcel/" + infoInscripcion[0].IDEQUIPO,{
+    method : "POST",
+    body: f
+  })
+  const data = await response.json();
+  mensajeDeRespuesta("Excel enviado correctamente");
+  obtenerInfoInscripcion();
 }
 
  const enviarPagoMedio =  async ()  =>{
@@ -323,7 +331,7 @@ let location = useLocation();
           var  IDJUGADORR = generarIdJugador();      
           var dataJugador = {
             IDJUGADOR : IDJUGADORR,
-            IDEQUIPO  : infoInscripcion.IDEQUIPO,          
+            IDEQUIPO  : infoInscripcion[0].IDEQUIPO,          
             NOMBREJUGADOR : nombreJ,
             CIJUGADOR : carnetJ,          
             CELULAR : numeroCelJ,       
@@ -356,7 +364,7 @@ let location = useLocation();
           const f = new FormData();
           f.append("imagen",fotoCiJ);
           console.log(fotoCiJ);
-          const response2 = await fetch(url + "setImgCi/"+ IDJUGADORR,
+          const response2 = await fetch(url + "setImgCi/"+ carnetJ,
           {
             method: "POST",
             body: f
@@ -369,7 +377,7 @@ let location = useLocation();
           const f2 = new FormData();
           f2.append("imagen",fotoJ);
           console.log(fotoJ);
-          const response3 = await fetch(url + "setImgJugador/"+ IDJUGADORR,
+          const response3 = await fetch(url + "setImgJugador/"+ carnetJ,
           {
             method: "POST",
             body: f2
@@ -382,6 +390,7 @@ let location = useLocation();
           limpiarCampos();
           limpiarVariables();
     }
+    obtenerJugadores();
  }
  const mensajeDeRespuesta = (txt) =>{
   toast(txt, {
@@ -801,7 +810,8 @@ let location = useLocation();
 
               <BoxCampo>
                 <TextBox>Rol</TextBox>
-                <SelectJugador name="select" onChange={(e)=> setRolJ(e.target.value)}>
+                <SelectJugador  name="select" onChange={(e)=> setRolJ(e.target.value)}>
+                    <option selected="true" disabled="disabled">Rol</option>
                     <option value="jugador">Jugador</option>
                     <option value="cuerpoTecnico">Cuerpo Tecnico</option>
                     <option value="ambos">Ambos</option>
@@ -847,11 +857,12 @@ let location = useLocation();
           {
             opcion == "2" && (
             
-                <ContenedorBoton style={{margin: "70px 0px"}}>
-                  <label style={{margin: "20px 0px"}}>Insertar excel</label>
-                  <input type="file" />
-                <BotonAñadir onClick={(e) => guardarExcel(e)}>
-                    Añadir Jugadores
+                <ContenedorBoton style={{margin: "120px 0px"}}>
+                  {/* <h3>Descarge la plantilla para llenar los datos </h3> */}
+                  <BotonDescarga href={require("../Imagenes/PlantillaJugadores.xlsx")} download="plantilla.xlsx">Descargar Plantilla</BotonDescarga>
+                  <input style={{margin: "30px 0px 10px 0px "}} type="file" onChange={(e)=>setExcel(e.target.files[0])} accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                <BotonAñadir onClick={() => enviarExcel()}>
+                    Enviar excel
                 </BotonAñadir>
               </ContenedorBoton>
              
@@ -887,6 +898,7 @@ let location = useLocation();
             jugador={jugador} 
             idDelegado= {idDelegado}
             cerrarModalJugador = {cerrarModalJugador}
+            obtenerJugadores = {obtenerJugadores}
             ></ModalJugador> : ""}</b>
           </ContenedorJugadores>
         </ContenedorConfiguracion>

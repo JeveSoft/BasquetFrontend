@@ -103,3 +103,25 @@ export const ImgJugador = styled.img `
 export const ContenedorJugador = styled.div`
     /* margin-bottom: 20px; */
 `
+
+export const BotonDescarga = styled.a`
+width: 100%;
+height: 40px;
+color: #ff7c01;
+outline: none;
+border: none;
+background: none;
+cursor: pointer;
+padding: 10px;
+position: relative;
+margin-top: 10px;
+border: 2px solid #ff7c01;
+border-radius: 5px;
+font-weight: 1000;
+&:hover {
+  transition: all 0.2s ease-in-out;
+  background: #ff7c01;
+  border: 2px solid black;
+  color: black;
+}
+`;
