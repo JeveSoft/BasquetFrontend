@@ -74,9 +74,15 @@ export const Botones = styled.button`
     transition: all 0.2s ease-in-out;
     color: #fc4415;
   }
+  
 `;
 export const ContenedorBotonesNav = styled.div`
   width: 100%;
+  ${(props) =>
+    props.ultimo === "true" &&
+    css`
+      margin-top: 220px;
+    `}
 `;
 export const ContenedorConfiguracion = styled.div`
   left: 15%;
@@ -148,6 +154,20 @@ export const TextBox = styled.span`
       text-align: center;
     `}
 `;
+export const TextBoxEq = styled.span`
+  display: block;
+  margin-bottom: 5px;
+  height: 45px;
+  width: 210px;
+  outline: none;
+  border-radius: 5px;
+  border: 2px solid #ff7c01;
+  text-align: center;
+  padding-top: 8px;
+  font-size: 16px;
+  border-bottom-width: 2px;
+  transition: all 0.3s ease;
+`;
 export const SelectEquipo = styled.select`
   height: 45px;
   width: 210px;
@@ -164,9 +184,6 @@ export const SelectEquipo = styled.select`
     border: 2px solid black;
     outline: none;
     box-shadow: 3px 0px 30px rgba(163, 163, 163, 0.4);
-  }
-  &:valid {
-    border: 3px solid green;
   }
   &:hover {
     border: 2px solid black;
@@ -224,7 +241,7 @@ export const NavBoton = styled.button`
   cursor: pointer;
   padding: 0;
   position: relative;
-  top: 40%;
+  top: 150%;
   border-radius: 50%;
   color: black;
   ${(props) =>
@@ -233,7 +250,7 @@ export const NavBoton = styled.button`
           right: 0%;
         `
       : css`
-      margin-top: 26px;
+          margin-top: 26px;
           left: 0%;
         `}
   &:hover {
@@ -372,4 +389,4 @@ export const BotonAnotar = styled.button`
     background: white;
     color: black;
   }
-`
+`;

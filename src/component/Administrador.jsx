@@ -1108,6 +1108,17 @@ export default function Administrador() {
         setInhabilitadoF(false);
       });
     });
+    toast("Partidos Establecidos", {
+      icon: "✅",
+      duration: 3000,
+      style: {
+        border: "2px solid #ff7c01",
+        padding: "10px",
+        color: "#fff",
+        background: "#000",
+        borderRadius: "4%",
+      },
+    });
     setTitulo("ADMINISTRADOR");
     setFixture1(true);
     setFixture2(false);

@@ -698,7 +698,7 @@ export default function Registro() {
           enviarCredenciales();
           setEspera("false");
           setInhabilitado(false);
-          //historial.replace("/");
+          historial.replace("/");
         });
       });
     });
