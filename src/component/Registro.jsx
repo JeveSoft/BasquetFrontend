@@ -676,9 +676,9 @@ export default function Registro() {
     };
     var inscripcion = {
       IDEQUIPO: generarIDEquipo(),
-      COMPROBANTEPAGO: "foto.jpg",
+      COMPROBANTEPAGO: "vacio",
       PAGOMEDIO: pago,
-      COMPROBANTEMEDIO: "",
+      COMPROBANTEMEDIO: "vacio",
       HABILITADO: "false",
     };
     axios.post(url + "añadirDelegado", delegado).then((response) => {
