@@ -22,8 +22,8 @@ import { SelectJugador, BotonPopup, ImgJugador} from "./EstiloEquipos"
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: 700px;
-          height: 620px;
+          width: auto;
+          height: auto;
           padding: 15px;
           color: #555;
           border-radius: 10px;
@@ -56,35 +56,7 @@ export default function ModalJugador( {jugador, idDelegado, idEquipo, cerrarModa
 
 
         const actualizarJugador = async () =>{
-                  var dataJugador = {
-                  IDEQUIPO  : jugador.IDEQUIPO,          
-                  NOMBREJUGADOR : nombreJ,
-                  CIJUGADOR : carnetJ,          
-                  CELULAR : numeroCelJ,       
-                  EMAIL : correoJ,              
-                  FOTOCIJUGADOR : fotoCiTxt,      
-                  ROL : rolJ,                
-                  FOTOQR : jugador.FOTOQR,        
-                  FOTOJUGADOR : fotoJTxt, 
-                  FECHANACIMIENTO : fechaNacimientoJug
-                }
-                console.log(dataJugador);
-      
-                
-                const response = await fetch(url+"actualizarJugador/"+jugador.CIJUGADOR, {
-                          method: 'PUT', 
-                          //mode: 'cors',
-                          
-                          headers: {
-                                    'Content-Type': 'application/json'
-                              },
-                              body: JSON.stringify(dataJugador)
-                    })
-                    
-               const data = await response.json();
-               console.log(data);
-
-                
+               
                   /* Envio imagen ci jugador */
                 if(fotoCiJ != null){
                   const f = new FormData();
@@ -140,119 +112,20 @@ export default function ModalJugador( {jugador, idDelegado, idEquipo, cerrarModa
            obtenerJugadores();
         }
 
-        const llenarVariableJ = () =>{
-           setNombreJ(jugador.NOMBREJUGADOR);
-           setCarnetJ(jugador.CIJUGADOR);
-           setCorreoJ(jugador.EMAIL);
-           setFotoCiTxt(jugador.FOTOCIJUGADOR);
-           setRolJ(jugador.ROL);
-           setFotoJTxt(jugador.FOTOJUGADOR);
-           setFechaNacimientoJug(jugador.FECHANACIMIENTO);
-           setNumeroCelJ(jugador.CELULAR);
-        }
-
-        const llenarInputs = () =>{
-          document.getElementById("nombreJugadorE").value = jugador.NOMBREJUGADOR;
-          document.getElementById("carnetJugadorJ").value = jugador.CIJUGADOR;
-          document.getElementById("correoJugadorE").value = jugador.EMAIL;
-          document.getElementById("numeroJugadorE").value = jugador.CELULAR;
-          document.getElementById("fechaNacJE").value = jugador.FECHANACIMIENTO ;
-          document.getElementById("rolJugador").value = jugador.ROL;
-
-        }
-
-   useEffect(function(){
-        llenarVariableJ();
-        llenarInputs();
-},[])
 
   return (
     <ModalEditarJugador>
           
       <DetalleUsuario>
-              <BoxCampo>
-                <TextBox>Nombre Completo</TextBox>
-                <InputBox
-                tipo="text"
-                //value={jugador.NOMBREJUGADOR}
-                id="nombreJugadorE"
-                //placeholder="Nombre Jugador"
-                onChange={(e)=>setNombreJ(e.target.value)}
-                expresionRegular={expresiones.nombre}
-                />
-              </BoxCampo>
-              <BoxCampo>
-                <TextBox>Carnet de Identidad</TextBox>
-                <InputBox
-                tipo="text"
-                //value={jugador.CIJUGADOR}
-                id="carnetJugadorJ"
-                placeholder= "Carnet De Jugador"
-                onChange={(e)=>setCarnetJ(e.target.value)}
-                expresionRegular={expresiones.nombre}
-                />
-              </BoxCampo>
-
-              <BoxCampo>
-                <TextBox>Correo</TextBox>
-                <InputBox
-                  tipo="email"
-                  //value={jugador.EMAIL}
-                  placeholder="Correo@gmail.com"
-                  id="correoJugadorE"
-                  onChange={(e)=>setCorreoJ(e.target.value)}
-                  expresionRegular={expresiones.correo}
-                  mensaje="Correo Invalido"
-                />
-              </BoxCampo>
-          
-              <BoxCampo>
-                <TextBox>Numero de Celular</TextBox>
-                <PhoneInput
-                  //placeholder="Numero de Celular"
-                  //value={jugador.CELULAR}
-                  defaultCountry="BO"
-                  id="numeroJugadorE"
-                  value={jugador.CELULAR}
-                  onChange={(numeroCel) => setNumeroCelJ(numeroCel)}
-                />
-              </BoxCampo>
-              <BoxCampo>
-                <TextBox>Fecha Nacimiento </TextBox>
-                <InputBox
-                  type="date"
-                 // placeholder="Fecha Nacimiento"
-                  //value={jugador.FECHANACIMIENTO}
-                  id="fechaNacJE"
-                  required
-                  onChange={(e) => {
-                    setFechaNacimientoJug(e.target.value);
-                  }}
               
-                />
-              </BoxCampo>
-
-              <BoxCampo>
-                <TextBox>Rol</TextBox>
-                <SelectJugador 
-                    name="select" 
-                    id="rolJugador"
-                    onChange={(e) => setRolJ(e.target.value)}>
-                    <option value="jugador">Jugador</option>
-                    <option value="cuerpoTecnico">Cuerpo Tecnico</option>
-                    <option value="ambos">Ambos</option>
-                </SelectJugador>
-               
-              </BoxCampo>
-             
               <BoxCampo>
                 <TextBox>Cambiar foto Carnet de Identidad</TextBox>
                 <InputFile
                   type="file"
-                  
                   required
                   name=""
                   id="fotoCiJ"
+                  accept="image/*"
                   onChange={(e) => {
                     setFotoCiJ(e.target.files[0]);
                   }}
@@ -273,7 +146,7 @@ export default function ModalJugador( {jugador, idDelegado, idEquipo, cerrarModa
                   required
                   name=""
                   id="fotoJ"
-                 
+                  accept="image/*"
                   onChange={(e) => {
                     setFotoJ(e.target.files[0]);
                   }}
