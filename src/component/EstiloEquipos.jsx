@@ -125,3 +125,6 @@ font-weight: 1000;
   color: black;
 }
 `;
+
+export const ContenedorExcel = styled.div`
+`;
