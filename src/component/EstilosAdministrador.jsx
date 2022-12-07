@@ -79,7 +79,7 @@ export const Botones = styled.button`
 export const ContenedorBotones = styled.div`
   width: 20%;
   height: 50vh;
-  top: 250px;
+  top: 200px;
   position: absolute;
 `;
 export const ContenedorConfiguracion = styled.div`
@@ -466,7 +466,7 @@ export const ImagenLogo = styled.img`
   position: absolute;
   height: 200px;
   width: 150px;
-  top: 100px;
+  top: 70px;
   left: 4%;
   cursor: pointer;
 `;

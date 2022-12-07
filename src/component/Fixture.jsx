@@ -41,7 +41,7 @@ export default function Fixture() {
   const [activoSF, setActivoSF] = useState(false);
   const [activoF, setActivoF] = useState(false);
   const [listaSemifinal, setListaSemiFinal] = useState([]);
-  const [listaFinal,setListaFinal] = useState([])
+  const [listaFinal, setListaFinal] = useState([]);
 
   const obtenerCategoria = () => {
     axios.get(url + "nombreCategorias").then((response) => {
@@ -58,8 +58,11 @@ export default function Fixture() {
   };
 
   const final = () => {
-
-  }
+    axios.get(url + "hayFinal/" + categoriaFinal).then((response) => {
+      setListaFinal(response.data);
+      setSeleccionoCategoriaF(true);
+    });
+  };
 
   const semiFinal = () => {
     axios.get(url + "haySemifinal/" + categoriaSemiFinal).then((response) => {
@@ -71,7 +74,17 @@ export default function Fixture() {
 
   useEffect(function () {
     obtenerCategoria();
-    if (categoria !== "") {
+    if (categoriaFinal!== ""){
+      if (activoF) {
+        if (!modalPartido) {
+          if (document.getElementById("categoriaFinal").value != null) {
+            document.getElementById("categoriaFinal").value =
+              categoriaFinal;
+          }
+        }
+      }
+    }
+    if (categoriaSemiFinal !== "") {
       if (activoSF) {
         if (!modalPartido) {
           if (document.getElementById("categoriaSemiFinal").value != null) {
@@ -80,6 +93,8 @@ export default function Fixture() {
           }
         }
       }
+    }
+    if (categoria !== "") {
       if (activoPF) {
         if (!modalPartido) {
           if (document.getElementById("categoria").value != null) {
@@ -388,7 +403,7 @@ export default function Fixture() {
                         </Select>
                       </BoxCampo>
                       <BoxCampo>
-                        <BotonBuscar onClick={""}>Buscar</BotonBuscar>
+                        <BotonBuscar onClick={final}>Buscar</BotonBuscar>
                       </BoxCampo>
                     </Detalle>
                     {seleccionoCategoriaF && (
@@ -468,7 +483,6 @@ export default function Fixture() {
                       </Detalle>
                     )}
                   </>
-                  
                 )}
               </ContenedorPrincipal>
             </ContenedorGlobal>
