@@ -155,6 +155,20 @@ export default function Administrador() {
   const [fixture2, setFixture2] = useState(false);
   const [fixture3, setFixture3] = useState(false);
   const [generoFixture, setGenerarFixture] = useState(false);
+
+  const [fixtureSF1, setFixtureSF1] = useState(true);
+  const [fixtureSF2, setFixtureSF2] = useState(false);
+  const [generoFixtureSF, setGenerarFixtureSF] = useState(false);
+  const [activoCFSF, setActivoCFSF] = useState("");
+
+  const [fixtureF1, setFixtureF1] = useState(true);
+  const [fixtureF2, setFixtureF2] = useState(false);
+  const [generoFixtureF, setGenerarFixtureF] = useState(false);
+  const [activoCFF, setActivoCFF] = useState("");
+  const [listaFinal, setListaFinal] = useState([]);
+  const [categoriaFinal, setCategoriaFinal] = useState("");
+  const [obtuvoListaFinal, setObtuvoListaFinal] = useState("");
+
   const [fechaDia1, setFechaDia1] = useState();
   const [fechaDia2, setFechaDia2] = useState();
   const [fechaDia3, setFechaDia3] = useState();
@@ -839,6 +853,21 @@ export default function Administrador() {
       setvHora2("false");
     }
   };
+
+  const validarHoraSemiFinal = () => {
+    if (horaSemiFinal !== undefined) {
+      setvHoraSemifinal("true");
+    } else {
+      setvHoraSemifinal("false");
+    }
+  };
+  const validarHoraSemiFinal2 = () => {
+    if (horaSemiFinal2 !== undefined) {
+      setvHoraSemifinal2("true");
+    } else {
+      setvHoraSemifinal2("false");
+    }
+  };
   const validarHora3 = () => {
     if (hora3 !== undefined) {
       setvHora3("true");
@@ -1127,7 +1156,369 @@ export default function Administrador() {
     setActivoE("");
     setActivoA("");
     setActivoI("");
+    setActivoCF("");
+    setActivoCFSF("");
     listaGrupos.splice(0, listaGrupos.length);
+  };
+
+  const [listaSemiFinalA, setListaSemiFinalA] = useState([]);
+  const [listaSemiFinalB, setListaSemiFinalB] = useState([]);
+  const [categoriaSemiFinal, setCategoriaSemiFinal] = useState("");
+  const [obtuvoListaSemifinalA, setObtuvoListaSemiFinalA] = useState(false);
+  const [obtuvoListaSemifinalB, setObtuvoListaSemiFinalB] = useState(false);
+  const [fechaSemiFinal, setFechaSemiFinal] = useState("");
+  const [lugarSemiFinal, setLugarSemiFinal] = useState({
+    campo: "",
+    valido: null,
+  });
+  const [horaSemiFinal2, setHoraSemiFinal2] = useState("");
+  const [vHoraSemifinal2, setvHoraSemifinal2] = useState(null);
+  const [horaSemiFinal, setHoraSemiFinal] = useState("");
+  const [vHoraSemifinal, setvHoraSemifinal] = useState(null);
+  const obternetEquipoSemiFinal = () => {
+    axios.get(url + "semiFinalA/" + categoriaSemiFinal).then((response) => {
+      setListaSemiFinalA(ordenar(response.data));
+
+      setObtuvoListaSemiFinalA(true);
+    });
+    axios.get(url + "semiFinalB/" + categoriaSemiFinal).then((response) => {
+      setListaSemiFinalB(ordenar(response.data));
+      setObtuvoListaSemiFinalB(true);
+    });
+  };
+
+  function ordenar(lista) {
+    var n, i, k, aux;
+    n = lista.length;
+    for (k = 1; k < n; k++) {
+      for (i = 0; i < n - k; i++) {
+        if (lista[i].PUNTOS < lista[i + 1].PUNTOS) {
+          aux = lista[i];
+          lista[i] = lista[i + 1];
+          lista[i + 1] = aux;
+        }
+      }
+    }
+
+    return [lista[0], lista[1]];
+  }
+
+  const [partidosSemifinal, setPartidosSemiFinal] = useState([]);
+
+  const generarPartidosSemiFinal = () => {
+    if (obtuvoListaSemifinalA && obtuvoListaSemifinalB) {
+      axios.get(url + "haySemifinal/" + categoriaSemiFinal).then((response) => {
+        if (response.data.length < 1) {
+          let partido1 = {
+            equipo1: listaSemiFinalA[0].NOMBRE,
+            equipo2: listaSemiFinalB[1].NOMBRE,
+            lugar: "",
+            fecha: "",
+            hora: "",
+          };
+          let partido2 = {
+            equipo1: listaSemiFinalA[1].NOMBRE,
+            equipo2: listaSemiFinalB[0].NOMBRE,
+            lugar: "",
+            fecha: "",
+            hora: "",
+          };
+          partidosSemifinal.push(partido1);
+          partidosSemifinal.push(partido2);
+          setFixtureSF1(false);
+          setFixtureSF2(true);
+        } else {
+          toast("Fixture Ya Generado", {
+            icon: "⚠️",
+            duration: 3000,
+            style: {
+              border: "2px solid #ff7c01",
+              padding: "10px",
+              color: "#fff",
+              background: "#000",
+              borderRadius: "4%",
+            },
+          });
+        }
+      });
+    } else {
+      toast("Generar Fixture", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
+    }
+  };
+
+  function validoSemifinal() {
+    let valido = true;
+    if (fechaSemiFinal === "") {
+      valido = false;
+      toast("Seleccionar Fecha", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
+    }
+    if (horaSemiFinal === "") {
+      valido = false;
+      toast("Seleccionar Fecha", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
+    }
+    if (lugarSemiFinal.campo === "") {
+      valido = false;
+      toast("Introducir Lugar", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
+    } else {
+      if (lugarSemiFinal.valido === "false") {
+        valido = false;
+        toast("Verificar Lugar", {
+          icon: "⚠️",
+          duration: 3000,
+          style: {
+            border: "2px solid #ff7c01",
+            padding: "10px",
+            color: "#fff",
+            background: "#000",
+            borderRadius: "4%",
+          },
+        });
+      }
+    }
+    return valido;
+  }
+
+  const [partidosFinal, setPartidoFinal] = useState([]);
+
+  const subirDatosSemifinal = () => {
+    if (validoSemifinal()) {
+      setEspera("true");
+      setInhabilitado(true);
+      const partido1 = {
+        IDCATEGORIA: categoriaSemiFinal,
+        GRUPO: "Grupo A " + categoriaSemiFinal,
+        EQUIPO1: partidosSemifinal[0].equipo1,
+        EQUIPO2: partidosSemifinal[0].equipo2,
+        GANADOR: "",
+        PERDEDOR: "",
+        EMPATE: "",
+        ANOTACIONESEQ1: "",
+        ANOTACIONESEQ2: "",
+        LUGAR: lugarSemiFinal.campo,
+        HORA: horaSemiFinal,
+        DIA: fechaSemiFinal,
+        FASE: "semiFinal",
+      };
+      const partido2 = {
+        IDCATEGORIA: categoriaSemiFinal,
+        GRUPO: "Grupo B " + categoriaSemiFinal,
+        EQUIPO1: partidosSemifinal[1].equipo1,
+        EQUIPO2: partidosSemifinal[1].equipo2,
+        GANADOR: "",
+        PERDEDOR: "",
+        EMPATE: "",
+        ANOTACIONESEQ1: "",
+        ANOTACIONESEQ2: "",
+        LUGAR: lugarSemiFinal.campo,
+        HORA: horaSemiFinal2,
+        DIA: fechaSemiFinal,
+        FASE: "semiFinal",
+      };
+      axios.post(url + "añadirPartido", partido1).then((response) => {
+        axios.post(url + "añadirPartido", partido2).then((response) => {
+          setEspera("false");
+          setInhabilitado(false);
+          toast("Partidos Establecidos", {
+            icon: "✅",
+            duration: 3000,
+            style: {
+              border: "2px solid #ff7c01",
+              padding: "10px",
+              color: "#fff",
+              background: "#000",
+              borderRadius: "4%",
+            },
+          });
+          setTitulo("ADMINISTRADOR");
+          setFixture1(true);
+          setFixture2(false);
+          setFixture3(false);
+          setActivoCL("");
+          setActivoE("");
+          setActivoA("");
+          setActivoI("");
+          setActivoCF("");
+          setActivoCFSF("");
+          listaSemiFinalA.splice(0, listaSemiFinalA.length);
+          listaSemiFinalB.splice(0, listaSemiFinalB.length);
+          setLugarSemiFinal({ campo: "", valido: "" });
+          setHoraSemiFinal("");
+          setHoraSemiFinal2("");
+          setvHoraSemifinal(null);
+          setvHoraSemifinal2(null);
+        });
+      });
+    }
+  };
+
+  const obtenerEquipoFinal = () => {
+    axios.get(url + "obtenerFinal/" + categoriaFinal).then((response) => {
+      setListaFinal(response.data);
+      setGenerarFixtureF(true);
+      setObtuvoListaFinal(true);
+      console.log(listaFinal);
+    });
+  };
+
+  const generarPartidoFinal = () => {
+    if (obtuvoListaFinal) {
+      axios.get(url + "hayFinal/" + categoriaFinal).then((response) => {
+        if (response.data.length < 1) {
+          let partido1 = {
+            equipo1: listaFinal[0],
+            equipo2: listaFinal[1],
+            lugar: "",
+            fecha: "",
+            hora: "",
+          };
+          let partido2 = {
+            equipo1: listaFinal[2],
+            equipo2: listaFinal[3],
+            lugar: "",
+            fecha: "",
+            hora: "",
+          };
+          partidosFinal.push(partido1);
+          partidosFinal.push(partido2);
+          setFixtureF1(false);
+          setFixtureF2(true);
+        }else{
+          toast("Fixture Ya Generado", {
+            icon: "⚠️",
+            duration: 3000,
+            style: {
+              border: "2px solid #ff7c01",
+              padding: "10px",
+              color: "#fff",
+              background: "#000",
+              borderRadius: "4%",
+            },
+          });
+        }
+      });
+    }else{
+      toast("Generar Fixture", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
+    }
+  };
+
+  const subirDatosFinal = () => {
+    if (validoSemifinal()) {
+      setEspera("true");
+      setInhabilitado(true);
+      const partido1 = {
+        IDCATEGORIA: categoriaFinal,
+        GRUPO: "Grupo A " + categoriaFinal,
+        EQUIPO1: partidosFinal[0].equipo1,
+        EQUIPO2: partidosFinal[0].equipo2,
+        GANADOR: "",
+        PERDEDOR: "",
+        EMPATE: "",
+        ANOTACIONESEQ1: "",
+        ANOTACIONESEQ2: "",
+        LUGAR: lugarSemiFinal.campo,
+        HORA: horaSemiFinal,
+        DIA: fechaSemiFinal,
+        FASE: "Final",
+      };
+      const partido2 = {
+        IDCATEGORIA: categoriaFinal,
+        GRUPO: "Grupo B " + categoriaFinal,
+        EQUIPO1: partidosFinal[1].equipo1,
+        EQUIPO2: partidosFinal[1].equipo2,
+        GANADOR: "",
+        PERDEDOR: "",
+        EMPATE: "",
+        ANOTACIONESEQ1: "",
+        ANOTACIONESEQ2: "",
+        LUGAR: lugarSemiFinal.campo,
+        HORA: horaSemiFinal2,
+        DIA: fechaSemiFinal,
+        FASE: "Final",
+      };
+      axios.post(url + "añadirPartido", partido1).then((response) => {
+        axios.post(url + "añadirPartido", partido2).then((response) => {
+          setEspera("false");
+          setInhabilitado(false);
+          toast("Partidos Establecidos", {
+            icon: "✅",
+            duration: 3000,
+            style: {
+              border: "2px solid #ff7c01",
+              padding: "10px",
+              color: "#fff",
+              background: "#000",
+              borderRadius: "4%",
+            },
+          });
+          setTitulo("ADMINISTRADOR");
+          setFixtureF1(true);
+          setFixtureF2(false);
+          setActivoCL("");
+          setActivoE("");
+          setActivoA("");
+          setActivoI("");
+          setActivoCF("");
+          setActivoCFSF("");
+          setActivoCFF("");
+          listaFinal.splice(0, listaFinal.length);
+          setLugarSemiFinal({ campo: "", valido: "" });
+          setHoraSemiFinal("");
+          setHoraSemiFinal2("");
+          setvHoraSemifinal(null);
+          setvHoraSemifinal2(null);
+        });
+      });
+    }
   };
 
   return (
@@ -1167,6 +1558,23 @@ export default function Administrador() {
               setGenerarFixture(false);
               partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
+              setActivoCFSF("");
+              setFixtureSF1(true);
+              setFixtureSF2(false);
+              setGenerarFixtureSF(false);
+              setCategoriaSemiFinal("");
+              setGenerarFixtureSF(false);
+              listaSemiFinalA.splice(0, listaSemiFinalA.length);
+              listaSemiFinalB.splice(0, listaSemiFinalB.length);
+              setActivoCFF("");
+              setFixtureF1(true);
+              setFixtureF2(false);
+              setGenerarFixtureF(false);
+              setCategoriaFinal("");
+              setGenerarFixtureF(false);
+              listaFinal.splice(0, listaFinal.length);
+              partidos.splice(0, partidos.length);
+              listaGrupos.splice(0, listaGrupos.length);
             }}
           >
             CONFIGURAR LIGA
@@ -1185,6 +1593,23 @@ export default function Administrador() {
               setFixture2(false);
               setFixture3(false);
               setGenerarFixture(false);
+              partidos.splice(0, partidos.length);
+              listaGrupos.splice(0, listaGrupos.length);
+              setActivoCFSF("");
+              setFixtureSF1(true);
+              setFixtureSF2(false);
+              setGenerarFixtureSF(false);
+              setCategoriaSemiFinal("");
+              setGenerarFixtureSF(false);
+              listaSemiFinalA.splice(0, listaSemiFinalA.length);
+              listaSemiFinalB.splice(0, listaSemiFinalB.length);
+              setActivoCFF("");
+              setFixtureF1(true);
+              setFixtureF2(false);
+              setGenerarFixtureF(false);
+              setCategoriaFinal("");
+              setGenerarFixtureF(false);
+              listaFinal.splice(0, listaFinal.length);
               partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
@@ -1207,6 +1632,23 @@ export default function Administrador() {
               setGenerarFixture(false);
               partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
+              setActivoCFSF("");
+              setFixtureSF1(true);
+              setFixtureSF2(false);
+              setGenerarFixtureSF(false);
+              setCategoriaSemiFinal("");
+              setGenerarFixtureSF(false);
+              listaSemiFinalA.splice(0, listaSemiFinalA.length);
+              listaSemiFinalB.splice(0, listaSemiFinalB.length);
+              setActivoCFF("");
+              setFixtureF1(true);
+              setFixtureF2(false);
+              setGenerarFixtureF(false);
+              setCategoriaFinal("");
+              setGenerarFixtureF(false);
+              listaFinal.splice(0, listaFinal.length);
+              partidos.splice(0, partidos.length);
+              listaGrupos.splice(0, listaGrupos.length);
             }}
           >
             ARBITRO
@@ -1224,6 +1666,23 @@ export default function Administrador() {
               setFixture2(false);
               setFixture3(false);
               setGenerarFixture(false);
+              setActivoCFSF("");
+              setFixtureSF1(true);
+              setFixtureSF2(false);
+              setGenerarFixtureSF(false);
+              setCategoriaSemiFinal("");
+              setGenerarFixtureSF(false);
+              listaSemiFinalA.splice(0, listaSemiFinalA.length);
+              listaSemiFinalB.splice(0, listaSemiFinalB.length);
+              partidos.splice(0, partidos.length);
+              listaGrupos.splice(0, listaGrupos.length);
+              setActivoCFF("");
+              setFixtureF1(true);
+              setFixtureF2(false);
+              setGenerarFixtureF(false);
+              setCategoriaFinal("");
+              setGenerarFixtureF(false);
+              listaFinal.splice(0, listaFinal.length);
               partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
@@ -1244,11 +1703,95 @@ export default function Administrador() {
               setFixture2(false);
               setFixture3(false);
               setGenerarFixture(false);
+              setActivoCFSF("");
+              setFixtureSF1(true);
+              setFixtureSF2(false);
+              setGenerarFixtureSF(false);
+              setCategoriaSemiFinal("");
+              setGenerarFixtureSF(false);
+              listaSemiFinalA.splice(0, listaSemiFinalA.length);
+              listaSemiFinalB.splice(0, listaSemiFinalB.length);
+              partidos.splice(0, partidos.length);
+              listaGrupos.splice(0, listaGrupos.length);
+              setActivoCFF("");
+              setFixtureF1(true);
+              setFixtureF2(false);
+              setGenerarFixtureF(false);
+              setCategoriaFinal("");
+              setGenerarFixtureF(false);
+              listaFinal.splice(0, listaFinal.length);
               partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
           >
             CREAR FIXTURE
+          </Botones>
+          <Botones
+            opcion={activoCFSF}
+            onClick={() => {
+              setTitulo("CREAR SEMI FINAL");
+              setActivoCL("");
+              setActivoE("");
+              setActivoA("");
+              setActivoI("");
+              setActivoCF("");
+              setActivoCFSF("true");
+              setFixtureSF1(true);
+              setFixtureSF2(false);
+              setGenerarFixtureSF(false);
+              setCategoriaSemiFinal("");
+              setGenerarFixtureSF(false);
+              listaSemiFinalA.splice(0, listaSemiFinalA.length);
+              listaSemiFinalB.splice(0, listaSemiFinalB.length);
+              partidos.splice(0, partidos.length);
+              listaGrupos.splice(0, listaGrupos.length);
+              setActivoCFF("");
+              setFixtureF1(true);
+              setFixtureF2(false);
+              setGenerarFixtureF(false);
+              setCategoriaFinal("");
+              setGenerarFixtureF(false);
+              listaFinal.splice(0, listaFinal.length);
+              partidos.splice(0, partidos.length);
+              listaGrupos.splice(0, listaGrupos.length);
+            }}
+          >
+            CREAR SEMIFINAL
+          </Botones>
+          <Botones
+            opcion={activoCFF}
+            onClick={() => {
+              setTitulo("CREAR FINAL");
+              setActivoCL("");
+              setActivoE("");
+              setActivoA("");
+              setActivoI("");
+              setActivoCF("");
+              setActivoCFSF("");
+              setActivoCFF("true");
+
+              setFixtureSF1(true);
+              setFixtureSF2(false);
+              setGenerarFixtureSF(false);
+              setCategoriaSemiFinal("");
+              setGenerarFixtureSF(false);
+              listaSemiFinalA.splice(0, listaSemiFinalA.length);
+              listaSemiFinalB.splice(0, listaSemiFinalB.length);
+              partidos.splice(0, partidos.length);
+              listaGrupos.splice(0, listaGrupos.length);
+
+              //setActivoCFF("");
+              setFixtureF1(true);
+              setFixtureF2(false);
+              setGenerarFixtureF(false);
+              setCategoriaFinal("");
+              setGenerarFixtureF(false);
+              listaFinal.splice(0, listaFinal.length);
+              partidos.splice(0, partidos.length);
+              listaGrupos.splice(0, listaGrupos.length);
+            }}
+          >
+            CREAR FINAL
           </Botones>
           <Botones
             onClick={() => {
@@ -1263,6 +1806,15 @@ export default function Administrador() {
               setFixture2(false);
               setFixture3(false);
               setGenerarFixture(false);
+              partidos.splice(0, partidos.length);
+              listaGrupos.splice(0, listaGrupos.length);
+              setActivoCFF("");
+              setFixtureF1(true);
+              setFixtureF2(false);
+              setGenerarFixtureF(false);
+              setCategoriaFinal("");
+              setGenerarFixtureF(false);
+              listaFinal.splice(0, listaFinal.length);
               partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
             }}
@@ -2325,6 +2877,354 @@ export default function Administrador() {
           )}
         </ContenedorConfiguracion>
       )}
+      {titulo === "CREAR SEMI FINAL" && (
+        <ContenedorConfiguracion>
+          <Titulo2>FIXTURE</Titulo2>
+          {fixtureSF1 && (
+            <>
+              <Detalle sin={"true"}>
+                {obtuvoC && (
+                  <BoxCampo>
+                    <TextBox>Categoria</TextBox>
+                    <SelectNacionalidad
+                      type="text"
+                      placeholder="Categoria"
+                      required
+                      id="categoria"
+                      onChange={(e) => {
+                        setCategoriaSemiFinal(e.target.value);
+                      }}
+                    >
+                      <option value="">Categoria</option>
+                      {listaCategorias.map((datos) => {
+                        return (
+                          <option value={datos.NOMBRECATEGORIA}>
+                            {datos.NOMBRECATEGORIA}
+                          </option>
+                        );
+                      })}
+                    </SelectNacionalidad>
+                    <BotonAñadir
+                      onClick={obternetEquipoSemiFinal}
+                      disabled={inhabilitado}
+                    >
+                      {espera === "false" && "Generar Fixture"}
+                      {espera === "true" && (
+                        <Img src={require("../Imagenes/Carga.gif")} />
+                      )}
+                    </BotonAñadir>
+                  </BoxCampo>
+                )}
+                {!obtuvoC && (
+                  <ImgCarga
+                    grupo={"false"}
+                    src={require("../Imagenes/Carga.gif")}
+                  />
+                )}
+              </Detalle>
+              <Detalle grupo={"true"}>
+                {obtuvoListaSemifinalA && (
+                  <>
+                    <BoxCampo grupo={"true"}>
+                      <TextBox grupo={"true"}>GRUPO A</TextBox>
+                      {listaSemiFinalA.map((datos) => {
+                        return <TextBox>{datos.NOMBRE}</TextBox>;
+                      })}
+                    </BoxCampo>
+                  </>
+                )}
+                {obtuvoListaSemifinalB && (
+                  <>
+                    <BoxCampo grupo={"true"}>
+                      <TextBox grupo={"true"}>GRUPO B</TextBox>
+                      {listaSemiFinalB.map((datos) => {
+                        return <TextBox>{datos.NOMBRE}</TextBox>;
+                      })}
+                    </BoxCampo>
+                  </>
+                )}
+                {(!obtuvoListaSemifinalA || !obtuvoListaSemifinalB) && (
+                  <ImgCarga
+                    grupo={"true"}
+                    src={require("../Imagenes/Carga.gif")}
+                  />
+                )}
+              </Detalle>
+              {obtuvoListaSemifinalA && obtuvoListaSemifinalB && (
+                <BotonAñadir
+                  disabled={inhabilitado}
+                  onClick={generarPartidosSemiFinal}
+                >
+                  {espera === "false" && "Siguiente"}
+                  {espera === "true" && (
+                    <Img src={require("../Imagenes/Carga.gif")} />
+                  )}
+                </BotonAñadir>
+              )}
+            </>
+          )}
+          {fixtureSF2 && (
+            <>
+              <Detalle grupo={"false"} sin={"true"}>
+                <BoxCampo grupo={"true"}>
+                  <TextBox grupo={"true"}>GRUPO A</TextBox>
+                  <TextBox ultimo={"true"}>
+                    {partidosSemifinal[0].equipo1} Vs{" "}
+                    {partidosSemifinal[0].equipo2}
+                  </TextBox>
+                </BoxCampo>
+                <BoxCampo grupo={"true"}>
+                  <TextBox grupo={"true"}>GRUPO B</TextBox>
+                  <TextBox ultimo={"true"}>
+                    {partidosSemifinal[1].equipo1} Vs{" "}
+                    {partidosSemifinal[1].equipo2}
+                  </TextBox>
+                </BoxCampo>
+
+                <BoxCampo semiFinal={"true"}>
+                  <TextBox>Fecha</TextBox>
+                  <InputBox
+                    type="date"
+                    id="fechaSemiFinal"
+                    onChange={(e) => {
+                      setFechaSemiFinal(e.target.value);
+                    }}
+                  />
+                </BoxCampo>
+
+                <InputValidar
+                  estado={lugarSemiFinal}
+                  cambiarEstado={setLugarSemiFinal}
+                  tipo="text"
+                  label="Lugar"
+                  placeholder="Lugar"
+                  name="lugar"
+                  expresionRegular={/^[a-zA-Z0-9-]{6,100}/}
+                  classe={"lugar"}
+                />
+                <BoxCampo semiFinal={"true"} hora={"true"}>
+                  <TextBox hora={"true"}>Hora 1</TextBox>
+                  <InputBox
+                    type="time"
+                    valido={vHoraSemifinal}
+                    id="hora2"
+                    onChange={(e) => {
+                      setHoraSemiFinal(e.target.value);
+                    }}
+                    onKeyUp={validarHoraSemiFinal}
+                    onBlur={validarHoraSemiFinal}
+                  />
+                  <IconoValidacion
+                    icon={
+                      vHoraSemifinal === "true" ? faCircleCheck : faCircleXmark
+                    }
+                    valido={vHoraSemifinal}
+                  />
+                </BoxCampo>
+
+                <BoxCampo semiFinal={"true"} hora={"true"}>
+                  <TextBox hora={"true"}>Hora 2</TextBox>
+                  <InputBox
+                    type="time"
+                    valido={vHoraSemifinal2}
+                    id="hora"
+                    onChange={(e) => {
+                      setHoraSemiFinal2(e.target.value);
+                    }}
+                    onKeyUp={validarHoraSemiFinal2}
+                    onBlur={validarHoraSemiFinal2}
+                  />
+                  <IconoValidacion
+                    icon={
+                      vHoraSemifinal2 === "true" ? faCircleCheck : faCircleXmark
+                    }
+                    valido={vHoraSemifinal2}
+                  />
+                </BoxCampo>
+              </Detalle>
+              <BotonAñadir
+                disabled={inhabilitado}
+                onClick={subirDatosSemifinal}
+              >
+                {espera === "false" && "Subir Datos"}
+                {espera === "true" && (
+                  <Img src={require("../Imagenes/Carga.gif")} />
+                )}
+              </BotonAñadir>
+            </>
+          )}
+        </ContenedorConfiguracion>
+      )}
+      {titulo === "CREAR FINAL" && (
+        <ContenedorConfiguracion>
+          <Titulo2>FIXTURE</Titulo2>
+          {fixtureF1 && (
+            <>
+              <Detalle sin={"true"}>
+                {obtuvoC && (
+                  <BoxCampo>
+                    <TextBox>Categoria</TextBox>
+                    <SelectNacionalidad
+                      type="text"
+                      placeholder="Categoria"
+                      required
+                      id="categoria"
+                      onChange={(e) => {
+                        setCategoriaFinal(e.target.value);
+                      }}
+                    >
+                      <option value="">Categoria</option>
+                      {listaCategorias.map((datos) => {
+                        return (
+                          <option value={datos.NOMBRECATEGORIA}>
+                            {datos.NOMBRECATEGORIA}
+                          </option>
+                        );
+                      })}
+                    </SelectNacionalidad>
+                    <BotonAñadir
+                      onClick={obtenerEquipoFinal}
+                      disabled={inhabilitado}
+                    >
+                      {espera === "false" && "Generar Fixture"}
+                      {espera === "true" && (
+                        <Img src={require("../Imagenes/Carga.gif")} />
+                      )}
+                    </BotonAñadir>
+                  </BoxCampo>
+                )}
+                {!obtuvoC && (
+                  <ImgCarga
+                    grupo={"false"}
+                    src={require("../Imagenes/Carga.gif")}
+                  />
+                )}
+              </Detalle>
+              <Detalle grupo={"true"}>
+                {generoFixtureF && (
+                  <>
+                    <BoxCampo grupo={"true"}>
+                      <TextBox grupo={"true"}>1º Lugar y 2º Lugar</TextBox>
+                      <TextBox>{listaFinal[0]}</TextBox>
+                      <TextBox>{listaFinal[1]}</TextBox>
+                    </BoxCampo>
+                    <BoxCampo grupo={"true"}>
+                      <TextBox grupo={"true"}>3º Lugar y 4º Lugar</TextBox>
+                      <TextBox>{listaFinal[2]}</TextBox>
+                      <TextBox>{listaFinal[3]}</TextBox>
+                    </BoxCampo>
+                  </>
+                )}
+
+                {!obtuvoListaFinal && (
+                  <ImgCarga
+                    grupo={"true"}
+                    src={require("../Imagenes/Carga.gif")}
+                  />
+                )}
+              </Detalle>
+              {obtuvoListaFinal && (
+                <BotonAñadir
+                  disabled={inhabilitado}
+                  onClick={generarPartidoFinal}
+                >
+                  {espera === "false" && "Siguiente"}
+                  {espera === "true" && (
+                    <Img src={require("../Imagenes/Carga.gif")} />
+                  )}
+                </BotonAñadir>
+              )}
+            </>
+          )}
+          {fixtureF2 && (
+            <>
+              <Detalle grupo={"false"} sin={"true"}>
+                <BoxCampo grupo={"true"}>
+                  <TextBox grupo={"true"}>GRUPO A</TextBox>
+                  <TextBox ultimo={"true"}>
+                    {partidosFinal[0].equipo1} Vs {partidosFinal[0].equipo2}
+                  </TextBox>
+                </BoxCampo>
+                <BoxCampo grupo={"true"}>
+                  <TextBox grupo={"true"}>GRUPO B</TextBox>
+                  <TextBox ultimo={"true"}>
+                    {partidosFinal[1].equipo1} Vs {partidosFinal[1].equipo2}
+                  </TextBox>
+                </BoxCampo>
+
+                <BoxCampo semiFinal={"true"}>
+                  <TextBox>Fecha</TextBox>
+                  <InputBox
+                    type="date"
+                    id="fechaSemiFinal"
+                    onChange={(e) => {
+                      setFechaSemiFinal(e.target.value);
+                    }}
+                  />
+                </BoxCampo>
+
+                <InputValidar
+                  estado={lugarSemiFinal}
+                  cambiarEstado={setLugarSemiFinal}
+                  tipo="text"
+                  label="Lugar"
+                  placeholder="Lugar"
+                  name="lugar"
+                  expresionRegular={/^[a-zA-Z0-9-]{6,100}/}
+                  classe={"lugar"}
+                />
+                <BoxCampo semiFinal={"true"} hora={"true"}>
+                  <TextBox hora={"true"}>Hora 1</TextBox>
+                  <InputBox
+                    type="time"
+                    valido={vHoraSemifinal}
+                    id="hora2"
+                    onChange={(e) => {
+                      setHoraSemiFinal(e.target.value);
+                    }}
+                    onKeyUp={validarHoraSemiFinal}
+                    onBlur={validarHoraSemiFinal}
+                  />
+                  <IconoValidacion
+                    icon={
+                      vHoraSemifinal === "true" ? faCircleCheck : faCircleXmark
+                    }
+                    valido={vHoraSemifinal}
+                  />
+                </BoxCampo>
+
+                <BoxCampo semiFinal={"true"} hora={"true"}>
+                  <TextBox hora={"true"}>Hora 2</TextBox>
+                  <InputBox
+                    type="time"
+                    valido={vHoraSemifinal2}
+                    id="hora"
+                    onChange={(e) => {
+                      setHoraSemiFinal2(e.target.value);
+                    }}
+                    onKeyUp={validarHoraSemiFinal2}
+                    onBlur={validarHoraSemiFinal2}
+                  />
+                  <IconoValidacion
+                    icon={
+                      vHoraSemifinal2 === "true" ? faCircleCheck : faCircleXmark
+                    }
+                    valido={vHoraSemifinal2}
+                  />
+                  
+                </BoxCampo>
+              </Detalle>
+              <BotonAñadir disabled={inhabilitado} onClick={subirDatosFinal}>
+                {espera === "false" && "Subir Datos"}
+                {espera === "true" && (
+                  <Img src={require("../Imagenes/Carga.gif")} />
+                )}
+              </BotonAñadir>
+            </>
+          )}
+        </ContenedorConfiguracion>
+      )}
+
       <Modal
         estado={modal}
         cambiarEstado={setModal}

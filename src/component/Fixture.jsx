@@ -27,24 +27,22 @@ export default function Fixture() {
   const [listaCategoria, setListaCategoria] = useState([]);
   const url = "http://127.0.0.1:8000/";
   const [categoria, setCategoria] = useState("");
+  const [categoriaSemiFinal, setCategoriaSemiFinal] = useState("");
   const [categoriaFinal, setCategoriaFinal] = useState("");
-  const [categoriaOctavos, setCategoriaOctavos] = useState("");
   const [listaGrupos, setListaGrupos] = useState([]);
   const [obtuvoCategoria, setObtuvoCategoria] = useState(false);
   const [seleccionoCategoria, setSeleccionoCategoria] = useState(false);
-  const [seleccionoCategoriaFinal, setSeleccionoCategoriaFinal] = useState(false);
-  const [seleccionoCategoriaOc, setSeleccionoCategoriaOc] = useState(false);
-  const [espera, setEspera] = useState("false");
-  const [inhabilitado, setInhabilitado] = useState(false);
+  const [seleccionoCategoriaSF, setSeleccionoCategoriaSF] = useState(false);
+  const [seleccionoCategoriaF, setSeleccionoCategoriaF] = useState(false);
+
   const [modalPartido, setModalPartido] = useState(false);
   const [partido, setPartido] = useState([]);
   const [activoPF, setActivoPF] = useState(true);
-  const [activoOc, setActivoOc] = useState(false);
+  const [activoSF, setActivoSF] = useState(false);
   const [activoF, setActivoF] = useState(false);
-  const [listaOctavos, setListaOctavos] = useState([]);
-  const [partido1, setPartido1] = useState([]);
-  const [partido2, setPartido2] = useState([]);
-  const [encabezadoSF, setEncabezadoSF] = useState("");
+  const [listaSemifinal, setListaSemiFinal] = useState([]);
+  const [listaFinal,setListaFinal] = useState([])
+
   const obtenerCategoria = () => {
     axios.get(url + "nombreCategorias").then((response) => {
       setListaCategoria(response.data);
@@ -59,52 +57,26 @@ export default function Fixture() {
     });
   };
 
-  const octavos = () => {
-    axios.get(url + "octavos/" + categoriaOctavos).then((response) => {
-      setListaOctavos(response.data);
-      setPartido1({});
-      setPartido2({});
-      setEncabezadoSF("Categoria " + categoriaOctavos);
-      if (listaOctavos[0].length > 0) {
-        if (listaOctavos[0].length > 2) {
-          //ordenar
-          listaOctavos[0].splice(2, listaOctavos[0].length);
-        }
-        if (listaOctavos[1].length > 2) {
-          //ordenar
-          listaOctavos[1].splice(2, listaOctavos[0].length);
-        }
-        let eq1 = listaOctavos[0][0].GANADOR;
-        let eq2 = listaOctavos[0][1].GANADOR;
-        /*let eq3 =listaOctavos[1][0].GANADOR
-      let eq4 = listaOctavos[1][2].GANADOR*/
-        setPartido1({
-          equipo1: eq1,
-          equipo2: eq1,
-          lugar: "",
-          fecha: "",
-          hora: "",
-        });
-        setPartido2({
-          equipo1: eq2,
-          equipo2: eq2,
-          lugar: "",
-          fecha: "",
-          hora: "",
-        });
-        setSeleccionoCategoriaOc(true);
-      }
+  const final = () => {
+
+  }
+
+  const semiFinal = () => {
+    axios.get(url + "haySemifinal/" + categoriaSemiFinal).then((response) => {
+      setListaSemiFinal(response.data);
+      setSeleccionoCategoriaSF(true);
+      console.log(listaSemifinal);
     });
   };
 
   useEffect(function () {
     obtenerCategoria();
-
     if (categoria !== "") {
-      if (activoOc){
-        if (!modalPartido){
-          if (document.getElementById("categoriaOctavos").value != null) {
-            document.getElementById("categoriaOctavos").value = categoriaOctavos;
+      if (activoSF) {
+        if (!modalPartido) {
+          if (document.getElementById("categoriaSemiFinal").value != null) {
+            document.getElementById("categoriaSemiFinal").value =
+              categoriaSemiFinal;
           }
         }
       }
@@ -155,17 +127,17 @@ export default function Fixture() {
                     activo={"" + activoPF + ""}
                     onClick={() => {
                       setActivoPF(true);
-                      setActivoOc(false);
+                      setActivoSF(false);
                       setActivoF(false);
                     }}
                   >
                     <TextoNav>Primera Fase</TextoNav>
                   </BotonNav>
                   <BotonNav
-                    activo={"" + activoOc + ""}
+                    activo={"" + activoSF + ""}
                     onClick={() => {
                       setActivoPF(false);
-                      setActivoOc(true);
+                      setActivoSF(true);
                       setActivoF(false);
                     }}
                   >
@@ -175,7 +147,7 @@ export default function Fixture() {
                     activo={"" + activoF + ""}
                     onClick={() => {
                       setActivoPF(false);
-                      setActivoOc(false);
+                      setActivoSF(false);
                       setActivoF(true);
                     }}
                   >
@@ -293,7 +265,7 @@ export default function Fixture() {
                     )}
                   </>
                 )}
-                {activoOc && (
+                {activoSF && (
                   <>
                     <Detalle>
                       <BoxCampo encabezado={"true"}>
@@ -302,9 +274,9 @@ export default function Fixture() {
                           type="text"
                           placeholder="Categoria"
                           required
-                          id="categoriaOctavos"
+                          id="categoriaSemiFinal"
                           onChange={(e) => {
-                            setCategoriaOctavos(e.target.value);
+                            setCategoriaSemiFinal(e.target.value);
                           }}
                         >
                           <option value="">Categoria</option>
@@ -314,45 +286,80 @@ export default function Fixture() {
                         </Select>
                       </BoxCampo>
                       <BoxCampo>
-                        <BotonBuscar onClick={octavos}>Buscar</BotonBuscar>
+                        <BotonBuscar onClick={semiFinal}>Buscar</BotonBuscar>
                       </BoxCampo>
                     </Detalle>
-                    {seleccionoCategoriaOc && (
+                    {seleccionoCategoriaSF && (
                       <Detalle>
                         <BoxCampo>
-                          <TextBox titulo={"true"}>{encabezadoSF}</TextBox>
+                          <TextBox titulo={"true"}>
+                            {"Categoria " + categoriaSemiFinal}
+                          </TextBox>
                           <ContenedorBox titulo={"true"}>
                             <Text
                               centro={"true"}
                               lugar={"primero"}
                               derecha={"false"}
                             >
-                              Partido 1
+                              GRUPO A
                             </Text>
                           </ContenedorBox>
-                          <ContenedorBox titulo={"true"}>
-                            <Text lugar={"primero"} derecha={"false"}>
-                              {partido1.equipo1}
+                          <ContenedorBox
+                            onClick={() => {
+                              setModalPartido(!modalPartido);
+                              setPartido({
+                                equipo1: listaSemifinal[0].EQUIPO1,
+                                equipo2: listaSemifinal[0].EQUIPO2,
+                                grupo: listaSemifinal[0].GRUPO,
+                                hora: listaSemifinal[0].HORA,
+                                categoria: listaSemifinal[0].IDCATEGORIA,
+                                lugar: listaSemifinal[0].LUGAR,
+                                dia: listaSemifinal[0].DIA,
+                              });
+                            }}
+                          >
+                            <Text derecha={"false"}>
+                              {listaSemifinal[0].EQUIPO1}
                             </Text>
-                            <Text lugar={"primero"} derecha={"false"}>
-                              {partido1.equipo2}
+                            <Text derecha={"medio"}>VS</Text>
+                            <Text derecha={"true"}>
+                              {listaSemifinal[0].EQUIPO2}
                             </Text>
                           </ContenedorBox>
+                        </BoxCampo>
+                        <BoxCampo>
+                          <TextBox titulo={"true"}>
+                            {"Categoria " + categoriaSemiFinal}
+                          </TextBox>
                           <ContenedorBox titulo={"true"}>
                             <Text
                               centro={"true"}
                               lugar={"primero"}
                               derecha={"false"}
                             >
-                              Partido 2
+                              GRUPO B
                             </Text>
                           </ContenedorBox>
-                          <ContenedorBox titulo={"true"}>
-                            <Text lugar={"primero"} derecha={"false"}>
-                              {partido2.equipo1}
+                          <ContenedorBox
+                            onClick={() => {
+                              setModalPartido(!modalPartido);
+                              setPartido({
+                                equipo1: listaSemifinal[1].EQUIPO1,
+                                equipo2: listaSemifinal[1].EQUIPO2,
+                                grupo: listaSemifinal[1].GRUPO,
+                                hora: listaSemifinal[1].HORA,
+                                categoria: listaSemifinal[1].IDCATEGORIA,
+                                lugar: listaSemifinal[1].LUGAR,
+                                dia: listaSemifinal[1].DIA,
+                              });
+                            }}
+                          >
+                            <Text derecha={"false"}>
+                              {listaSemifinal[1].EQUIPO1}
                             </Text>
-                            <Text lugar={"primero"} derecha={"false"}>
-                              {partido2.equipo2}
+                            <Text derecha={"medio"}>VS</Text>
+                            <Text derecha={"true"}>
+                              {listaSemifinal[1].EQUIPO2}
                             </Text>
                           </ContenedorBox>
                         </BoxCampo>
@@ -360,8 +367,9 @@ export default function Fixture() {
                     )}
                   </>
                 )}
-                {activoF && <>
-                  <Detalle>
+                {activoF && (
+                  <>
+                    <Detalle>
                       <BoxCampo encabezado={"true"}>
                         <TextBox sin={"true"}>Categoria</TextBox>
                         <Select
@@ -380,12 +388,88 @@ export default function Fixture() {
                         </Select>
                       </BoxCampo>
                       <BoxCampo>
-                        <BotonBuscar onClick={""}>
-                          Buscar
-                        </BotonBuscar>
+                        <BotonBuscar onClick={""}>Buscar</BotonBuscar>
                       </BoxCampo>
                     </Detalle>
-                </>}
+                    {seleccionoCategoriaF && (
+                      <Detalle>
+                        <BoxCampo>
+                          <TextBox titulo={"true"}>
+                            {"Categoria " + categoriaFinal}
+                          </TextBox>
+                          <ContenedorBox titulo={"true"}>
+                            <Text
+                              centro={"true"}
+                              lugar={"primero"}
+                              derecha={"false"}
+                            >
+                              1º Lugar y 2º Lugar
+                            </Text>
+                          </ContenedorBox>
+                          <ContenedorBox
+                            onClick={() => {
+                              setModalPartido(!modalPartido);
+                              setPartido({
+                                equipo1: listaFinal[0].EQUIPO1,
+                                equipo2: listaFinal[0].EQUIPO2,
+                                grupo: listaFinal[0].GRUPO,
+                                hora: listaFinal[0].HORA,
+                                categoria: listaFinal[0].IDCATEGORIA,
+                                lugar: listaFinal[0].LUGAR,
+                                dia: listaFinal[0].DIA,
+                              });
+                            }}
+                          >
+                            <Text derecha={"false"}>
+                              {listaFinal[0].EQUIPO1}
+                            </Text>
+                            <Text derecha={"medio"}>VS</Text>
+                            <Text derecha={"true"}>
+                              {listaFinal[0].EQUIPO2}
+                            </Text>
+                          </ContenedorBox>
+                        </BoxCampo>
+                        <BoxCampo>
+                          <TextBox titulo={"true"}>
+                            {"Categoria " + categoriaFinal}
+                          </TextBox>
+                          <ContenedorBox titulo={"true"}>
+                            <Text
+                              centro={"true"}
+                              lugar={"primero"}
+                              derecha={"false"}
+                            >
+                              3º Lugar y 4º Lugar
+                            </Text>
+                          </ContenedorBox>
+                          <ContenedorBox
+                            onClick={() => {
+                              setModalPartido(!modalPartido);
+                              setPartido({
+                                equipo1: listaFinal[1].EQUIPO1,
+                                equipo2: listaFinal[1].EQUIPO2,
+                                grupo: listaFinal[1].GRUPO,
+                                hora: listaFinal[1].HORA,
+                                categoria: listaFinal[1].IDCATEGORIA,
+                                lugar: listaFinal[1].LUGAR,
+                                dia: listaFinal[1].DIA,
+                              });
+                            }}
+                          >
+                            <Text derecha={"false"}>
+                              {listaFinal[1].EQUIPO1}
+                            </Text>
+                            <Text derecha={"medio"}>VS</Text>
+                            <Text derecha={"true"}>
+                              {listaFinal[1].EQUIPO2}
+                            </Text>
+                          </ContenedorBox>
+                        </BoxCampo>
+                      </Detalle>
+                    )}
+                  </>
+                  
+                )}
               </ContenedorPrincipal>
             </ContenedorGlobal>
           )}

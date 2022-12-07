@@ -136,6 +136,16 @@ export const BoxCampo = styled.div`
   position: relative;
   z-index: 90;
   ${(props) =>
+    props.semiFinal === "true" &&
+    css`
+      margin: -5px 10px 0 10px;
+    `}
+    ${(props) =>
+    props.hora === "true" &&
+    css`
+      width: 150px;
+    `}
+  ${(props) =>
     props.lugar === "true" &&
     css`
       margin: 10px 0 0 0;
@@ -174,6 +184,11 @@ export const TextBox = styled.span`
   display: block;
   font-weight: 500;
   width: 300px;
+  ${(props) =>
+    props.hora === "true" &&
+    css`
+       width: 150px;
+    `}
   ${(props) =>
     props.grupo === "true" &&
     css`
