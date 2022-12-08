@@ -415,7 +415,7 @@ let location = useLocation();
  }
 
  const obtenerJugadores = async () => {
-    const response = await fetch(url + "obtenerJugadores");
+    const response = await fetch(url + "obtenerJugadores/"+infoInscripcion[0].IDEQUIPO);
     const data = await response.json();
     setJugadores(data);
     setCantidadActual(data.length);
@@ -547,12 +547,8 @@ let location = useLocation();
                 <TextBox>Nombre Completo</TextBox>
                 <InputBox
                 tipo="text"
-                //estado={ nombre }
-                //cambiarEstado={setNombre}
-                
-                //id="nombreDelegado"
                 label="Nombre Completo"
-                //placeholder= {delegado.NOMBRE}
+                placeholder= "Nombre Completo"
                 name="nombreDelegado"
                 id="nombreDelegado"
                 onChange={(e)=>setNombre(e.target.value)}
@@ -563,28 +559,14 @@ let location = useLocation();
                 <TextBox>Carnet de Identidad</TextBox>
                 <InputBox
                 tipo="text"
-                estado={ carnet }
-                cambiarEstado={setCarnet}
-                
-                //id="nombreDelegado"
                 label="Nombre Completo"
-                //placeholder= {delegado.NOMBRE}
+                placeholder= "Carnet Identidad"
                 name="nombreDelegado"
                 id="carnetIdentidad"
                 onChange={(e)=>setCarnet(e.target.value)}
                 expresionRegular={expresiones.nombre}
                 />
               </BoxCampo>
-              {/* <InputValidar
-                estado={carnet}
-                cambiarEstado={setCarnet}
-                tipo="text"
-                label="Carnet Identidad"
-                placeholder= {delegado.CI}
-                name="carnetIdentidad"
-                expresionRegular={expresiones.carnet}
-                mensaje="Carnet Invalido"
-              /> */}
 
               <BoxCampo>
                 <TextBox>Correo</TextBox>
@@ -601,17 +583,6 @@ let location = useLocation();
                   mensaje="Correo Invalido"
                 />
               </BoxCampo>
-              {/* <InputValidar
-                estado={correo}
-                cambiarEstado={setCorreo}
-                tipo="email"
-                label="Correo"
-                placeholder="Correo@gmail.com"
-                name="correo"
-                expresionRegular={expresiones.correo}
-                mensaje="Correo Invalido"
-              /> */}
-
               
               <BoxCampo>
                 <TextBox>Numero de Celular</TextBox>
@@ -628,7 +599,6 @@ let location = useLocation();
                 <TextBox>Fecha Nacimiento </TextBox>
                 <InputBox
                   type="date"
-                  //valido={validarFechaN}
                   placeholder="Fecha Nacimiento"
                   required
                   name="fechaNacimiento"
@@ -636,38 +606,23 @@ let location = useLocation();
                   onChange={(e) => {
                     setFechaNacimientoDel(e.target.value);
                   }}
-                  //onKeyUp={validar}
-                  //onBlur={validar}
                 />
-                {/* <IconoValidacion
-                  icon={
-                    validarFechaN === "true" ? faCircleCheck : faCircleXmark
-                  }
-                  //valido={validarFechaN}
-                /> */}
+                
               </BoxCampo>
              
               <BoxCampo>
                 <TextBox>Nacionalidad </TextBox>
                 <InputBox
                   type="text"
-                  //valido={validarFechaN}
-                  //placeholder="Fecha Nacimiento"
+                  placeholder="Nacionalidad"
                   required
                   name="nacionalidad"
                   id="nacionalidad"
                   onChange={(e) => {
                     setNacionalidad(e.target.value);
                   }}
-                  //onKeyUp={validar}
-                  //onBlur={validar}
                 />
-               {/*  <IconoValidacion
-                  icon={
-                    validarFechaN === "true" ? faCircleCheck : faCircleXmark
-                  }
-                  //valido={validarFechaN}
-                /> */}
+              
               </BoxCampo>
 
               <Boton onClick={()=>actualizarDelegado()}>Actualizar</Boton>
@@ -836,10 +791,10 @@ let location = useLocation();
             opcion == "2" && (
             
                 <ContenedorExcel style={{margin: "100px 0px"}}>
-                     <label><h5>Importante: </h5>Si usted tiene jugadores ingresados manualmente se borraran al momento de enviar el excel.</label>
-                      <Boton style={{margin: "15px 0px"}} href={require("../Imagenes/PlantillaJugadores.xlsx")} download="plantilla.xlsx">Descargar Plantilla</Boton>
+                     <label style={{margin: "20px 0px"}}><h5>Importante: </h5>Si usted tiene jugadores ingresados manualmente se borraran al momento de enviar el excel.</label>
+                      <BotonDescarga href={require("../Imagenes/PlantillaJugadores.xlsx")} download="plantilla.xlsx">Descargar Plantilla</BotonDescarga>
                       <br/>
-                     <input style={{margin: "15px 0px 25px 0px"}} type="file" onChange={(e)=>setExcel(e.target.files[0])} accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                     <input style={{margin: "20px 0px 25px 0px"}} type="file" onChange={(e)=>setExcel(e.target.files[0])} accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
                       <br/>
                 <Boton onClick={() => enviarExcel()}>
                     Enviar excel
