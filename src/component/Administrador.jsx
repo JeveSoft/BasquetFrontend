@@ -192,6 +192,10 @@ export default function Administrador() {
   const [vhora2, setvHora2] = useState(null);
   const [vhora3, setvHora3] = useState(null);
   const [vhora4, setvHora4] = useState(null);
+  const [pagoMitad, setPagoMitad] = useState(null);
+  const [pagoCompleto, setPagoCompleto] = useState(null); 
+  const [informacion, setInformacion] = useState({}); 
+
   const validarFechaFinLiga = () => {
     if (fechaFinLiga != "") {
       if (
@@ -346,8 +350,31 @@ export default function Administrador() {
           });
         });
       }
+      if(pagoMitad !== null && pagoCompleto !== null){
+        subirComprobantes(response.data[0].IDCAMPEONATO);
+        console.log("entreo");
+      }
     });
   };
+
+  const subirComprobantes = async (idCampeonato) =>{
+    const f = new FormData();
+    f.append("imagen",pagoMitad);
+
+    const response2 = await fetch(url + "pagoMedio/"+idCampeonato,{
+      method: "POST",
+      body: f
+    })
+
+    const f2 = new FormData();
+    f2.append("imagen",pagoCompleto);
+
+    const response = await fetch(url + "pagoCompleto/"+idCampeonato,{
+      method: "POST",
+      body: f
+    })
+  }
+
   const subirFechas = () => {
     setEspera("true");
     setInhabilitado(true);
@@ -523,7 +550,7 @@ export default function Administrador() {
       validarDia3();
       validarDia4();
     }
-    obtenerCategoria();
+    //obtenerCategoria();
     if (titulo === "CONFIGURAR LIGA" && opcionL === "1") {
       validarFechaPreInicio();
       validarFechaPreFin();
@@ -2105,14 +2132,14 @@ export default function Administrador() {
             <Detalle>
               <BoxCampo>
                 <TextBox>Pago Mitad</TextBox>
-                <InputFile type="file" name="" id="mitad" hidden />
+                <input type="file" name="" id="mitad" hidden onChange={(e)=>setPagoMitad(e.target.files[0])}/>
                 <LabelFile for="mitad" id="imagenMitad">
                   Seleccionar Archivo
                 </LabelFile>
               </BoxCampo>
               <BoxCampo>
                 <TextBox>Pago Completo</TextBox>
-                <InputFile type="file" name="" id="completo" hidden />
+                <input type="file" name="" id="completo" hidden onChange={(e)=>setPagoCompleto(e.target.files[0])}/>
                 <LabelFile for="completo" id="imagenCompleto">
                   Seleccionar Archivo
                 </LabelFile>
@@ -2546,8 +2573,11 @@ export default function Administrador() {
                           </LetraCuerpo>
                         </TableCell>
                         <TableCell align="right">
-                          <BotonVer
-                            onClick={() => setModalVerFoto(!modalVerFoto)}
+                          <BotonVer 
+                            onClick={() => 
+                              {setModalVerFoto(!modalVerFoto)
+                               setInformacion(datos)
+                              }}
                           >
                             <FontAwesomeIcon icon={faImage} />
                           </BotonVer>
@@ -3267,7 +3297,10 @@ export default function Administrador() {
         mensaje={"¿Seguro de eliminar Arbitro?"}
         datos={datos}
       />
-      <ModalFoto estado={modalVerFoto} cambiarEstado={setModalVerFoto} />
+      <ModalFoto 
+        estado={modalVerFoto}
+        cambiarEstado={setModalVerFoto}
+        informacion={informacion} />
       <ModalArbitro
         estado={modalVerArbitro}
         cambiarEstado={setModalVerArbitro}

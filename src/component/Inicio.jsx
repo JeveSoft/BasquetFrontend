@@ -81,13 +81,24 @@ export default function Inicio() {
   const imagenes = ["1.jpg", "2.jpg", "3.jpg"];
   const [loaded, setLoaded] = useState(false);
   const [modal, setModal] = useState(false);
+  const url = "http://127.0.0.1:8000/";
+  const [informaciones, setInformaciones] = useState([]) 
   useEffect(() => {
     const interval = setInterval(() => {
       next();
     }, 3000);
     return () => clearInterval(interval);
   });
+  useEffect(() => {
+    obtenerInfo();
+  },[]);
 
+  const obtenerInfo = async () =>{
+     const response = await fetch(url + "informacion");
+     const data = await response.json();
+     console.log(data);
+     setInformaciones(data);
+  }
   const next = () => {
     setLoaded(false);
     setTimeout(() => {
@@ -135,7 +146,7 @@ export default function Inicio() {
       </Nav>
       <Container>
         <ImageContainer
-          src={require("../Imagenes/" + imagenes[imageIndex])}
+          src={url+"storage/" + informaciones[imageIndex].NOMBREFOTO}
           className={loaded ? "loaded" : ""}
           onLoad={() => setLoaded(true)}
         />
@@ -146,7 +157,7 @@ export default function Inicio() {
           <FontAwesomeIcon icon={faChevronLeft} />
         </NavBoton>
         <DotContainer>
-          {imagenes.map((dot, index) => (
+          {informaciones.map((dot, index) => (
             <Dot key={dot} active={index === imageIndex} />
           ))}
         </DotContainer>
