@@ -96,24 +96,24 @@ export default function Inicio() {
   const obtenerInfo = async () =>{
      const response = await fetch(url + "informacion");
      const data = await response.json();
-     console.log(data);
      setInformaciones(data);
+     console.log(data);
   }
   const next = () => {
     setLoaded(false);
     setTimeout(() => {
-      if (imageIndex + 1 > imagenes.length - 1) setImageIndex(0);
+      if (imageIndex + 1 > informaciones.length - 1) setImageIndex(0);
       setImageIndex((state) => (state += 1));
-      if (imageIndex === imagenes.length - 1) setImageIndex(0);
+      if (imageIndex === informaciones.length - 1) setImageIndex(0);
     }, 500);
   };
 
   const prev = () => {
     setLoaded(false);
     setTimeout(() => {
-      if (imageIndex - 1 < 0) setImageIndex(imagenes.length - 1);
+      if (imageIndex - 1 < 0) setImageIndex(informaciones.length - 1);
       setImageIndex((state) => (state -= 1));
-      if (imageIndex === 0) setImageIndex(imagenes.length - 1);
+      if (imageIndex === 0) setImageIndex(informaciones.length - 1);
     }, 500);
   };
   document.title = "Inicio";
@@ -145,24 +145,39 @@ export default function Inicio() {
         </NavBtn>
       </Nav>
       <Container>
-        <ImageContainer
-          src={url+"storage/" + informaciones[imageIndex].NOMBREFOTO}
-          className={loaded ? "loaded" : ""}
-          onLoad={() => setLoaded(true)}
-        />
-        <NavBoton right onClick={next}>
-          <FontAwesomeIcon icon={faChevronRight} />
-        </NavBoton>
-        <NavBoton left onClick={prev}>
-          <FontAwesomeIcon icon={faChevronLeft} />
-        </NavBoton>
-        <DotContainer>
-          {informaciones.map((dot, index) => (
-            <Dot key={dot} active={index === imageIndex} />
-          ))}
-        </DotContainer>
-        <IniciarSesion estado={modal} cambiarEstado={setModal} />
-      </Container>
+          {
+            informaciones[imageIndex] != null ? 
+            <>
+            <ImageContainer
+            src={ url+"storage/" + informaciones[imageIndex].NOMBREFOTO }
+            className={loaded ? "loaded" : ""}
+            onLoad={() => setLoaded(true)}
+            />
+            <NavBoton right onClick={next}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </NavBoton>
+            <NavBoton left onClick={prev}>
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </NavBoton>
+            <DotContainer>
+              {informaciones.map((dot, index) => (
+                <Dot key={dot} active={index === imageIndex} />
+              ))}
+            </DotContainer>
+            <IniciarSesion estado={modal} cambiarEstado={setModal} />
+             </> 
+            :
+            <> 
+              <ImageContainer
+              src={require('../Imagenes/' + imagenes[imageIndex])}
+              className={loaded ? "loaded" : ""}
+              onLoad={() => setLoaded(true)}
+            />
+            </>
+          }
+        </Container>
+        
+
       <Toaster reverseOrder={true} position="top-right" />
     </>
   );

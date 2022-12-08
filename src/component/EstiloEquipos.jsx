@@ -44,6 +44,8 @@ export const EquipoModal = styled.div`
 export const ImgEquipo = styled.img`
     max-width: 400px;
     height: 400px;
+    border-radius: 10px;
+    cursor: pointer;
 `
 export const PopUpContainer = styled.div`
    background: white;
