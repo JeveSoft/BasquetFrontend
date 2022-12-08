@@ -79,7 +79,7 @@ export const Botones = styled.button`
 export const ContenedorBotones = styled.div`
   width: 20%;
   height: 50vh;
-  top: 250px;
+  top: 200px;
   position: absolute;
 `;
 export const ContenedorConfiguracion = styled.div`
@@ -136,6 +136,16 @@ export const BoxCampo = styled.div`
   position: relative;
   z-index: 90;
   ${(props) =>
+    props.semiFinal === "true" &&
+    css`
+      margin: -5px 10px 0 10px;
+    `}
+    ${(props) =>
+    props.hora === "true" &&
+    css`
+      width: 150px;
+    `}
+  ${(props) =>
     props.lugar === "true" &&
     css`
       margin: 10px 0 0 0;
@@ -174,6 +184,11 @@ export const TextBox = styled.span`
   display: block;
   font-weight: 500;
   width: 300px;
+  ${(props) =>
+    props.hora === "true" &&
+    css`
+       width: 150px;
+    `}
   ${(props) =>
     props.grupo === "true" &&
     css`
@@ -451,7 +466,7 @@ export const ImagenLogo = styled.img`
   position: absolute;
   height: 200px;
   width: 150px;
-  top: 100px;
+  top: 70px;
   left: 4%;
   cursor: pointer;
 `;

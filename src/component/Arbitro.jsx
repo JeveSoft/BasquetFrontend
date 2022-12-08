@@ -60,7 +60,6 @@ const styles = makeStyles({
 export default function Arbitro() {
   const [titulo, setTitulo] = useState("ARBITRO");
   const [activoPJ, setActivoPJ] = useState("");
-  const [activoP, setActivoP] = useState("");
   const [activoCS, setActivoCS] = useState("");
   const [modal, setModal] = useState(false);
   const [ventana0, setVentana0] = useState(true);
@@ -88,6 +87,7 @@ export default function Arbitro() {
   const [inhabilitado, setInhabilitado] = useState(false);
   const [anotaciones1, setAnotaciones1] = useState({ campo: "", valido: null });
   const [anotaciones2, setAnotaciones2] = useState({ campo: "", valido: null });
+  const [llenado, setLlenado] = useState(false);
 
   const obtenerCategoria = () => {
     axios.get(url + "nombreCategorias").then((response) => {
@@ -103,10 +103,15 @@ export default function Arbitro() {
       )
       .then((response) => {
         if (response.data.length > 0) {
-          setIdPartido(response.data[0].IDPARTIDO)
+          setIdPartido(response.data[0].IDPARTIDO);
           setEquipo1(response.data[0].EQUIPO1);
           setEquipo2(response.data[0].EQUIPO2);
           setLugar(response.data[0].LUGAR);
+          setLlenado(
+            response.data[0].GANADOR === null || response.data[0].GANADOR === ""
+              ? false
+              : true
+          );
           setPartidoValido(true);
         } else {
           setPartidoValido(false);
@@ -251,15 +256,29 @@ export default function Arbitro() {
 
   const irVentana2 = () => {
     if (esValido()) {
-      setEspera("true");
-      setInhabilitado(true);
-      axios.get(url + "obtenerEntrenador/" + equipo1).then((response) => {
-        setEntrenador1(response.data);
-        setVentana1(false);
-        setVentana2(true);
-        setEspera("false");
-        setInhabilitado(false);
-      });
+      if (!llenado) {
+        setEspera("true");
+        setInhabilitado(true);
+        axios.get(url + "obtenerEntrenador/" + equipo1).then((response) => {
+          setEntrenador1(response.data);
+          setVentana1(false);
+          setVentana2(true);
+          setEspera("false");
+          setInhabilitado(false);
+        });
+      } else {
+        toast("Partido Ya Registrado", {
+          icon: "⚠️",
+          duration: 3000,
+          style: {
+            border: "2px solid #ff7c01",
+            padding: "10px",
+            color: "#fff",
+            background: "#000",
+            borderRadius: "4%",
+          },
+        });
+      }
     }
   };
 
@@ -328,49 +347,137 @@ export default function Arbitro() {
 
   const subirDatos = () => {
     if (esValidoV4()) {
-      var datos = {
-        IDCATEGORIA:categoria,
-        EQUIPO1: equipo1,
-        EQUIPO2: equipo2,
-        GANADOR: parseInt(anotaciones1.campo)  > parseInt(anotaciones2.campo)?equipo1:equipo2,
-        PERDEDOR: parseInt(anotaciones1.campo)  > parseInt(anotaciones2.campo)?equipo2:equipo1,
-        EMPATE: anotaciones1.campo === anotaciones2.campo ? "empate" : "",
-        ANOTACIONESEQ1: anotaciones1.campo,
-        ANOTACIONESEQ2: anotaciones2.campo,
-      };
-      axios.put(url + "actualizarPartido/"+idPartido, datos).then((response) => {
-        setCategoria("");
-        setFecha("");
-        setHora("");
-        setEquipo1("");
-        setEquipo2("");
-        setLugar("");
-        setAnotaciones1("");
-        setJuez1("");
-        setAnotaciones2("");
-        setJuez2("");
-        toast("Partido Registrado", {
-          icon: "✅",
-          duration: 3000,
-          style: {
-            border: "2px solid #ff7c01",
-            padding: "10px",
-            color: "#fff",
-            background: "#000",
-            borderRadius: "4%",
-          },
+      axios.get(url + "obtenerPuntos/" + equipo1).then((response) => {
+        var puntos1 = parseInt(response.data);
+        axios.get(url + "obtenerPuntos/" + equipo2).then((response) => {
+          var puntos2 = parseInt(response.data);
+          let ganador = "";
+          let perdedor = "";
+          let empate = "";
+          if (parseInt(anotaciones1.campo) > parseInt(anotaciones2.campo)) {
+            ganador = equipo1;
+            perdedor = equipo2;
+          } else {
+            if (parseInt(anotaciones2.campo) > parseInt(anotaciones1.campo)) {
+              ganador = equipo2;
+              perdedor = equipo1;
+            } else {
+              empate = "empate";
+            }
+          }
+          var datos = {
+            IDCATEGORIA: categoria,
+            EQUIPO1: equipo1,
+            EQUIPO2: equipo2,
+            GANADOR: ganador,
+            PERDEDOR: perdedor,
+            EMPATE: empate,
+            ANOTACIONESEQ1: anotaciones1.campo,
+            ANOTACIONESEQ2: anotaciones2.campo,
+          };
+
+          let puntos = 0;
+          let puntosEm = 0;
+          if (equipo1 === ganador) {
+            puntos = puntos1 + 50 + parseInt(anotaciones1.campo);
+            noEmpate(ganador, datos, puntos);
+          } else {
+            if (equipo2 === ganador) {
+              puntos = puntos2 + 50 + parseInt(anotaciones2.campo);
+              noEmpate(ganador, datos, puntos);
+            } else {
+              puntos = puntos1 + 25 + parseInt(anotaciones1.campo);
+              puntosEm = puntos2 + 25 + parseInt(anotaciones2.campo);
+              siEmpate(datos, puntos, puntosEm);
+            }
+          }
         });
-        setVentana4(false);
-        setVentana0(true);
       });
     }
   };
 
+  const siEmpate = (datos, puntos, puntosEm) => {
+    axios
+      .put(url + "actualizarPartido/" + idPartido, datos)
+      .then((response) => {
+        axios
+          .put(url + "subirPuntos/" + equipo1, { PUNTOS: puntos })
+          .then((respo) => {
+            axios
+              .put(url + "subirPuntos/" + equipo2, { PUNTOS: puntosEm })
+              .then((respon) => {
+                setCategoria("");
+                setFecha("");
+                setHora("");
+                setEquipo1("");
+                setEquipo2("");
+                setLugar("");
+                setAnotaciones1("");
+                setJuez1("");
+                setAnotaciones2("");
+                setJuez2("");
+                toast("Partido Registrado", {
+                  icon: "✅",
+                  duration: 3000,
+                  style: {
+                    border: "2px solid #ff7c01",
+                    padding: "10px",
+                    color: "#fff",
+                    background: "#000",
+                    borderRadius: "4%",
+                  },
+                });
+                setVentana4(false);
+                setVentana0(true);
+              });
+          });
+      });
+  };
+
+  const noEmpate = (ganador, datos, puntos) => {
+    axios
+      .put(url + "actualizarPartido/" + idPartido, datos)
+      .then((response) => {
+        axios
+          .put(url + "subirPuntos/" + ganador, { PUNTOS: puntos })
+          .then((res) => {
+            setCategoria("");
+            setFecha("");
+            setHora("");
+            setEquipo1("");
+            setEquipo2("");
+            setLugar("");
+            setAnotaciones1("");
+            setJuez1("");
+            setAnotaciones2("");
+            setJuez2("");
+            toast("Partido Registrado", {
+              icon: "✅",
+              duration: 3000,
+              style: {
+                border: "2px solid #ff7c01",
+                padding: "10px",
+                color: "#fff",
+                background: "#000",
+                borderRadius: "4%",
+              },
+            });
+            setVentana4(false);
+            setVentana0(true);
+          });
+      });
+  };
+
   useEffect(function () {
-    if (ventana0){
-      setCategoria("")
-      setFecha("")
-      setHora("")
+    if (ventana0) {
+      setCategoria("");
+      setFecha("");
+      setHora("");
+      setEquipo1("");
+      setEquipo2("");
+      setLugar("");
+      setJuez1("");
+      setJuez2("");
     }
     if (categoria != "" && fecha != "" && hora != "") {
       obtenerPartido();
@@ -392,7 +499,6 @@ export default function Arbitro() {
             onClick={() => {
               setTitulo("ARBITRO");
               setActivoPJ("");
-              setActivoP("");
               setActivoCS("");
               setVentana0(true);
               setVentana1(false);
@@ -406,7 +512,6 @@ export default function Arbitro() {
               onClick={() => {
                 setTitulo("PLANILLA DE JUEGO");
                 setActivoPJ("true");
-                setActivoP("");
                 setActivoCS("");
                 setVentana0(true);
                 setVentana1(false);
@@ -417,26 +522,10 @@ export default function Arbitro() {
               PLANILLA DE JUEGO
             </Botones>
             <Botones
-              opcion={activoP}
-              onClick={() => {
-                setTitulo("PERFIL");
-                setActivoPJ("");
-                setActivoP("true");
-                setActivoCS("");
-                setVentana0(true);
-                setVentana1(false);
-                setVentana2(false);
-                setVentana3(false);
-              }}
-            >
-              PERFIL
-            </Botones>
-            <Botones
               opcion={activoCS}
               onClick={() => {
                 setTitulo("ARBITRO");
                 setActivoPJ("");
-                setActivoP("");
                 setActivoCS("true");
                 setModal(!modal);
                 setVentana0(true);
@@ -445,6 +534,7 @@ export default function Arbitro() {
                 setVentana3(false);
               }}
             >
+            
               CERRAR SESION
             </Botones>
           </ContenedorBotones>
@@ -775,11 +865,6 @@ export default function Arbitro() {
                 </ContenedorBotonesNav>
               </Detalle>
             )}
-          </ContenedorConfiguracion>
-        )}
-        {titulo === "PERFIL" && (
-          <ContenedorConfiguracion>
-            <Titulo2>PERFIL</Titulo2>
           </ContenedorConfiguracion>
         )}
         <Modal
