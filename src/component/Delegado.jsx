@@ -88,6 +88,7 @@ export default function Delegado() {
 
  
   const url = "http://127.0.0.1:8000/";
+  const urlR = "http://127.0.0.1:3000/";
   const [listaGrupos, setListaGrupos] = useState([]);
 
 
@@ -202,8 +203,8 @@ let location = useLocation();
  }
 
  const obtenerInfoInscripcion = async () =>{
-     
-     const response = await fetch(url+"estadoInscripcion/"+idDelegado);
+     var idDelegadoP =  location.pathname.substring(10,location.pathname.length); 
+     const response = await fetch(url+"estadoInscripcion/"+idDelegadoP);
      const data = await response.json();
      console.log(data);
      setInfoInscripcion(data);
@@ -442,8 +443,8 @@ let location = useLocation();
   useEffect(function () {
    
     obtenerDelegado();
-    obtenerJugadores();
     obtenerInfoInscripcion();
+    obtenerJugadores();
   },[]);
 
   return (
@@ -822,7 +823,7 @@ let location = useLocation();
                      <ImgJugador src={url+"storage/"+jugador.FOTOJUGADOR} alt="foto jugador" />
                  }
                  <h5>{jugador.NOMBREJUGADOR}</h5>
-                 <p>{jugador.CIJUGADOR}</p>
+                 {/* <p>{jugador.CIJUGADOR}</p> */}
 
                 </ContenedorJugador>
               )
@@ -836,6 +837,7 @@ let location = useLocation();
             obtenerJugadores = {obtenerJugadores}
             ></ModalJugador> : ""}</b>
           </ContenedorJugadores>
+            <BotonDescarga href={urlR+"QrJugadores/"+infoInscripcion[0].IDEQUIPO} target="_blank">Obtener QR code</BotonDescarga>
         </ContenedorConfiguracion>
       )}
       
