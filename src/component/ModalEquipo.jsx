@@ -87,12 +87,10 @@ export const TextBox = styled.span`
 const ImgLogo = styled.img`
   width: 60px;
   height: 60px;
-  background: red;
 `;
 const ImgComprobante = styled.img`
   width: 200px;
   height: 200px;
-  background: red;
 `;
 const ContenedorBoton = styled.div`
   width: 100%;

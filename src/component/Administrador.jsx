@@ -1552,7 +1552,7 @@ export default function Administrador() {
     <ContenedorPrincipal>
       <ContenedorOpciones>
         <Titulo>{titulo}</Titulo>
-        <ImagenLogo
+        <ImagenLogo admin = {"true"}
           src={require("../Imagenes/LogoBlanco.png")}
           onClick={() => {
             setTitulo("ADMINISTRADOR");
@@ -1568,7 +1568,7 @@ export default function Administrador() {
             listaGrupos.splice(0, listaGrupos.length);
           }}
         />
-        <ContenedorBotones>
+        <ContenedorBotones admin = {"true"}>
           <Botones
             opcion={activoCL}
             onClick={() => {

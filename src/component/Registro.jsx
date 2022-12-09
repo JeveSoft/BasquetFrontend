@@ -509,7 +509,7 @@ export default function Registro() {
     }
 
     if(logoEquipo === null){
-      toast("Ingesar Categoria", {
+      toast("Ingesar Logo", {
         icon: "⚠️",
         duration: 3000,
         style: {

@@ -79,14 +79,20 @@ export const Botones = styled.button`
 export const ContenedorBotones = styled.div`
   width: 20%;
   height: 50vh;
-  top: 200px;
+  top: 250px;
   position: absolute;
+  ${(props) =>
+    props.admin === "true" &&
+    css`
+      top: 210px;
+    `}
 `;
 export const ContenedorConfiguracion = styled.div`
   left: 15%;
   max-width: 700px;
   width: 100%;
-  top: 10px;
+  height: 610px;
+  top: -20px;
   background: #fff;
   padding: 25px 30px;
   border-radius: 5px;
@@ -466,9 +472,14 @@ export const ImagenLogo = styled.img`
   position: absolute;
   height: 200px;
   width: 150px;
-  top: 70px;
+  top: 110px;
   left: 4%;
   cursor: pointer;
+  ${(props) =>
+    props.admin === "true" &&
+    css`
+      top: 80px;
+    `}
 `;
 export const SelectNacionalidad = styled.select`
   height: 45px;
