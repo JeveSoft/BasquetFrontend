@@ -9,6 +9,7 @@ export default function QrJugadores (){
       const VentanaQr = styled.div`
            margin:10px;
            width: 200px;
+           text-align:center;
        `;
        const VentanaQrs = styled.div`
           display: flex;
