@@ -200,6 +200,8 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
           axios.get(url + "arbitro/" + id).then((response) => {
             if (response.data.length > 0) {
               if (response.data[0].CI === contraseña) {
+                setEspera("false");
+                setInhabilitado(false);
                 document.title = response.data[0].NOMBRE;
                 toast("Inicio Correctamente", {
                   icon: "✔️",
@@ -251,6 +253,8 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
           axios.get(url + "delegado/" + id).then((response) => {
             if (response.data.length > 0) {
               if (response.data[0].CI === contraseña) {
+                setEspera("false");
+                setInhabilitado(false);
                 toast("Inicio Correctamente", {
                   icon: "✔️",
                   duration: 3000,
@@ -262,8 +266,11 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
                     borderRadius: "4%",
                   },
                 });
-                historial.push("/delegado/"+id);
+                historial.push("/delegado/" + id);
               } else {
+                setEspera("false");
+                setInhabilitado(false);
+                setInicio("INICIAR SESION");
                 toast("Contraseña Incorrecta", {
                   icon: "⚠️",
                   duration: 3000,
@@ -277,6 +284,9 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
                 });
               }
             } else {
+              setInhabilitado(false);
+              setEspera("false");
+              setInicio("INICIAR SESION");
               toast("Id Invalido", {
                 icon: "⚠️",
                 duration: 3000,

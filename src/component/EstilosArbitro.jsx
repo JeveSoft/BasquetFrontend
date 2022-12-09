@@ -241,18 +241,11 @@ export const NavBoton = styled.button`
   cursor: pointer;
   padding: 0;
   position: relative;
-  top: 150%;
+  top: 190%;
   border-radius: 50%;
   color: black;
-  ${(props) =>
-    props.left === true
-      ? css`
-          right: 0%;
-        `
-      : css`
-          margin-top: 26px;
-          left: 0%;
-        `}
+  margin-top: 26px;
+      left: 1730%;
   &:hover {
     transition: all 0.2s ease-in-out;
     background: #ff7c01;

@@ -3,13 +3,6 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import {
   BotonAnotar,
@@ -21,13 +14,10 @@ import {
   ContenedorMedio,
   ContenedorOpciones,
   ContenedorPrincipal,
-  ContenedorTable,
   Detalle,
   Imagen,
   ImagenLogo,
   InputBox,
-  Letra,
-  LetraCuerpo,
   NavBoton,
   NavBoton1,
   SelectEquipo,
@@ -35,7 +25,6 @@ import {
   TextBoxEq,
   Titulo,
   Titulo2,
-  Titulo3,
   VS,
 } from "./EstilosArbitro";
 import InputValidar from "./InputValidar";
@@ -64,24 +53,17 @@ export default function Arbitro() {
   const [modal, setModal] = useState(false);
   const [ventana0, setVentana0] = useState(true);
   const [ventana1, setVentana1] = useState(false);
-  const [ventana2, setVentana2] = useState(false);
-  const [ventana3, setVentana3] = useState(false);
   const [ventana4, setVentana4] = useState(false);
   const url = "http://127.0.0.1:8000/";
   const [listaCategoria, setListaCategoria] = useState([]);
   const [obtuvoCategoria, setObtuvoCategoria] = useState(false);
-  const classes = styles();
   const [categoria, setCategoria] = useState("");
   const [fecha, setFecha] = useState("");
   const [hora, setHora] = useState("");
   const [equipo1, setEquipo1] = useState("");
   const [equipo2, setEquipo2] = useState("");
   const [lugar, setLugar] = useState("");
-  const [juez1, setJuez1] = useState({ campo: "", valido: null });
-  const [juez2, setJuez2] = useState({ campo: "", valido: null });
   const [partidoValido, setPartidoValido] = useState(false);
-  const [entrenador1, setEntrenador1] = useState("");
-  const [entrenador2, setEntrenador2] = useState("");
   const [idPartido, setIdPartido] = useState("");
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
@@ -167,64 +149,6 @@ export default function Arbitro() {
         },
       });
     }
-    if (juez1.campo === "") {
-      valido = false;
-      toast("Ingesar Juez 1", {
-        icon: "⚠️",
-        duration: 3000,
-        style: {
-          border: "2px solid #ff7c01",
-          padding: "10px",
-          color: "#fff",
-          background: "#000",
-          borderRadius: "4%",
-        },
-      });
-    } else {
-      if (juez1.valido === "false") {
-        valido = false;
-        toast("Nombre Juez 1 Invalido", {
-          icon: "⚠️",
-          duration: 3000,
-          style: {
-            border: "2px solid #ff7c01",
-            padding: "10px",
-            color: "#fff",
-            background: "#000",
-            borderRadius: "4%",
-          },
-        });
-      }
-    }
-    if (juez2.campo === "") {
-      valido = false;
-      toast("Ingesar Juez 2", {
-        icon: "⚠️",
-        duration: 3000,
-        style: {
-          border: "2px solid #ff7c01",
-          padding: "10px",
-          color: "#fff",
-          background: "#000",
-          borderRadius: "4%",
-        },
-      });
-    } else {
-      if (juez2.valido === "false") {
-        valido = false;
-        toast("Nombre Juez 2 Invalido", {
-          icon: "⚠️",
-          duration: 3000,
-          style: {
-            border: "2px solid #ff7c01",
-            padding: "10px",
-            color: "#fff",
-            background: "#000",
-            borderRadius: "4%",
-          },
-        });
-      }
-    }
     if (!partidoValido) {
       valido = false;
       toast("Partido Invalido Revisar Categoria Fecha y Hora", {
@@ -242,30 +166,15 @@ export default function Arbitro() {
     return valido;
   }
 
-  const irVentana3 = () => {
-    setEspera("true");
-    setInhabilitado(true);
-    axios.get(url + "obtenerEntrenador/" + equipo2).then((response) => {
-      setEntrenador2(response.data);
-      setVentana3(true);
-      setVentana2(false);
-      setEspera("false");
-      setInhabilitado(false);
-    });
-  };
-
   const irVentana2 = () => {
     if (esValido()) {
       if (!llenado) {
         setEspera("true");
         setInhabilitado(true);
-        axios.get(url + "obtenerEntrenador/" + equipo1).then((response) => {
-          setEntrenador1(response.data);
-          setVentana1(false);
-          setVentana2(true);
-          setEspera("false");
-          setInhabilitado(false);
-        });
+        setVentana1(false);
+        setVentana4(true);
+        setEspera("false");
+        setInhabilitado(false);
       } else {
         toast("Partido Ya Registrado", {
           icon: "⚠️",
@@ -413,9 +322,7 @@ export default function Arbitro() {
                 setEquipo2("");
                 setLugar("");
                 setAnotaciones1("");
-                setJuez1("");
                 setAnotaciones2("");
-                setJuez2("");
                 toast("Partido Registrado", {
                   icon: "✅",
                   duration: 3000,
@@ -448,9 +355,7 @@ export default function Arbitro() {
             setEquipo2("");
             setLugar("");
             setAnotaciones1("");
-            setJuez1("");
             setAnotaciones2("");
-            setJuez2("");
             toast("Partido Registrado", {
               icon: "✅",
               duration: 3000,
@@ -468,6 +373,7 @@ export default function Arbitro() {
       });
   };
 
+
   useEffect(function () {
     if (ventana0) {
       setCategoria("");
@@ -476,10 +382,8 @@ export default function Arbitro() {
       setEquipo1("");
       setEquipo2("");
       setLugar("");
-      setJuez1("");
-      setJuez2("");
     }
-    if (categoria != "" && fecha != "" && hora != "") {
+    if (categoria !== "" && fecha != "" && hora != "") {
       obtenerPartido();
       if (ventana1) {
         document.getElementById("categorias").value = categoria;
@@ -502,8 +406,7 @@ export default function Arbitro() {
               setActivoCS("");
               setVentana0(true);
               setVentana1(false);
-              setVentana2(false);
-              setVentana3(false);
+              
             }}
           />
           <ContenedorBotones>
@@ -515,8 +418,7 @@ export default function Arbitro() {
                 setActivoCS("");
                 setVentana0(true);
                 setVentana1(false);
-                setVentana2(false);
-                setVentana3(false);
+                
               }}
             >
               PLANILLA DE JUEGO
@@ -530,11 +432,8 @@ export default function Arbitro() {
                 setModal(!modal);
                 setVentana0(true);
                 setVentana1(false);
-                setVentana2(false);
-                setVentana3(false);
               }}
             >
-            
               CERRAR SESION
             </Botones>
           </ContenedorBotones>
@@ -621,28 +520,6 @@ export default function Arbitro() {
                       </BoxCampo>
                     </Detalle>
                     <Detalle>
-                      <InputValidar
-                        estado={juez1}
-                        cambiarEstado={setJuez1}
-                        tipo="text"
-                        label="1º Juez"
-                        placeholder="1º Juez"
-                        name="1juez"
-                        expresionRegular={/^[a-zA-ZÀ-ÿ\s]{3,40}$/}
-                        classe={"arbitro"}
-                      />
-
-                      <InputValidar
-                        estado={juez2}
-                        cambiarEstado={setJuez2}
-                        tipo="text"
-                        label="2º Juez"
-                        placeholder="2º Juez"
-                        name="2juez"
-                        expresionRegular={/^[a-zA-ZÀ-ÿ\s]{3,40}$/}
-                        classe={"arbitro"}
-                      />
-
                       <BoxCampo>
                         <NavBoton
                           disabled={inhabilitado}
@@ -662,161 +539,7 @@ export default function Arbitro() {
                 )}
               </>
             )}
-            {ventana2 && (
-              <>
-                <Titulo3>Equipo: {equipo1}</Titulo3>
-                <Detalle tipo={"principal"}>
-                  <BoxCampo>
-                    <TextBox>Entrenador</TextBox>
-                    <TextBoxEq>{entrenador1}</TextBoxEq>
-                  </BoxCampo>
-                  <InputValidar
-                    estado={"equipo"}
-                    cambiarEstado={"setEquipo"}
-                    tipo="text"
-                    label="Asistente"
-                    placeholder="Asistente"
-                    name="asistente"
-                    expresionRegular={""}
-                    classe={"arbitro"}
-                  />
-                  <ContenedorTable>
-                    <Table>
-                      <TableHead className={classes.encabezado}>
-                        <TableRow>
-                          <TableCell>
-                            <Letra>Nombre Jugador</Letra>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Letra>Nº</Letra>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Letra>E/S</Letra>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Letra>Faltas</Letra>
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody className={classes.bordes}>
-                        <TableRow>
-                          <TableCell>
-                            <LetraCuerpo>1</LetraCuerpo>
-                          </TableCell>
-                          <TableCell>
-                            <LetraCuerpo centro={"true"}>1</LetraCuerpo>
-                          </TableCell>
-                          <TableCell>
-                            <LetraCuerpo centro={"true"}>1</LetraCuerpo>
-                          </TableCell>
-                          <TableCell>
-                            <LetraCuerpo centro={"true"}>1</LetraCuerpo>
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </ContenedorTable>
-                  <ContenedorBotonesNav>
-                    <NavBoton1
-                      disabled={inhabilitado}
-                      left
-                      onClick={() => {
-                        setVentana2(false);
-                        setVentana1(true);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faChevronLeft} />
-                    </NavBoton1>
-                    <NavBoton1
-                      disabled={inhabilitado}
-                      right
-                      onClick={irVentana3}
-                    >
-                      <FontAwesomeIcon icon={faChevronRight} />
-                    </NavBoton1>
-                  </ContenedorBotonesNav>
-                </Detalle>
-              </>
-            )}
-            {ventana3 && (
-              <>
-                <Titulo3>Equipo: {equipo2}</Titulo3>
-                <Detalle tipo={"principal"}>
-                  <BoxCampo>
-                    <TextBox>Entrenador</TextBox>
-                    <TextBoxEq>{entrenador2}</TextBoxEq>
-                  </BoxCampo>
-                  <InputValidar
-                    estado={"equipo"}
-                    cambiarEstado={"setEquipo"}
-                    tipo="text"
-                    label="Asistente"
-                    placeholder="Asistente"
-                    name="asistente"
-                    expresionRegular={""}
-                    classe={"arbitro"}
-                  />
-                  <ContenedorTable>
-                    <Table>
-                      <TableHead className={classes.encabezado}>
-                        <TableRow>
-                          <TableCell>
-                            <Letra>Nombre Jugador</Letra>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Letra>Nº</Letra>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Letra>E/S</Letra>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Letra>Faltas</Letra>
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody className={classes.bordes}>
-                        <TableRow>
-                          <TableCell>
-                            <LetraCuerpo>1</LetraCuerpo>
-                          </TableCell>
-                          <TableCell>
-                            <LetraCuerpo centro={"true"}>1</LetraCuerpo>
-                          </TableCell>
-                          <TableCell>
-                            <LetraCuerpo centro={"true"}>1</LetraCuerpo>
-                          </TableCell>
-                          <TableCell>
-                            <LetraCuerpo centro={"true"}>1</LetraCuerpo>
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </ContenedorTable>
-                  <ContenedorBotonesNav>
-                    <NavBoton1
-                      disabled={inhabilitado}
-                      left
-                      onClick={() => {
-                        setVentana2(true);
-                        setVentana3(false);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faChevronLeft} />
-                    </NavBoton1>
-                    <NavBoton1
-                      disabled={inhabilitado}
-                      right
-                      onClick={() => {
-                        setVentana3(false);
-                        setVentana4(true);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faChevronRight} />
-                    </NavBoton1>
-                  </ContenedorBotonesNav>
-                </Detalle>
-              </>
-            )}
+
             {ventana4 && (
               <Detalle tipo={"principal"}>
                 <BoxCampo>
@@ -853,7 +576,7 @@ export default function Arbitro() {
                     disabled={inhabilitado}
                     left
                     onClick={() => {
-                      setVentana3(true);
+                      setVentana1(true);
                       setVentana4(false);
                     }}
                   >
