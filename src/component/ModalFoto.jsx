@@ -66,7 +66,8 @@ export const DetalleUsuario = styled.img`
   height: 400px;
   background: black;
 `;
-export default function ModalFoto({ estado, cambiarEstado }) {
+export default function ModalFoto({ estado, cambiarEstado, informacion }) {
+  const url = "http://127.0.0.1:8000/";
   return (
     <>
       {estado && (
@@ -82,7 +83,7 @@ export default function ModalFoto({ estado, cambiarEstado }) {
             >
               <FontAwesomeIcon icon={faXmark} />
             </BotonCerrar>
-            <DetalleUsuario src={require("../Imagenes/1.jpg")} />
+            <DetalleUsuario src={url+"storage/"+informacion.NOMBREFOTO} />
           </ContenedorModal>
         </Overlay>
       )}

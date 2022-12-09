@@ -11,6 +11,7 @@ import Registro from "./component/Registro";
 import Administrador from "./component/Administrador";
 import Delegado from "./component/Delegado";
 import Arbitro from "./component/Arbitro";
+import QrJugadores from "./component/QrJugadores";
 
 export function App() {
     return (
@@ -25,6 +26,7 @@ export function App() {
                 <Route path='/administrador' component={Administrador}/>
                 <Route path='/delegado' component={Delegado}/>
                 <Route path='/arbitro' component={Arbitro}/>
+                <Route path='/qrJugadores' component={QrJugadores}/>
             </Switch>
         </Router>
 

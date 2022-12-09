@@ -71,7 +71,9 @@ export default function Registro() {
   const url = "http://127.0.0.1:8000/";
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
-
+  const [campeonato, setCampeonato] = useState({});
+  const [comprobantePago,setComprobantePago] = useState(null);
+  const [logoEquipo,setLogoEquipo] = useState(null);
   const existeDelegado = () => {
     axios.get(url + "delegadoNombre/" + carnet.campo).then((response) => {
       if (response.data.length <= 0) {
@@ -505,9 +507,27 @@ export default function Registro() {
       valido = false;
     } else {
     }
+
+    if(logoEquipo === null){
+      toast("Ingesar Categoria", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
+      valido = false;
+    }
+    
     return valido;
   }
   const registroEquipo = () => {
+    obtenerCampeonato();
+
     if (esValidoDelegado()) {
       existeDelegado();
     }
@@ -681,9 +701,9 @@ export default function Registro() {
       COMPROBANTEMEDIO: "vacio",
       HABILITADO: "false",
     };
-    axios.post(url + "añadirDelegado", delegado).then((response) => {
-      axios.post(url + "añadirEquipo", equipoBd).then((response) => {
-        axios.post(url + "añadirInscripcion", inscripcion).then((response) => {
+    axios.post(url + "anadirDelegado", delegado).then((response) => {
+      axios.post(url + "anadirEquipo", equipoBd).then((response) => {
+        axios.post(url + "anadirInscripcion", inscripcion).then((response) => {
           toast("Delegado Registrado", {
             icon: "✅",
             duration: 3000,
@@ -695,6 +715,7 @@ export default function Registro() {
               borderRadius: "4%",
             },
           });
+          enviarComprobatenPago(equipoBd.IDEQUIPO);
           enviarCredenciales();
           setEspera("false");
           setInhabilitado(false);
@@ -703,6 +724,29 @@ export default function Registro() {
       });
     });
   };
+
+  const enviarComprobatenPago = async (idEquipo) =>{
+    const f = new FormData();
+    f.append("imagen",comprobantePago);
+    const response = await fetch(url+"comprobantePago/"+idEquipo,{
+      method : "POST",
+      body: f
+    })
+    console.log(logoEquipo);
+
+    const f2 = new FormData();
+    f2.append("imagen",logoEquipo);
+    const response2 = await fetch(url+ "agregarLogo/"+idEquipo,{
+      method: "POST",
+      body: f2
+    })
+  }
+  const obtenerCampeonato = async () =>{
+     const response = await fetch(url + "todosCampeonatos");
+     const data = await response.json();
+     console.log(data);
+     setCampeonato(data[0]);
+  }
 
   return (
     <>
@@ -1092,7 +1136,10 @@ export default function Registro() {
               />
               <BoxCampo>
                 <TextBox>Logo Equipo</TextBox>
-                <InputFile type="file" name="" id="logo" hidden />
+                <input type="file" name="" id="logo" hidden onChange={(e)=> 
+                  {setLogoEquipo(e.target.files[0])
+                  }} 
+                  />
                 <LabelFile for="logo" id="imagenLogo">
                   Seleccionar Archivo
                 </LabelFile>
@@ -1198,10 +1245,10 @@ export default function Registro() {
             </CategoryPago>
             <DetalleUsuarioPago>
               {pago == "Completo" && (
-                <ImagenPago src={require("../Imagenes/2.jpg")} />
+                <ImagenPago src={url+"storage/"+campeonato.PAGOCOMPLETO} />
               )}
               {pago == "Medio" && (
-                <ImagenPago src={require("../Imagenes/1.jpg")} />
+                <ImagenPago src={url+"storage/"+campeonato.PAGOMITAD} />
               )}
             </DetalleUsuarioPago>
             <ContenedorBotones>
@@ -1244,7 +1291,7 @@ export default function Registro() {
           <ContenedorRegistro>
             <Titulo>COMPROBANTE DE PAGO</Titulo>
             <CategoryPago>
-              <InputFile type="file" name="" id="logo" hidden />
+              <input type="file" name="" id="logo" hidden onChange={(e)=>setComprobantePago(e.target.files[0])}/>
               <LabelFile for="logo" id="comprobantePago">
                 Seleccionar Archivo
               </LabelFile>

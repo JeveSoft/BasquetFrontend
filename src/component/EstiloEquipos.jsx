@@ -44,6 +44,8 @@ export const EquipoModal = styled.div`
 export const ImgEquipo = styled.img`
     max-width: 400px;
     height: 400px;
+    border-radius: 10px;
+    cursor: pointer;
 `
 export const PopUpContainer = styled.div`
    background: white;
@@ -88,7 +90,7 @@ transition: all 0.3s ease;
 export const ContenedorJugadores = styled.div `
     margin-top: 30px;
     display: grid;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(5,1fr);
     place-items: center;
     text-align: center;
 `
@@ -105,26 +107,23 @@ export const ContenedorJugador = styled.div`
 `
 
 export const BotonDescarga = styled.a`
-width: 100%;
-height: 40px;
-color: #ff7c01;
-outline: none;
-border: none;
-background: none;
-cursor: pointer;
-padding: 10px;
-position: relative;
-margin-top: 10px;
-border: 2px solid #ff7c01;
+display: inline-block;
+background: #ff7c01;
+margin-bottom: 10px;
 border-radius: 5px;
-font-weight: 1000;
+text-decoration: none;
+color: black;
+padding: 10px;
+transition: all 0.2s ease-in-out;
+width: 200px;
+height: 40px;
+font-size: 16px;
+text-align: center;
+border: 1px solid black;
 &:hover {
-  transition: all 0.2s ease-in-out;
-  background: #ff7c01;
-  border: 2px solid black;
-  color: black;
-}
-`;
+  background: black;
+  color: #ff7c01;
+}`;
 
 export const ContenedorExcel = styled.div`
 `;

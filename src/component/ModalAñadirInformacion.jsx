@@ -182,6 +182,7 @@ export default function ModalAñadirInformacion({
   const [edadMin, setEdadMin] = useState({ campo: "", valido: null });
   const [edadMax, setEdadMax] = useState({ campo: "", valido: null });
   const [nombreFoto, setNombreFoto] = useState("foto.jpg");
+  const [fotoInfo, setFotoInfo] = useState(null);
 
   const url = "http://127.0.0.1:8000/";
   const [espera, setEspera] = useState("false");
@@ -194,7 +195,7 @@ export default function ModalAñadirInformacion({
     }
     return valido;
   };
-  const subirDatosInformacion = () => {
+  const subirDatosInformacion = async () => {
     if (tituloFoto.valido === "true") {
       setEspera("true");
       setInhabilitado(true);
@@ -202,12 +203,25 @@ export default function ModalAñadirInformacion({
         TITULO: tituloFoto.campo,
         NOMBREFOTO: nombreFoto,
       };
-      axios.post(url + "añadirInformacion", datos).then((response) => {
+      
+      /* axios.post(url + "añadirInformacion", datos).then((response) => {
         setTituloFoto({ campo: "", valido: null });
         setEspera("false");
         setInhabilitado(false);
         cambiarEstado(false);
       });
+       */
+      const f = new FormData();
+      f.append("imagen",fotoInfo);
+      f.append("titulo",tituloFoto.campo);
+      const res = await fetch(url + "agregarFotoInfo",{
+        method: "POST",
+        body: f,
+      });
+      setTituloFoto({ campo: "", valido: null });
+        setEspera("false");
+        setInhabilitado(false);
+        cambiarEstado(false);
     } else {
       toast("Verificar Titulo", {
         icon: "⚠️",
@@ -401,7 +415,7 @@ export default function ModalAñadirInformacion({
                 />
                 <BoxCampo>
                   <TextBox>IMAGEN</TextBox>
-                  <InputFile type="file" name="" id="foto" hidden />
+                  <InputFile type="file" name="" id="foto" hidden onChange={(e)=>setFotoInfo(e.target.files[0])} />
                   <LabelFile for="foto" id="imagenLogo">
                     Seleccionar Archivo
                   </LabelFile>
