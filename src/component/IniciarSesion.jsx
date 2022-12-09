@@ -266,11 +266,11 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
                     borderRadius: "4%",
                   },
                 });
-                historial.push("/delegado/"+id);
+                historial.push("/delegado/" + id);
               } else {
                 setEspera("false");
                 setInhabilitado(false);
-              setInicio("INICIAR SESION");
+                setInicio("INICIAR SESION");
                 toast("Contraseña Incorrecta", {
                   icon: "⚠️",
                   duration: 3000,
