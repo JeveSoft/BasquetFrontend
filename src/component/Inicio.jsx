@@ -148,31 +148,46 @@ export default function Inicio() {
           {
             informaciones[imageIndex] != null ? 
             <>
-            <ImageContainer
-            src={ url+"storage/" + informaciones[imageIndex].NOMBREFOTO }
-            className={loaded ? "loaded" : ""}
-            onLoad={() => setLoaded(true)}
-            />
-            <NavBoton right onClick={next}>
-              <FontAwesomeIcon icon={faChevronRight} />
-            </NavBoton>
-            <NavBoton left onClick={prev}>
-              <FontAwesomeIcon icon={faChevronLeft} />
-            </NavBoton>
-            <DotContainer>
-              {informaciones.map((dot, index) => (
-                <Dot key={dot} active={index === imageIndex} />
-              ))}
-            </DotContainer>
-            <IniciarSesion estado={modal} cambiarEstado={setModal} />
-             </> 
+              {
+                informaciones.length == 1 ?
+                <>
+                  <ImageContainer
+                    src={ url+"storage/" + informaciones[imageIndex].NOMBREFOTO }
+                    className={"loaded"}
+                    onLoad={() => setLoaded(true)}
+                    />
+                  <IniciarSesion estado={modal} cambiarEstado={setModal} />
+                </>
+                :
+                <>
+                  <ImageContainer
+                    src={ url+"storage/" + informaciones[imageIndex].NOMBREFOTO }
+                    className={"loaded"}
+                    onLoad={() => setLoaded(true)}
+                    />
+                  <NavBoton right onClick={next}>
+                    <FontAwesomeIcon icon={faChevronRight} />
+                  </NavBoton>
+                  <NavBoton left onClick={prev}>
+                    <FontAwesomeIcon icon={faChevronLeft} />
+                  </NavBoton>
+                  <DotContainer>
+                    {informaciones.map((dot, index) => (
+                      <Dot key={dot} active={index === imageIndex} />
+                    ))}
+                  </DotContainer>
+                  <IniciarSesion estado={modal} cambiarEstado={setModal} />
+                </>
+              }
+            </> 
             :
             <> 
               <ImageContainer
-              src={require('../Imagenes/' + imagenes[imageIndex])}
-              className={loaded ? "loaded" : ""}
+              src={require('../Imagenes/' + imagenes[1])}
+              className={"loaded"}
               onLoad={() => setLoaded(true)}
             />
+            <IniciarSesion estado={modal} cambiarEstado={setModal} />
             </>
           }
         </Container>

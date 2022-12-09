@@ -40,7 +40,7 @@ export default function QrJugadores (){
              {
                 jugadores.map((jugador) => {
                    return (
-                    <VentanaQr>
+                    <VentanaQr key={jugador.IDJUGADOR}>
                               <h5>{jugador.NOMBREJUGADOR}</h5>
                               <img src={url+"qrJugadores/"+jugador.FOTOQR} />
                     </VentanaQr>
@@ -48,7 +48,7 @@ export default function QrJugadores (){
                     })
           }   
           </VentanaQrs>
-          <BotonDescarga href="javascript:window.print()">Imprimir</BotonDescarga>
+          <BotonDescarga style={{margin:"50px"}} href="javascript:window.print()">Imprimir</BotonDescarga>
           </>
           )
 }

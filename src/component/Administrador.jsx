@@ -550,7 +550,7 @@ export default function Administrador() {
       validarDia3();
       validarDia4();
     }
-    //obtenerCategoria();
+    obtenerCategoria();
     if (titulo === "CONFIGURAR LIGA" && opcionL === "1") {
       validarFechaPreInicio();
       validarFechaPreFin();
