@@ -103,10 +103,7 @@ export default function Equipo() {
         </ContenedorMain>
       </Contenedor >
       <b>{popUp ? <PopUpEquipo equipo={equipo} cerrarPopup={cerrarPopup}/> : ''}</b>
-      <IniciarSesion
-        estado={modal}
-        cambiarEstado={setModal}
-      />
+      
     </>
   );
 }

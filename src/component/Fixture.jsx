@@ -52,34 +52,45 @@ export default function Fixture() {
 
   const obtenerPartido = () => {
     axios.get(url + "obtenercategoriafixture/" + categoria).then((grupo) => {
-      setListaGrupos(grupo.data);
-      setSeleccionoCategoria(true);
+      if (grupo.data.length > 0) {
+        setListaGrupos(grupo.data);
+        setSeleccionoCategoria(true);
+      } else {
+        setListaGrupos([]);
+        setSeleccionoCategoria(false);
+      }
     });
   };
 
   const final = () => {
     axios.get(url + "hayFinal/" + categoriaFinal).then((response) => {
-      setListaFinal(response.data);
-      setSeleccionoCategoriaF(true);
+      if (response.data.length) {
+        setListaFinal(response.data);
+        setSeleccionoCategoriaF(true);
+      } else {
+        setSeleccionoCategoriaF(false);
+      }
     });
   };
 
   const semiFinal = () => {
     axios.get(url + "haySemifinal/" + categoriaSemiFinal).then((response) => {
-      setListaSemiFinal(response.data);
-      setSeleccionoCategoriaSF(true);
-      console.log(listaSemifinal);
+      if (response.data.length > 0) {
+        setListaSemiFinal(response.data);
+        setSeleccionoCategoriaSF(true);
+      } else {
+        setSeleccionoCategoriaSF(false);
+      }
     });
   };
 
   useEffect(function () {
     obtenerCategoria();
-    if (categoriaFinal!== ""){
+    if (categoriaFinal !== "") {
       if (activoF) {
         if (!modalPartido) {
           if (document.getElementById("categoriaFinal").value != null) {
-            document.getElementById("categoriaFinal").value =
-              categoriaFinal;
+            document.getElementById("categoriaFinal").value = categoriaFinal;
           }
         }
       }
@@ -495,7 +506,6 @@ export default function Fixture() {
         cambiarEstado={setModalPartido}
         datos={partido}
       />
-      <IniciarSesion estado={modal} cambiarEstado={setModal} />
     </>
   );
 }

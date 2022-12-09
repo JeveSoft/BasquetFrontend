@@ -16,6 +16,7 @@ import {
 import { useEffect } from "react";
 import axios from "axios";
 import { BotonBuscar, Select } from "./EstilosFixture";
+import toast from "react-hot-toast";
 export default function Tabla() {
   const [modal, setModal] = useState(false);
   const [listaEquipos, setListaEquipos] = useState([]);
@@ -34,10 +35,26 @@ export default function Tabla() {
   const obtenerEquipo = () => {
     if (categoria !== "") {
       axios.get(url + "equiposPuntos/" + categoria).then((response) => {
-        setListaEquipos(ordenar(response.data));
-        setObtuvoEquipos(true);
+        if (response.data.length > 0) {
+          setListaEquipos(ordenar(response.data));
+          setObtuvoEquipos(true);
+        }else{
+          setListaEquipos([])
+          //setObtuvoEquipos(false)
+        }
       });
     } else {
+      toast("Ingesar Categoria", {
+        icon: "⚠️",
+        duration: 3000,
+        style: {
+          border: "2px solid #ff7c01",
+          padding: "10px",
+          color: "#fff",
+          background: "#000",
+          borderRadius: "4%",
+        },
+      });
     }
   };
 
@@ -53,9 +70,9 @@ export default function Tabla() {
         }
       }
     }
-    
+
     for (i = 1; i < n; i++) {
-      if (lista[i].PUNTOS === null ){
+      if (lista[i].PUNTOS === null) {
         lista[i].PUNTOS = "0";
       }
     }
@@ -142,7 +159,6 @@ export default function Tabla() {
           )}
         </ContenedorPrincipal>
       </ContenedorGlobal>
-      <IniciarSesion estado={modal} cambiarEstado={setModal} />
     </>
   );
 }
