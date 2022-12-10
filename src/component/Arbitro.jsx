@@ -33,18 +33,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Img } from "./EstiloRegistro";
-const styles = makeStyles({
-  encabezado: {
-    padding: "0 30px",
-    boxShadow: "0 2px 3px 2px #000000",
-  },
-  bordes: {
-    boxShadow: "0 2px 3px 2px #ff7c01",
-  },
-  celdas: {
-    background: "red",
-  },
-});
 
 export default function Arbitro() {
   const [titulo, setTitulo] = useState("ARBITRO");
