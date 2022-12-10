@@ -251,7 +251,7 @@ export default function ModalAñadirInformacion({
           .get(url + "existeCategoria/" + categoria.campo)
           .then((response) => {
             if (response.data.length <= 0) {
-              axios.post(url + "añadirCategoria", datos).then((response1) => {
+              axios.post(url + "anadirCategoria", datos).then((response1) => {
                 setEspera("false");
                 setInhabilitado(false);
                 setCategoria({ campo: "", valido: null });

@@ -334,7 +334,7 @@ export default function Administrador() {
           PAGOMITAD: "pagomedio.jpg",
           PAGOCOMPLETO: "pagocompleto.jpg",
         };
-        axios.post(url + "añadirCampeonato", pagos).then((response) => {
+        axios.post(url + "anadirCampeonato", pagos).then((response) => {
           setEspera("false");
           setInhabilitado(false);
           toast("Pagos Establecidas", {
@@ -424,7 +424,7 @@ export default function Administrador() {
             PAGOMITAD: "",
             PAGOCOMPLETO: "",
           };
-          axios.post(url + "añadirCampeonato", fechas).then((response) => {
+          axios.post(url + "anadirCampeonato", fechas).then((response) => {
             setEspera("false");
             setInhabilitado(false);
 
@@ -1159,7 +1159,7 @@ export default function Administrador() {
       });
     });
     partidosLleno.map((partido) => {
-      axios.post(url + "añadirPartido", partido).then((response) => {
+      axios.post(url + "anadirPartido", partido).then((response) => {
         setEsperaF("false");
         setInhabilitadoF(false);
       });
@@ -1381,8 +1381,8 @@ export default function Administrador() {
         DIA: fechaSemiFinal,
         FASE: "semiFinal",
       };
-      axios.post(url + "añadirPartido", partido1).then((response) => {
-        axios.post(url + "añadirPartido", partido2).then((response) => {
+      axios.post(url + "anadirPartido", partido1).then((response) => {
+        axios.post(url + "anadirPartido", partido2).then((response) => {
           setEspera("false");
           setInhabilitado(false);
           toast("Partidos Establecidos", {
@@ -1512,8 +1512,8 @@ export default function Administrador() {
         DIA: fechaSemiFinal,
         FASE: "Final",
       };
-      axios.post(url + "añadirPartido", partido1).then((response) => {
-        axios.post(url + "añadirPartido", partido2).then((response) => {
+      axios.post(url + "anadirPartido", partido1).then((response) => {
+        axios.post(url + "anadirPartido", partido2).then((response) => {
           setEspera("false");
           setInhabilitado(false);
           toast("Partidos Establecidos", {
