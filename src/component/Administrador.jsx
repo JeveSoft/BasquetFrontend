@@ -102,8 +102,6 @@ export default function Administrador() {
   const [opcion, setOpcion] = useState("1");
   const [activoF, setActivoF] = useState("true");
   const [activoL, setActivoL] = useState("");
-  const [activoFM, setActivoFM] = useState("true");
-  const [activoFA, setActivoFA] = useState("");
   const [activoP, setActivoP] = useState("");
   const [opcionL, setOpcionL] = useState("1");
   const [validarPreInicio, setValidarPreInicio] = useState(null);
@@ -197,14 +195,14 @@ export default function Administrador() {
   const [informacion, setInformacion] = useState({}); 
 
   const validarFechaFinLiga = () => {
-    if (fechaFinLiga != "") {
+    if (fechaFinLiga !== "") {
       if (
         fechaFinLiga > fechaInicioLiga &&
-        validarInicioLiga == "true" &&
-        validarInicio == "true" &&
-        validarFin == "true" &&
-        validarPreFin == "true" &&
-        validarPreInicio == "true"
+        validarInicioLiga === "true" &&
+        validarInicio === "true" &&
+        validarFin === "true" &&
+        validarPreFin === "true" &&
+        validarPreInicio === "true"
       ) {
         setValidarFinLiga("true");
       } else {
@@ -215,13 +213,13 @@ export default function Administrador() {
     }
   };
   const validarFechaInicioLiga = () => {
-    if (fechaInicioLiga != "") {
+    if (fechaInicioLiga !== "") {
       if (
         fechaInicioLiga > fechaFin &&
-        validarInicio == "true" &&
-        validarFin == "true" &&
-        validarPreFin == "true" &&
-        validarPreInicio == "true"
+        validarInicio === "true" &&
+        validarFin === "true" &&
+        validarPreFin === "true" &&
+        validarPreInicio === "true"
       ) {
         setValidarInicioLiga("true");
       } else {
@@ -232,11 +230,11 @@ export default function Administrador() {
     }
   };
   const validarFechaInicio = () => {
-    if (fechaInicio != "") {
+    if (fechaInicio !== "") {
       if (
         fechaInicio > fechaPreFin &&
-        validarPreFin == "true" &&
-        validarPreInicio == "true"
+        validarPreFin === "true" &&
+        validarPreInicio === "true"
       ) {
         setValidarInicio("true");
       } else {
