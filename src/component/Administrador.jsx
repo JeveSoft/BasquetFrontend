@@ -305,7 +305,7 @@ export default function Administrador() {
           PAGOMITAD: "pagomedio.jpg",
           PAGOCOMPLETO: "pagocompleto.jpg",
         };
-        axios
+        /* axios
           .put(url + "acutalizarPagos/" + response.data[0].IDCAMPEONATO, pagos)
           .then((response) => {
             setEspera("false");
@@ -321,7 +321,7 @@ export default function Administrador() {
                 borderRadius: "4%",
               },
             });
-          });
+          }); */
       } else {
         var pagos = {
           DESCRIPCION: "",

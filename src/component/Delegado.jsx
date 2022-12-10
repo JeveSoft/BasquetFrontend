@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useState } from "react";
 import {
   Texto,
@@ -53,7 +53,7 @@ import { toast } from "react-hot-toast";
 import {DetalleUsuario} from "./EstiloRegistro";
 import PhoneInput from "react-phone-number-input";
 import { Boton } from "./IniciarSesion";
-import { SelectJugador,ContenedorJugadores, ImgJugador , ContenedorJugador, BotonDescarga, ContenedorExcel} from "./EstiloEquipos"
+import { SelectJugador,ContenedorJugadores, ImgJugador , ContenedorJugador, BotonDescarga, ContenedorExcel, BotonDescargaLink} from "./EstiloEquipos"
 import ModalJugador from "./ModalJugador"
 import InputValidar from "./InputValidar";
 const styles = makeStyles({
@@ -837,7 +837,7 @@ let location = useLocation();
             obtenerJugadores = {obtenerJugadores}
             ></ModalJugador> : ""}</b>
           </ContenedorJugadores>
-            <BotonDescarga href={urlR+"QrJugadores/"+infoInscripcion[0].IDEQUIPO} target="_blank">Obtener QR code</BotonDescarga>
+            <BotonDescargaLink to={"/qrJugadores/"+infoInscripcion[0].IDEQUIPO}>Obtener qr Jugadores</BotonDescargaLink>
         </ContenedorConfiguracion>
       )}
       

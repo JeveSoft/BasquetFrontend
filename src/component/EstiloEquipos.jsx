@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import { Link} from 'react-router-dom';
 export const Button = styled.button`
     font-size: 1em;
     border-decoration: none;
@@ -127,3 +127,21 @@ border: 1px solid black;
 
 export const ContenedorExcel = styled.div`
 `;
+export const BotonDescargaLink = styled(Link)`
+display: inline-block;
+background: #ff7c01;
+margin-bottom: 10px;
+border-radius: 5px;
+text-decoration: none;
+color: black;
+padding: 10px;
+transition: all 0.2s ease-in-out;
+width: 200px;
+height: 40px;
+font-size: 16px;
+text-align: center;
+border: 1px solid black;
+&:hover {
+  background: black;
+  color: #ff7c01;
+}`;
