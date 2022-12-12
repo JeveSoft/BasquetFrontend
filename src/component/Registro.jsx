@@ -702,6 +702,7 @@ export default function Registro() {
       COMPROBANTEMEDIO: "vacio",
       HABILITADO: "false",
     };
+    console.log(equipoBd)
     axios.post(url + "anadirDelegado", delegado).then((response) => {
       axios.post(url + "anadirEquipo", equipoBd).then((response) => {
         axios.post(url + "anadirInscripcion", inscripcion).then((response) => {

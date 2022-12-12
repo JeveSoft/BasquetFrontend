@@ -84,12 +84,12 @@ export default function Inicio() {
   const [modal, setModal] = useState(false);
 
   const [informaciones, setInformaciones] = useState([]) 
-  useEffect(() => {
+  /* useEffect(() => {
     const interval = setInterval(() => {
       next();
     }, 3000);
     return () => clearInterval(interval);
-  });
+  }); */
   useEffect(() => {
     obtenerInfo();
   },[]);

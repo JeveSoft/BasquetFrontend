@@ -390,7 +390,7 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
                 placeholder="CONTRASEÑA"
                 type="password"
                 required
-                id="nombreCompleto"
+                id="password"
                 onChange={(e) => {
                   setContraseña(e.target.value);
                 }}

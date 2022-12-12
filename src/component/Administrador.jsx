@@ -287,7 +287,7 @@ export default function Administrador() {
       setValidarPreInicio(null);
     }
   };
-  const subirPagos = () => {
+  const   subirPagos = () => {
     setEspera("true");
     setInhabilitado(true);
     axios.get(url + "todosCampeonatos").then((response) => {
@@ -351,6 +351,19 @@ export default function Administrador() {
       if(pagoMitad !== null && pagoCompleto !== null){
         subirComprobantes(response.data[0].IDCAMPEONATO);
         console.log("entreo");
+        setEspera("false");
+        setInhabilitado(false);
+            toast("Pagos Establecidas", {
+              icon: "✅",
+              duration: 3000,
+              style: {
+                border: "2px solid #ff7c01",
+                padding: "10px",
+                color: "#fff",
+                background: "#000",
+                borderRadius: "4%",
+              },
+            });
       }
     });
   };
@@ -496,6 +509,10 @@ export default function Administrador() {
       }
     }
   };
+  useEffect(function(){
+    obtenerCategoria();
+  },[])
+
   useEffect(function () {
     if (
       titulo === "CONFIGURAR LIGA" &&
@@ -526,7 +543,7 @@ export default function Administrador() {
       obtenerArbitro();
     }
     if (titulo === "INFORMACIÓN") {
-      obtenerInformacion();
+      //obtenerInformacion();
     }
     if (titulo === "EQUIPO") {
       if (opcion === "1") {
@@ -548,7 +565,7 @@ export default function Administrador() {
       validarDia3();
       validarDia4();
     }
-    obtenerCategoria();
+    //obtenerCategoria();
     if (titulo === "CONFIGURAR LIGA" && opcionL === "1") {
       validarFechaPreInicio();
       validarFechaPreFin();
@@ -1710,6 +1727,7 @@ export default function Administrador() {
               listaFinal.splice(0, listaFinal.length);
               partidos.splice(0, partidos.length);
               listaGrupos.splice(0, listaGrupos.length);
+              obtenerInformacion();
             }}
           >
             INFORMACIÓN
@@ -1873,6 +1891,7 @@ export default function Administrador() {
                 setActivoL("true");
                 setActivoP("");
                 setOpcionL("2");
+                obtenerCategoria();
               }}
             >
               <Texto>CONFIGURACION LIGA</Texto>

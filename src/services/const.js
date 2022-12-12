@@ -1,2 +1,2 @@
-export const url = "http://146.190.22.88/api/"
-export const urlImage = "http://146.190.22.88/"
+export const url = "http://127.0.0.1:8000/api/"
+export const urlImage = "http://127.0.0.1:8000/"

@@ -743,8 +743,8 @@ let location = useLocation();
 
               <BoxCampo>
                 <TextBox>Rol</TextBox>
-                <SelectJugador id="rol" name="select" onChange={(e)=> setRolJ(e.target.value)}>
-                    <option selected="true" disabled="disabled">Rol</option>
+                <SelectJugador defaultValue="Rol" id="rol" name="select" onChange={(e)=> setRolJ(e.target.value)}>
+                    <option value="Rol"  disabled="disabled">Rol</option>
                     <option value="jugador">Jugador</option>
                     <option value="cuerpoTecnico">Cuerpo Tecnico</option>
                     <option value="ambos">Ambos</option>
