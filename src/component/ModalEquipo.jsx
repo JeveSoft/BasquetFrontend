@@ -6,7 +6,7 @@ import { toast, Toaster } from "react-hot-toast";
 import styled, { css } from "styled-components";
 import { Img } from "./EstilosAdministrador";
 import emailjs from "@emailjs/browser";
-import {url} from "../services/const"
+import {url, urlImage} from "../services/const"
 const Overlay = styled.div`
   width: 100vw;
   height: 100vh;
@@ -248,12 +248,12 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                   </TextBox>
                   <TextBox>Categoria Equipo= {datos.CATEGORIA}</TextBox>
                   <TextBox>
-                    Logo Equipo= <ImgLogo src={url+"storage/"+datos.LOGO} alt="foto"></ImgLogo>
+                    Logo Equipo= <ImgLogo src={urlImage+"storage/"+datos.LOGO} alt="foto"></ImgLogo>
                   </TextBox>
                 </BoxCampo>
                 <BoxCampo>
                   <TextBox>
-                    Comprobante = <ImgComprobante src={url+"storage/"+datos.COMPROBANTE[0]}></ImgComprobante>
+                    Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTE[0]}></ImgComprobante>
                   </TextBox>
                 </BoxCampo>
                 <ContenedorBoton>
@@ -296,19 +296,19 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                   </TextBox>
                   <TextBox>Categoria Equipo= {datos.CATEGORIA}</TextBox>
                   <TextBox>
-                    Logo Equipo= <ImgLogo src={url+"storage/"+datos.LOGO} alt="foto"></ImgLogo>
+                    Logo Equipo= <ImgLogo src={urlImage+"storage/"+datos.LOGO} alt="foto"></ImgLogo>
                   </TextBox>
                 </BoxCampo>
                 <BoxCampo>
                   <TextBox>
-                    Comprobante = <ImgComprobante src={url+"storage/"+datos.COMPROBANTE[0]}  ></ImgComprobante>
+                    Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTE[0]}  ></ImgComprobante>
                   </TextBox>
                 </BoxCampo>
                 {datos.COMPROBANTECOMPLETO[0] != "vacio" && (
                   <>
                     <BoxCampo>
                       <TextBox>
-                        Comprobante = <ImgComprobante src={url+"storage/"+datos.COMPROBANTECOMPLETO[0]}></ImgComprobante>
+                        Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTECOMPLETO[0]}></ImgComprobante>
                       </TextBox>
                     </BoxCampo>
                   </>
@@ -386,19 +386,19 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                   </TextBox>
                   <TextBox>Categoria Equipo= {datos.CATEGORIA}</TextBox>
                   <TextBox>
-                    Logo Equipo= <ImgLogo src={url+"storage/"+datos.LOGO}></ImgLogo>
+                    Logo Equipo= <ImgLogo src={urlImage+"storage/"+datos.LOGO}></ImgLogo>
                   </TextBox>
                 </BoxCampo>
                 <BoxCampo>
                   <TextBox>
-                    Comprobante = <ImgComprobante src={url+"storage/"+datos.COMPROBANTE[0]}></ImgComprobante>
+                    Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTE[0]}></ImgComprobante>
                   </TextBox>
                 </BoxCampo>
                 {datos.COMPROBANTECOMPLETO[0] != "vacio" && (
                   <>
                     <BoxCampo>
                       <TextBox>
-                        Comprobante = <ImgComprobante src={url+"storage/"+datos.COMPROBANTECOMPLETO[0]}></ImgComprobante>
+                        Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTECOMPLETO[0]}></ImgComprobante>
                       </TextBox>
                     </BoxCampo>
                   </>
@@ -443,19 +443,19 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                 </TextBox>
                 <TextBox>Categoria Equipo= {datos.CATEGORIA}</TextBox>
                 <TextBox>
-                  Logo Equipo= <ImgLogo src={url+"storage/"+datos.LOGO}></ImgLogo>
+                  Logo Equipo= <ImgLogo src={urlImage+"storage/"+datos.LOGO}></ImgLogo>
                 </TextBox>
               </BoxCampo>
               <BoxCampo>
                 <TextBox>
-                  Comprobante = <ImgComprobante src={url+"storage/"+datos.COMPROBANTE[0]}></ImgComprobante>
+                  Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTE[0]}></ImgComprobante>
                 </TextBox>
               </BoxCampo>
               {datos.COMPROBANTECOMPLETO[0] != "vacio" && (
                 <>
                   <BoxCampo>
                     <TextBox>
-                      Comprobante = <ImgComprobante src={url+"storage/"+datos.COMPROBANTECOMPLETO[0]}></ImgComprobante>
+                      Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTECOMPLETO[0]}></ImgComprobante>
                     </TextBox>
                   </BoxCampo>
                 </>

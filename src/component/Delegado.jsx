@@ -322,7 +322,7 @@ let location = useLocation();
         console.log(dataJugador);
         
         
-        const response = await fetch(url+"agregarJugador/", {
+        const response = await fetch(url+"agregarJugador", {
           method: 'POST', 
           mode: 'cors',
           
