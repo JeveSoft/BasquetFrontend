@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from "react";
+import { url, urlImage} from "../services/const"
 import {
   Texto,
   NavBotonMenu,
@@ -87,8 +88,7 @@ export default function Delegado() {
 
 
  
-  const url = "http://127.0.0.1:8000/";
-  const urlR = "http://127.0.0.1:3000/";
+
   const [listaGrupos, setListaGrupos] = useState([]);
 
 
@@ -820,7 +820,7 @@ let location = useLocation();
                     jugador.FOTOJUGADOR == "vacio" ? 
                     <ImgJugador src={require("../Imagenes/imagenJugador.jpg")} alt="foto carnet" />
                     :
-                     <ImgJugador src={url+"storage/"+jugador.FOTOJUGADOR} alt="foto jugador" />
+                     <ImgJugador src={urlImage+"storage/"+jugador.FOTOJUGADOR} alt="foto jugador" />
                  }
                  <h5>{jugador.NOMBREJUGADOR}</h5>
                  {/* <p>{jugador.CIJUGADOR}</p> */}

@@ -2,7 +2,7 @@ import React, { useState , useEffect} from "react";
 import styled, { css } from "styled-components";
 import { useLocation } from 'react-router-dom';
 import { toast } from "react-hot-toast";
-
+import {url,urlImage} from "../services/const"
 import {
   InputFile,
   TextBox,
@@ -33,7 +33,7 @@ import { SelectJugador, BotonPopup, ImgJugador} from "./EstiloEquipos"
  `
 
 export default function ModalJugador( {jugador, idDelegado, idEquipo, cerrarModalJugador, obtenerJugadores}) {
-  const url = "http://127.0.0.1:8000/";
+  
   const [nombreJ,setNombreJ] = useState("");
   const [carnetJ,setCarnetJ] = useState("");
   const [correoJ,setCorreoJ] = useState("");
@@ -136,7 +136,7 @@ export default function ModalJugador( {jugador, idDelegado, idEquipo, cerrarModa
                   jugador.FOTOCIJUGADOR == "vacio" ? 
                   <ImgJugador src={require("../Imagenes/imagenJugador.jpg")} alt="ATR" />
                   :
-                  <ImgJugador src={url+"storage/"+jugador.FOTOCIJUGADOR} alt="ATR" />
+                  <ImgJugador src={urlImage+"storage/"+jugador.FOTOCIJUGADOR} alt="ATR" />
                 }
 
               <BoxCampo>
@@ -156,7 +156,7 @@ export default function ModalJugador( {jugador, idDelegado, idEquipo, cerrarModa
                     jugador.FOTOJUGADOR == "vacio" ? 
                     <ImgJugador src={require("../Imagenes/imagenJugador.jpg")} alt="ATR" />
                     :
-                     <ImgJugador src={url+"storage/"+jugador.FOTOJUGADOR} alt="ATR" />
+                     <ImgJugador src={urlImage+"storage/"+jugador.FOTOJUGADOR} alt="ATR" />
                  }
 
             </DetalleUsuario>

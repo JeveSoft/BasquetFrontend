@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import { BotonDescarga } from "./EstiloEquipos";
+import {url} from "../services/const"
 export default function QrJugadores (){
 
       const VentanaQr = styled.div`
@@ -18,7 +19,7 @@ export default function QrJugadores (){
        `;
 
       let location = useLocation(); 
-      const url = "http://127.0.0.1:8000/";
+      
       const [jugadores,setJugadores] = useState([]); 
       const obtenerIdEquipo = () =>{
       }

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import toast, { Toaster } from "react-hot-toast";
-
+import {url,urlImage} from "../services/const"
 const Overlay = styled.div`
   width: 100vw;
   height: 100vh;
@@ -67,7 +67,7 @@ export const DetalleUsuario = styled.img`
   background: black;
 `;
 export default function ModalFoto({ estado, cambiarEstado, informacion }) {
-  const url = "http://127.0.0.1:8000/";
+  
   return (
     <>
       {estado && (
@@ -83,7 +83,7 @@ export default function ModalFoto({ estado, cambiarEstado, informacion }) {
             >
               <FontAwesomeIcon icon={faXmark} />
             </BotonCerrar>
-            <DetalleUsuario src={url+"storage/"+informacion.NOMBREFOTO} />
+            <DetalleUsuario src={urlImage+"storage/"+informacion.NOMBREFOTO} />
           </ContenedorModal>
         </Overlay>
       )}

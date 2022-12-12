@@ -6,7 +6,7 @@ import { toast, Toaster } from "react-hot-toast";
 import styled, { css } from "styled-components";
 import { Img } from "./EstilosAdministrador";
 import emailjs from "@emailjs/browser";
-
+import {url} from "../services/const"
 const Overlay = styled.div`
   width: 100vw;
   height: 100vh;
@@ -141,7 +141,7 @@ const BotonAñadir = styled.button`
     `}
 `;
 export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
-  const url = "http://127.0.0.1:8000/";
+ 
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
 

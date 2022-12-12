@@ -6,6 +6,7 @@ import { useHistory } from "react-router";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { Img } from "./EstilosAdministrador";
+import {url,urlImage} from "../services/const"
 
 const Overlay = styled.div`
   width: 100vw;
@@ -120,7 +121,7 @@ export const Texto = styled.div`
 `;
 export default function Modal({ estado, cambiarEstado, mensaje, tipo, datos }) {
   const historial = useHistory();
-  const url = "http://127.0.0.1:8000/";
+ 
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
 

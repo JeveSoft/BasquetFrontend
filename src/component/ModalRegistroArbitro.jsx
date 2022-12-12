@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
+import {url} from "../services/const"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faXmark,
@@ -179,7 +180,7 @@ export default function ModalRegistroArbitro({
   var [nacionalidad, setNacionalidad] = useState("");
   var [genero, setGenero] = useState("");
   var [validarFechaN, setValidarFechaN] = useState(null);
-  const url = "http://127.0.0.1:8000/";
+ 
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
 

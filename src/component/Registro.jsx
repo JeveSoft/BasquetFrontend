@@ -1,5 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {url, urlImage} from "../services/const"
 import {
   faChevronRight,
   faChevronLeft,
@@ -68,7 +69,7 @@ export default function Registro() {
   var [validarCreacion, setValidarCreacion] = useState(null);
   const [pago, setPago] = useState("");
   const [listaCategoria, setListaCategoria] = useState([]);
-  const url = "http://127.0.0.1:8000/";
+ 
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
   const [campeonato, setCampeonato] = useState({});
@@ -1245,10 +1246,10 @@ export default function Registro() {
             </CategoryPago>
             <DetalleUsuarioPago>
               {pago == "Completo" && (
-                <ImagenPago src={url+"storage/"+campeonato.PAGOCOMPLETO} />
+                <ImagenPago src={urlImage+"storage/"+campeonato.PAGOCOMPLETO} />
               )}
               {pago == "Medio" && (
-                <ImagenPago src={url+"storage/"+campeonato.PAGOMITAD} />
+                <ImagenPago src={urlImage+"storage/"+campeonato.PAGOMITAD} />
               )}
             </DetalleUsuarioPago>
             <ContenedorBotones>

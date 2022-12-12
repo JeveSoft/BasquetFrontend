@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink } from "./Nav";
+import {url,urlImage} from "../services/const"
 import IniciarSesion from "./IniciarSesion";
 import { ImagenLogo } from "./Inicio";
 import {
@@ -25,7 +26,7 @@ export default function Fixture() {
   const [modal, setModal] = useState(false);
   document.title = "Fixture";
   const [listaCategoria, setListaCategoria] = useState([]);
-  const url = "http://127.0.0.1:8000/";
+  
   const [categoria, setCategoria] = useState("");
   const [categoriaSemiFinal, setCategoriaSemiFinal] = useState("");
   const [categoriaFinal, setCategoriaFinal] = useState("");

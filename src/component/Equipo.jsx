@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import {url, urlImage} from "../services/const"
 import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink, ImagenLogo } from './Nav'
 import IniciarSesion from './IniciarSesion';
 import {Button, Contenedor,ContenedorMain, Equipos, EquipoModal, ImgEquipo, Select} from "./EstiloEquipos"
@@ -11,7 +12,7 @@ export default function Equipo() {
   const [equipo, setEquipo] = useState({});
   const [popUp, setpopUp] = useState(false);
   const [categorias, setCategorias] = useState([]);
-  const url = "http://127.0.0.1:8000/";
+  
   useEffect(()=>{
     getCategorias();
     getDatos();
@@ -100,7 +101,7 @@ export default function Equipo() {
                         equipo.LOGO == "LOGO.JPG" ?
                         <ImgEquipo src={ require("../Imagenes/equipoDefault.png") }/>
                         :
-                        <ImgEquipo src={ url+ "storage/"+  equipo.LOGO }/>
+                        <ImgEquipo src={ urlImage+ "storage/"+  equipo.LOGO }/>
                       }
                     </EquipoModal>
                     

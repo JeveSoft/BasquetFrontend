@@ -5,6 +5,7 @@ import { faXmark, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import {url,urlImage} from "../services/const"
 
 const Overlay = styled.div`
   width: 100vw;
@@ -133,7 +134,7 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
   const [id, setId] = useState("");
   const [contraseña, setContraseña] = useState("");
   const historial = useHistory();
-  const url = "http://127.0.0.1:8000/";
+
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
   const [inicio, setInicio] = useState("INICIAR SESION");

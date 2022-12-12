@@ -5,6 +5,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import toast, { Toaster } from "react-hot-toast";
 import InputValidar from "./InputValidar";
 import axios from "axios";
+import {url} from "../services/const"
 
 const Overlay = styled.div`
   width: 100vw;
@@ -184,7 +185,6 @@ export default function ModalAñadirInformacion({
   const [nombreFoto, setNombreFoto] = useState("foto.jpg");
   const [fotoInfo, setFotoInfo] = useState(null);
 
-  const url = "http://127.0.0.1:8000/";
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
 

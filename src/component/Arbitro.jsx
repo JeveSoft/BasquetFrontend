@@ -4,6 +4,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
+import {url, urlImage} from "../services/const"
 import {
   BotonAnotar,
   Botones,
@@ -42,7 +43,6 @@ export default function Arbitro() {
   const [ventana0, setVentana0] = useState(true);
   const [ventana1, setVentana1] = useState(false);
   const [ventana4, setVentana4] = useState(false);
-  const url = "http://127.0.0.1:8000/";
   const [listaCategoria, setListaCategoria] = useState([]);
   const [obtuvoCategoria, setObtuvoCategoria] = useState(false);
   const [categoria, setCategoria] = useState("");

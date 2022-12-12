@@ -6,6 +6,7 @@ import {
   NavBoton,
   DotContainer,
 } from "./Carusel";
+import {url ,urlImage} from "../services/const"
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
@@ -81,7 +82,7 @@ export default function Inicio() {
   const imagenes = ["1.jpg", "2.jpg", "3.jpg"];
   const [loaded, setLoaded] = useState(false);
   const [modal, setModal] = useState(false);
-  const url = "http://127.0.0.1:8000/";
+
   const [informaciones, setInformaciones] = useState([]) 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -152,7 +153,7 @@ export default function Inicio() {
                 informaciones.length == 1 ?
                 <>
                   <ImageContainer
-                    src={ url+"storage/" + informaciones[imageIndex].NOMBREFOTO }
+                    src={ urlImage+"storage/" + informaciones[imageIndex].NOMBREFOTO }
                     className={"loaded"}
                     onLoad={() => setLoaded(true)}
                     />
@@ -161,7 +162,7 @@ export default function Inicio() {
                 :
                 <>
                   <ImageContainer
-                    src={ url+"storage/" + informaciones[imageIndex].NOMBREFOTO }
+                    src={ urlImage+"storage/" + informaciones[imageIndex].NOMBREFOTO }
                     className={"loaded"}
                     onLoad={() => setLoaded(true)}
                     />

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { url, urlImage} from "../services/const"
 import {
   Texto,
   NavBotonMenu,
@@ -141,7 +142,6 @@ export default function Administrador() {
   const [listaInformacion, setListaInformacion] = useState([]);
   const [elEquipo, setElEquipo] = useState([]);
   const [tipoEquipo, settipoEquipo] = useState([]);
-  const url = "http://127.0.0.1:8000/";
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
   const [esperaF, setEsperaF] = useState("false");

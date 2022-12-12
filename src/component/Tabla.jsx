@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink } from "./Nav";
 import IniciarSesion from "./IniciarSesion";
 import { ImagenLogo } from "./Inicio";
+import {url} from "../services/const"
 import {
   Text,
   Detalle,
@@ -22,7 +23,7 @@ export default function Tabla() {
   const [listaEquipos, setListaEquipos] = useState([]);
   document.title = "Tabla Posiciones";
   const [categoria, setCategoria] = useState("");
-  const url = "http://127.0.0.1:8000/";
+ 
   const [listaCategoria, setListaCategoria] = useState([]);
   const [obtuvoEquipos, setObtuvoEquipos] = useState(false);
 
