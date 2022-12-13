@@ -51,7 +51,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-import {DetalleUsuario} from "./EstiloRegistro";
+import {DetalleUsuario, ImagenPago} from "./EstiloRegistro";
 import PhoneInput from "react-phone-number-input";
 import { Boton } from "./IniciarSesion";
 import { SelectJugador,ContenedorJugadores, ImgJugador , ContenedorJugador, BotonDescarga, ContenedorExcel, BotonDescargaLink} from "./EstiloEquipos"
@@ -125,8 +125,8 @@ let location = useLocation();
   const [cantidadActual,setCantidadActual] = useState("");
   const [editarJugador,setEditarJugador] = useState(false);
   const [jugador,setJugador] = useState({});
-
-
+/* ampeonato */
+  const [campeonato, setCampeonato] = useState({});
   const expresiones = {
     nombre: /^[a-zA-ZÀ-ÿ\s]{3,40}$/, // Letras y espacios, pueden llevar acentos.
     correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
@@ -438,12 +438,18 @@ let location = useLocation();
    const cerrarModalJugador = (b) =>{
       setEditarJugador(b);
    }
-
+   const obtenerCampeonato = async ()=>{
+     const response = await fetch(url+"todosCampeonatos");
+     const data = await response.json();
+     setCampeonato(data[0]);
+     console.log(campeonato);
+   }
  
   useEffect(function () {
    
     obtenerDelegado();
     obtenerInfoInscripcion();
+    obtenerCampeonato();
     obtenerJugadores();
   },[]);
 
@@ -639,12 +645,14 @@ let location = useLocation();
             
             pagoMedio == "Medio" ? 
                   <>
-                    <h3 style={{margin:"20px 0px"}}>Complete el pago porfavor</h3>
-                    <label>Inserte el segundo comprobante de pago</label>
+                    <h4 style={{margin:"20px 0px"}}>Complete el pago porfavor</h4>
+                    <ImagenPago style={{width:"200px", height:"200px"}} src={urlImage+"storage/"+campeonato.PAGOMITAD} alt="foto carnet" />
                     <br/>
-                    <InputFile type="file" name="files" onChange={(e)=>guardarPagoMedio(e)}/>
+                    <label>Inserte comprobante de pago</label>
                     <br/>
-                    <BotonAñadir onClick={()=>enviarPagoMedio()}>Enviar Comprobante</BotonAñadir>
+                    <InputFile style={{margin:"15px 0"}} type="file" name="files" onChange={(e)=>guardarPagoMedio(e)}/>
+                    <br/>
+                    <Boton onClick={()=>enviarPagoMedio()}>Enviar Comprobante</Boton>
                   </>
                 :
                 
