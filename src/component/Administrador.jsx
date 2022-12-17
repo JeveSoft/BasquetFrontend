@@ -2149,17 +2149,17 @@ export default function Administrador() {
             <Detalle>
               <BoxCampo>
                 <TextBox>Pago Mitad</TextBox>
-                <input type="file" name="" id="mitad" hidden onChange={(e)=>setPagoMitad(e.target.files[0])}/>
-                <LabelFile for="mitad" id="imagenMitad">
+                <input type="file" name="" id="mitad" accept="image/*" onChange={(e)=>setPagoMitad(e.target.files[0])}/>
+                {/* <LabelFile for="mitad" id="imagenMitad">
                   Seleccionar Archivo
-                </LabelFile>
+                </LabelFile> */}
               </BoxCampo>
               <BoxCampo>
                 <TextBox>Pago Completo</TextBox>
-                <input type="file" name="" id="completo" hidden onChange={(e)=>setPagoCompleto(e.target.files[0])}/>
-                <LabelFile for="completo" id="imagenCompleto">
+                <input type="file" name="" id="completo" accept="image/*" onChange={(e)=>setPagoCompleto(e.target.files[0])}/>
+                {/* <LabelFile for="completo" id="imagenCompleto">
                   Seleccionar Archivo
-                </LabelFile>
+                </LabelFile> */}
               </BoxCampo>
               <BotonAñadir disabled={inhabilitado} onClick={subirPagos}>
                 {espera == "false" && "Guardar"}
@@ -2584,7 +2584,7 @@ export default function Administrador() {
                   {listaInformacion.map((datos) => {
                     return (
                       <TableRow className={classes.bordes}>
-                        <TableCell>
+                        <TableCell key={datos.TITULO}>
                           <LetraCuerpo titulo="true">
                             {datos.TITULO}
                           </LetraCuerpo>

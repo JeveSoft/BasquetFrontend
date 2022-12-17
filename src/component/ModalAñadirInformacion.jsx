@@ -6,6 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import InputValidar from "./InputValidar";
 import axios from "axios";
 import {url} from "../services/const"
+import { useEffect } from "react";
 
 const Overlay = styled.div`
   width: 100vw;
@@ -179,15 +180,25 @@ export default function ModalAñadirInformacion({
   titulo,
 }) {
   const [categoria, setCategoria] = useState({ campo: "", valido: null });
-  const [tituloFoto, setTituloFoto] = useState({ campo: "", valido: null });
+  const [tituloFoto, setTituloFoto] = useState("");
+  const [tituloValido, setTituloValido] = useState(null);
   const [edadMin, setEdadMin] = useState({ campo: "", valido: null });
   const [edadMax, setEdadMax] = useState({ campo: "", valido: null });
   const [nombreFoto, setNombreFoto] = useState("foto.jpg");
   const [fotoInfo, setFotoInfo] = useState(null);
-
+  const [informaciones, setInformaciones] = useState([]);
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
 
+  useEffect(()=>{
+    obtenerInformaciones();
+  },[])
+
+  const obtenerInformaciones = async () =>{
+    const response = await fetch(url+"informacion");
+    const data = await response.json();
+    setInformaciones(data);
+  }
   const validarEdad = () => {
     var valido = false;
     if (edadMin.campo < edadMax.campo) {
@@ -195,47 +206,72 @@ export default function ModalAñadirInformacion({
     }
     return valido;
   };
+
+  const validoTitulo = () =>{
+    console.log(informaciones);
+    console.log(tituloFoto)
+    
+  }
+  const mensajeRespuesta = (msg, icon ) =>{
+    toast(msg, {
+      icon: icon,
+    duration: 3000,
+    style: {
+      border: "2px solid #ff7c01",
+      padding: "10px",
+      color: "#fff",
+      background: "#000",
+      borderRadius: "4%",
+    },
+  });
+  }
+
   const subirDatosInformacion = async () => {
-    if (tituloFoto.valido === "true") {
+    if (validarTitulo()) {
       setEspera("true");
       setInhabilitado(true);
-      const datos = {
-        TITULO: tituloFoto.campo,
-        NOMBREFOTO: nombreFoto,
-      };
-      
-      /* axios.post(url + "añadirInformacion", datos).then((response) => {
-        setTituloFoto({ campo: "", valido: null });
-        setEspera("false");
-        setInhabilitado(false);
-        cambiarEstado(false);
-      });
-       */
-      const f = new FormData();
-      f.append("imagen",fotoInfo);
-      f.append("titulo",tituloFoto.campo);
-      const res = await fetch(url + "agregarFotoInfo",{
-        method: "POST",
-        body: f,
-      });
-      setTituloFoto({ campo: "", valido: null });
-        setEspera("false");
-        setInhabilitado(false);
-        cambiarEstado(false);
-    } else {
-      toast("Verificar Titulo", {
-        icon: "⚠️",
-        duration: 3000,
-        style: {
-          border: "2px solid #ff7c01",
-          padding: "10px",
-          color: "#fff",
-          background: "#000",
-          borderRadius: "4%",
-        },
-      });
-    }
+   
+        if(fotoInfo != null ){
+          const f = new FormData();
+          f.append("imagen",fotoInfo);
+          f.append("titulo",tituloFoto);
+          const res = await fetch(url + "agregarFotoInfo",{
+            method: "POST",
+            body: f,
+          });
+          mensajeRespuesta("Informacion Agregada Correctamente!","✅")
+        }else{
+          mensajeRespuesta("Ingrese Foto Información","⚠️")
+        }
+      }else{
+        mensajeRespuesta("Titulo Ya Existe!","⚠️")
+      }
+      setTituloFoto("");
+      setFotoInfo(null);
+      setEspera("false");
+      setInhabilitado(false);
+      cambiarEstado(false);
+      obtenerInformaciones();
+    
   };
+
+  const validarTitulo = () =>{
+    var response = false;
+    console.log(informaciones);
+    console.log(tituloFoto)
+    const divTitulo = document.getElementById("tituloImagen");
+    var valido = informaciones.some((info)=>{
+        return info.TITULO === tituloFoto
+    })
+    if(valido && divTitulo != null){
+      divTitulo.style.border = "3px solid red";
+    }else if(divTitulo != null){
+      divTitulo.style.border = "3px solid green"
+      response = true;
+    }
+    console.log(valido);
+    return response;
+  }
   const subirDatos = () => {
     if (categoria.valido === "true") {
       if (validarEdad()) {
@@ -326,10 +362,10 @@ export default function ModalAñadirInformacion({
               <DetalleUsuario>
                 <BoxCampo>
                   <TextBox>REGLAMENTO</TextBox>
-                  <InputFile type="file" name="" id="foto" hidden />
-                  <LabelFile for="foto" id="imagenLogo">
+                  <input type="file" name="" id="foto" hidden />
+                  {/* <LabelFile for="foto" id="imagenLogo">
                     Seleccionar Archivo
-                  </LabelFile>
+                  </LabelFile> */}
                 </BoxCampo>
                 <Boton
                   onClick={() => {
@@ -402,23 +438,29 @@ export default function ModalAñadirInformacion({
             )}
             {tipo == "informacion" && (
               <DetalleUsuario>
-                <InputValidar
-                  estado={tituloFoto}
-                  cambiarEstado={setTituloFoto}
+                <TextBox>Título</TextBox>
+                <InputBox
+                  //estado={tituloFoto}
+                  //cambiarEstado={setTituloFoto}
                   tipo="text"
                   label="Titulo Imagen"
                   placeholder="Titulo Imagen"
                   name="tituloImagen"
+                  id="tituloImagen"
                   classe="categoria"
-                  expresionRegular={/^[a-zA-Z0-9-+]{3,15}/}
-                  centro={"true"}
+                  //expresionRegular={/^[a-zA-Z0-9-+]{3,15}$/}
+                  onChange={(e)=>{
+                  setTituloFoto(e.target.value);  
+                   }}
+                  onMouseLeave = {validarTitulo()}
+                  //centro={"true"}
                 />
                 <BoxCampo>
                   <TextBox>IMAGEN</TextBox>
-                  <InputFile type="file" name="" id="foto" hidden onChange={(e)=>setFotoInfo(e.target.files[0])} />
-                  <LabelFile for="foto" id="imagenLogo">
+                  <input  type="file" name="" id="foto" accept="image/*" onChange={(e)=>setFotoInfo(e.target.files[0])} />
+                  {/* <LabelFile for="foto" id="imagenLogo">
                     Seleccionar Archivo
-                  </LabelFile>
+                  </LabelFile> */}
                 </BoxCampo>
                 <Boton
                   espera={espera}
