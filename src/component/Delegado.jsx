@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from "react";
 import { url, urlImage} from "../services/const"
+import { isValidPhoneNumber } from "react-phone-number-input";
 import {
   Texto,
   NavBotonMenu,
@@ -148,30 +149,45 @@ let location = useLocation();
      actualizarValoresVista();
   }
  
-
+  const validarDelegado = () =>{
+    var valido = true;  
+    if(numeroCel == ""){valido = false;
+      mensajeDeRespuestaError("Ingresar numero");
+    }else if(numeroCel.length < 3 || numeroCel.length > 15){valido = false;
+      mensajeDeRespuestaError("Numero Invalido");
+    }
+    if (!isValidPhoneNumber(numeroCel)) {
+      mensajeDeRespuestaError("Numero Invalido")
+      valido = false;
+    }
+    return valido;
+  }
   const actualizarDelegado = async ()=> {
     var data = {
-        NOMBRE: nombre,
-        CI: carnet,
-        EMAIL: correo,
+        NOMBRE: delegado.NOMBRE,
+        CI: delegado.CI,
+        EMAIL: delegado.EMAIL,
         CELULAR: numeroCel,
-        FECHANACIMIENTO: fechaNacimientoDel,
-        NACIONALIDAD: nacionalidad,
+        FECHANACIMIENTO: delegado.FECHANACIMIENTO,
+        NACIONALIDAD: delegado.NACIONALIDAD,
     }; 
+    console.log(data);
+    if(validarDelegado()){
 
-    const response = await fetch(url+"actualizarDelegado/"+idDelegado, {
-      method: 'PUT', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      //credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
-    })
-    const data2 = await response.json()
-    setDelegado(data2);
-    
-    actualizarValores();
+      const response = await fetch(url+"actualizarDelegado/"+idDelegado, {
+        method: 'PUT', 
+        mode: 'cors', 
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      const data2 = await response.json()
+      setDelegado(data2);
+      actualizarValores();
+      mensajeDeRespuesta("Delegado Actualizado correctamente")
+      document.getElementById("numeroCelular").value =  data2.CELULAR;
+    }
     //actualizarValoresVista();
   }
 
@@ -270,6 +286,10 @@ let location = useLocation();
     mensajeDeRespuestaError("Ingresar numero");
   }else if(numeroCelJ.length < 3 || numeroCelJ.length > 15){valido = false;
     mensajeDeRespuestaError("Numero Invalido");
+  }
+  if (!isValidPhoneNumber(numeroCelJ)) {
+    mensajeDeRespuestaError("Numero Invalido")
+    valido = false;
   }
   if(fechaNacimientoJug == ""){valido = false;
     mensajeDeRespuestaError("Ingresar fechaNacimiento");
@@ -593,8 +613,9 @@ let location = useLocation();
                 placeholder= "Nombre Completo"
                 name="nombreDelegado"
                 id="nombreDelegado"
-                onChange={(e)=>setNombre(e.target.value)}
-                expresionRegular={expresiones.nombre}
+                readOnly
+                //onChange={(e)=>setNombre(e.target.value)}
+                //expresionRegular={expresiones.nombre}
                 />
               </BoxCampo>
               <BoxCampo>
@@ -605,8 +626,9 @@ let location = useLocation();
                 placeholder= "Carnet Identidad"
                 name="carnetIdentidad"
                 id="carnetIdentidad"
-                onChange={(e)=>setCarnet(e.target.value)}
-                expresionRegular={expresiones.carnet}
+                readOnly
+                //onChange={(e)=>setCarnet(e.target.value)}
+                //expresionRegular={expresiones.carnet}
                 />
               </BoxCampo>
 
@@ -619,10 +641,9 @@ let location = useLocation();
                   label="Correo"
                   placeholder="Correo@gmail.com"
                   id="correo"
-                  onChange={(e)=>setCorreo(e.target.value)}
-                  expresionRegular={expresiones.correo}
-
-                  mensaje="Correo Invalido"
+                  readOnly
+                  //onChange={(e)=>setCorreo(e.target.value)}
+                  //expresionRegular={expresiones.correo}
                 />
               </BoxCampo>
               
@@ -645,9 +666,8 @@ let location = useLocation();
                   required
                   name="fechaNacimiento"
                   id="fechaNacimiento"
-                  onChange={(e) => {
-                    setFechaNacimientoDel(e.target.value);
-                  }}
+                  readOnly
+                  //onChange={(e) => {setFechaNacimientoDel(e.target.value);}}
                 />
                 
               </BoxCampo>
@@ -660,9 +680,8 @@ let location = useLocation();
                   required
                   name="nacionalidad"
                   id="nacionalidad"
-                  onChange={(e) => {
-                    setNacionalidad(e.target.value);
-                  }}
+                  readOnly
+                  //onChange={(e) => {setNacionalidad(e.target.value);}}
                 />
               
               </BoxCampo>
