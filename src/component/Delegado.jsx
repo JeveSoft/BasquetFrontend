@@ -51,7 +51,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-import {DetalleUsuario, ImagenPago} from "./EstiloRegistro";
+import {DetalleUsuario, IconoValidacion, ImagenPago} from "./EstiloRegistro";
 import PhoneInput from "react-phone-number-input";
 import { Boton } from "./IniciarSesion";
 import { SelectJugador,ContenedorJugadores, ImgJugador , ContenedorJugador, BotonDescarga, ContenedorExcel, BotonDescargaLink} from "./EstiloEquipos"
@@ -125,13 +125,15 @@ let location = useLocation();
   const [cantidadActual,setCantidadActual] = useState("");
   const [editarJugador,setEditarJugador] = useState(false);
   const [jugador,setJugador] = useState({});
+  const [fechaActual,setFechaActual] = useState("");
 /* ampeonato */
   const [campeonato, setCampeonato] = useState({});
+  const [categoria, setCategoria] = useState({});
   const expresiones = {
     nombre: /^[a-zA-ZÀ-ÿ\s]{3,40}$/, // Letras y espacios, pueden llevar acentos.
     correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
     telefono: /^\d{7,14}$/, // 7 a 14 numeros.
-    carnet: /^[a-zA-Z0-9-]{6,15}/,
+    carnet: /^[a-zA-Z0-9-]{6,15}$/,
     sigla: /^[a-zA-Z0-9-]{1,4}/,
   };
 
@@ -145,10 +147,7 @@ let location = useLocation();
      actualizarValores();
      actualizarValoresVista();
   }
-  const obtenerIdDelegado = async () => {
-    var idDelegado =  location.pathname.substring(10,location.pathname.length); 
-    setIdDelegado(idDelegado);
-  }
+ 
 
   const actualizarDelegado = async ()=> {
     var data = {
@@ -159,9 +158,7 @@ let location = useLocation();
         FECHANACIMIENTO: fechaNacimientoDel,
         NACIONALIDAD: nacionalidad,
     }; 
-    console.log(data);
 
-    //console.log(delegado);
     const response = await fetch(url+"actualizarDelegado/"+idDelegado, {
       method: 'PUT', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
@@ -173,7 +170,6 @@ let location = useLocation();
     })
     const data2 = await response.json()
     setDelegado(data2);
-    console.log(data2);
     
     actualizarValores();
     //actualizarValoresVista();
@@ -203,23 +199,20 @@ let location = useLocation();
  }
 
  const obtenerInfoInscripcion = async () =>{
-     var idDelegadoP =  location.pathname.substring(10,location.pathname.length); 
+     var idDelegadoP =  location.pathname.substring(10,location.pathname.length);
      const response = await fetch(url+"estadoInscripcion/"+idDelegadoP);
      const data = await response.json();
      console.log(data);
      setInfoInscripcion(data);
      setPagoMedio(data[0].PAGOMEDIO);
      setCantidadMaxima(data[0].CANTIDAD);
-     console.log(cantidadMaxima);
  }
 
  const guardarPagoMedio = (e) => {
-    console.log(e.target.files[0]);
     setPagoMedioImg(e.target.files[0]);
  }
 
  const enviarExcel = async () => {
-  console.log(excel);
   const f = new FormData();
   f.append("file",excel);
   const response = await fetch(url + "addJugadoresExcel/" + infoInscripcion[0].IDEQUIPO,{
@@ -242,7 +235,6 @@ let location = useLocation();
         })
     const data = await response.json();
     obtenerInfoInscripcion();
-    console.log(data);
  }
 
  function generarIdJugador() {
@@ -257,55 +249,88 @@ let location = useLocation();
  }
 
  const validarJugador = () => {
-  if(nombreJ.campo == ""){
+  var valido = true;
+  if(nombreJ.campo == ""){valido = false;
     mensajeDeRespuestaError("Ingresar nombre completo");
-  }else if(nombreJ.valido == "false"){
+  }else if(nombreJ.valido == "false"){valido = false;
     mensajeDeRespuestaError("Nombre invalido");
   }
-  if(correoJ.campo == ""){
+  if(correoJ.campo == ""){valido = false;
     mensajeDeRespuestaError("Ingresar correo");
-  }else if(correoJ.valido == "false"){
+  }else if(correoJ.valido == "false"){valido = false;
     mensajeDeRespuestaError("Correo Invalido");
   }
 
-  if(carnetJ.campo == ""){
+  if(carnetJ.campo == ""){valido = false;
     mensajeDeRespuestaError("Ingresar carnet");
-  }else if(carnetJ.valido == "false"){
+  }else if(carnetJ.valido == "false"){valido = false;
     mensajeDeRespuestaError("Carnet Invalido");
   }
-
-  if(numeroCelJ == ""){
+  if(numeroCelJ == ""){valido = false;
     mensajeDeRespuestaError("Ingresar numero");
-  }else if(numeroCelJ.length < 3 || numeroCelJ.length > 30){
+  }else if(numeroCelJ.length < 3 || numeroCelJ.length > 15){valido = false;
     mensajeDeRespuestaError("Numero Invalido");
   }
-  if(fechaNacimientoJug == ""){
+  if(fechaNacimientoJug == ""){valido = false;
     mensajeDeRespuestaError("Ingresar fechaNacimiento");
+  }else{//25-35
+      var response = validarFechaJugador();
+      if( typeof response == "string"){
+        mensajeDeRespuestaError(response);
+        valido = false;
+      }
+    }
+
+  if(fotoCiJ == null){valido = false;
+    mensajeDeRespuestaError("Ingrese foto de carnet de jugador");
   }
+  if (fotoJ == null){valido = false;
+    mensajeDeRespuestaError("Ingrese foto de jugador");
+  }
+
   if(rolJ == ""){
     mensajeDeRespuestaError("Ingresar rol");
   }
 
-
-
-
-
-  if(nombreJ.valido == "true" && carnetJ.valido == "true" && correoJ.valido == "true" ){
-      return true;
+  if(nombreJ.valido == "true" && carnetJ.valido == "true" && correoJ.valido == "true" && valido ){
+      return true;  
     }
     return false;
  }
 
+ const validarFechaJugador = () =>{
+  const fecha = new Date();
+  const fechaAnioActual = fecha.getFullYear();
+  const fechaMesActual = fecha.getMonth() + 1;
+  const fechaDiaActual = fecha.getDate();
+  const anioMaximo = fechaAnioActual - categoria.EDADMIN;
+  const anioMinimo = fechaAnioActual - categoria.EDADMAX;
+  var anioMaximoValido = anioMaximo+"-"+fechaMesActual+"-"+fechaDiaActual;
+  var anioMinimoValido = anioMinimo+"-"+fechaMesActual+"-"+fechaDiaActual;
+  const divFecha = document.getElementById("fechaNacJ");
+  if(Date.parse(fechaNacimientoJug) <= Date.parse(anioMaximoValido)){
+      if(Date.parse(fechaNacimientoJug) >= Date.parse(anioMinimoValido)){
+        if(divFecha != null && fechaNacimientoJug !== ""){
+          divFecha.style.border = "3px solid green";
+          divFecha.value = fechaNacimientoJug;
+        }
+      }else{
+        if(divFecha != null && fechaNacimientoJug !== ""){
+          divFecha.style.border = "3px solid red";
+        }
+        return "Edad sobrepasa la categoria";
+      }
+    }else{
+      if(divFecha != null && fechaNacimientoJug !== ""){
+        divFecha.style.border = "3px solid red";
+      }
+      return "No tiene la edad minima para la categoria";
+    }
+ }
   const enviarJugador = async () =>{
-    console.log(cantidadActual);
-    console.log(cantidadMaxima);
-    console.log(carnetJ);
-    console.log(correoJ);
-    console.log(nombreJ);
     if(cantidadActual < cantidadMaxima){
       if(validarJugador()){
         var  IDJUGADORR = generarIdJugador();      
-        console.log("engtro")
         var dataJugador = {
           IDJUGADOR : IDJUGADORR,
           IDEQUIPO  : infoInscripcion[0].IDEQUIPO,          
@@ -319,7 +344,6 @@ let location = useLocation();
           FOTOJUGADOR : "vacio", 
           FECHANACIMIENTO : fechaNacimientoJug
         }
-        console.log(dataJugador);
         
         
         const response = await fetch(url+"agregarJugador", {
@@ -333,14 +357,12 @@ let location = useLocation();
         })
         
         const data = await response.json();
-          console.log(data);
-          limpiarCampos();
           limpiarVariables();
+          limpiarCampos();
           
           /* Envio imagen ci jugador */
           const f = new FormData();
           f.append("imagen",fotoCiJ);
-          console.log(fotoCiJ);
           const response2 = await fetch(url + "setImgCi/"+ carnetJ.campo,
           {
             method: "POST",
@@ -350,7 +372,6 @@ let location = useLocation();
           /* Envio imagen Jugador */
           const f2 = new FormData();
           f2.append("imagen",fotoJ);
-          console.log(fotoJ);
           const response3 = await fetch(url + "setImgJugador/"+ carnetJ.campo,
           {
             method: "POST",
@@ -398,11 +419,13 @@ let location = useLocation();
   document.getElementById("nombreJugador").value = "";
   document.getElementById("carnetJugador").value = "";
   document.getElementById("correoJugador").value = "";
-  document.getElementById("numeroJugador").value = "3";
+  document.getElementById("numeroJugador").value = "";
   document.getElementById("fechaNacJ").value = "";
+  document.getElementById("fechaNacJ").style.border = "2px solid #ff7c01";
   document.getElementById("fotoCiJ").value = "";
   document.getElementById("fotoJ").value = "";
   document.getElementById("rol").value = "Rol";
+  document.getElementById("rol").style.border = "2px solid #ff7c01";
  }
 
  const  limpiarVariables = () => {
@@ -420,8 +443,7 @@ let location = useLocation();
     const data = await response.json();
     setJugadores(data);
     setCantidadActual(data.length);
-    console.log(cantidadActual);
-    console.log(jugadores);
+   
  }
 
    const infoJugador = (jugador) => {
@@ -432,7 +454,6 @@ let location = useLocation();
         setEditarJugador(true);
       }
 
-      //console.log(jugador.IDJUGADOR);
    }
 
    const cerrarModalJugador = (b) =>{
@@ -442,15 +463,29 @@ let location = useLocation();
      const response = await fetch(url+"todosCampeonatos");
      const data = await response.json();
      setCampeonato(data[0]);
-     console.log(campeonato);
    }
  
+   const obtenerCategoria = async () =>{
+     const response = await fetch(url+"existeCategoria/"+infoInscripcion[0].CATEGORIA);
+     const data = await response.json();
+     setCategoria(data[0]); 
+   }
+
+   const obtenerFechaActual = () =>{
+      const fecha = new Date();
+      const fechaAnioActual = fecha.getFullYear();
+      const fechaMesActual = fecha.getMonth() + 1;
+      const fechaDiaActual = fecha.getDate();
+      setFechaActual(fechaAnioActual+"-"+fechaMesActual+"-"+fechaDiaActual);
+   }
   useEffect(function () {
    
     obtenerDelegado();
     obtenerInfoInscripcion();
     obtenerCampeonato();
     obtenerJugadores();
+    obtenerCategoria();
+    obtenerFechaActual();
   },[]);
 
   return (
@@ -478,7 +513,6 @@ let location = useLocation();
               setActivoA("");
               setActivoI("");
              
-              //console.log(location.pathname.substring(10,location.pathname.length));
               obtenerDelegado();
               listaGrupos.splice(0, listaGrupos.length);
             }}
@@ -509,6 +543,7 @@ let location = useLocation();
               setActivoI("");
               obtenerInfoInscripcion();
               listaGrupos.splice(0, listaGrupos.length);
+              obtenerCategoria()
             }}
           >
             AGREGAR JUGADORES
@@ -566,12 +601,12 @@ let location = useLocation();
                 <TextBox>Carnet de Identidad</TextBox>
                 <InputBox
                 tipo="text"
-                label="Nombre Completo"
+                label="Carnet Identidad"
                 placeholder= "Carnet Identidad"
-                name="nombreDelegado"
+                name="carnetIdentidad"
                 id="carnetIdentidad"
                 onChange={(e)=>setCarnet(e.target.value)}
-                expresionRegular={expresiones.nombre}
+                expresionRegular={expresiones.carnet}
                 />
               </BoxCampo>
 
@@ -710,7 +745,7 @@ let location = useLocation();
                 cambiarEstado={setCarnetJ}
                 tipo="text"
                 label="Carnet Identidad"
-                placeholder="Carnet Identidad"
+                placeholder="Carnet de Identidad"
                 name="carnetJugador"
                 expresionRegular={expresiones.carnet}
                 mensaje="Carnet Invalido"
@@ -732,26 +767,35 @@ let location = useLocation();
                   placeholder="Numero de Celular"
                   defaultCountry="BO"
                   id="numeroJugador"
+                  name="numeroJugador"
                   onChange={(numeroCel) => setNumeroCelJ(numeroCel)}
                 />
               </BoxCampo>
               <BoxCampo>
                 <TextBox>Fecha Nacimiento </TextBox>
-                <InputBox 
+                  <InputBox 
                   type="date"
                   placeholder="Fecha Nacimiento"
                   id="fechaNacJ"
+                  name="fechaNacj"
                   required
                   onChange={(e) => {
                     setFechaNacimientoJug(e.target.value);
                   }}
-              
+                  onmousemove={validarFechaJugador()}
                 />
               </BoxCampo>
 
               <BoxCampo>
                 <TextBox>Rol</TextBox>
-                <SelectJugador defaultValue="Rol" id="rol" name="select" onChange={(e)=> setRolJ(e.target.value)}>
+                <SelectJugador
+                  defaultValue="Rol"
+                  id="rol"
+                  name="select"
+                  onChange={(e)=> 
+                  {setRolJ(e.target.value)
+                    document.getElementById("rol").style.border = "3px solid green"
+                  }}> 
                     <option value="Rol"  disabled="disabled">Rol</option>
                     <option value="jugador">Jugador</option>
                     <option value="cuerpoTecnico">Cuerpo Tecnico</option>

@@ -85,7 +85,16 @@ padding-right: 15px;
 font-size: 16px;
 border-bottom-width: 2px;
 transition: all 0.3s ease;
-`
+ &:hover {
+    border: 2px solid black;
+    outline: none;
+    box-shadow: 3px 0px 30px rgba(163, 163, 163, 0.4);
+  }
+&:focus {
+    border: 2px solid black;
+    outline: none;
+    box-shadow: 3px 0px 30px rgba(163, 163, 163, 0.4);
+}`
 
 export const ContenedorJugadores = styled.div `
     margin-top: 30px;
