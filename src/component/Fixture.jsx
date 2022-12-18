@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink } from "./Nav";
-import {url,urlImage} from "../services/const"
+import { url, urlImage } from "../services/const";
 import IniciarSesion from "./IniciarSesion";
 import { ImagenLogo } from "./Inicio";
 import {
@@ -26,7 +26,7 @@ export default function Fixture() {
   const [modal, setModal] = useState(false);
   document.title = "Fixture";
   const [listaCategoria, setListaCategoria] = useState([]);
-  
+
   const [categoria, setCategoria] = useState("");
   const [categoriaSemiFinal, setCategoriaSemiFinal] = useState("");
   const [categoriaFinal, setCategoriaFinal] = useState("");
@@ -243,7 +243,13 @@ export default function Fixture() {
                                     <Text derecha={"false"}>
                                       {equipos.EQUIPO1}
                                     </Text>
+                                    <Text derecha={"medio"}>
+                                      {equipos.ANOTACIONESEQ1}
+                                    </Text>
                                     <Text derecha={"medio"}>VS</Text>
+                                    <Text derecha={"medio"}>
+                                      {equipos.ANOTACIONESEQ2}
+                                    </Text>
                                     <Text derecha={"true"}>
                                       {equipos.EQUIPO2}
                                     </Text>
@@ -278,7 +284,13 @@ export default function Fixture() {
                                     <Text derecha={"false"}>
                                       {equipos.EQUIPO1}
                                     </Text>
+                                    <Text derecha={"medio"}>
+                                      {equipos.ANOTACIONESEQ1}
+                                    </Text>
                                     <Text derecha={"medio"}>VS</Text>
+                                    <Text derecha={"medio"}>
+                                      {equipos.ANOTACIONESEQ2}
+                                    </Text>
                                     <Text derecha={"true"}>
                                       {equipos.EQUIPO2}
                                     </Text>
@@ -348,7 +360,13 @@ export default function Fixture() {
                             <Text derecha={"false"}>
                               {listaSemifinal[0].EQUIPO1}
                             </Text>
+                            <Text derecha={"medio"}>
+                              {listaSemifinal[0].ANOTACIONESEQ1}
+                            </Text>
                             <Text derecha={"medio"}>VS</Text>
+                            <Text derecha={"medio"}>
+                              {listaSemifinal[0].ANOTACIONESEQ2}
+                            </Text>
                             <Text derecha={"true"}>
                               {listaSemifinal[0].EQUIPO2}
                             </Text>
@@ -384,7 +402,13 @@ export default function Fixture() {
                             <Text derecha={"false"}>
                               {listaSemifinal[1].EQUIPO1}
                             </Text>
+                            <Text derecha={"medio"}>
+                              {listaSemifinal[1].ANOTACIONESEQ1}
+                            </Text>
                             <Text derecha={"medio"}>VS</Text>
+                            <Text derecha={"medio"}>
+                              {listaSemifinal[1].ANOTACIONESEQ2}
+                            </Text>
                             <Text derecha={"true"}>
                               {listaSemifinal[1].EQUIPO2}
                             </Text>
@@ -450,7 +474,13 @@ export default function Fixture() {
                             <Text derecha={"false"}>
                               {listaFinal[0].EQUIPO1}
                             </Text>
+                            <Text derecha={"medio"}>
+                              {listaFinal[0].ANOTACIONESEQ1}
+                            </Text>
                             <Text derecha={"medio"}>VS</Text>
+                            <Text derecha={"medio"}>
+                              {listaFinal[0].ANOTACIONESEQ2}
+                            </Text>
                             <Text derecha={"true"}>
                               {listaFinal[0].EQUIPO2}
                             </Text>
@@ -486,7 +516,13 @@ export default function Fixture() {
                             <Text derecha={"false"}>
                               {listaFinal[1].EQUIPO1}
                             </Text>
+                            <Text derecha={"medio"}>
+                              {listaFinal[1].ANOTACIONESEQ1}
+                            </Text>
                             <Text derecha={"medio"}>VS</Text>
+                            <Text derecha={"medio"}>
+                              {listaFinal[1].ANOTACIONESEQ2}
+                            </Text>
                             <Text derecha={"true"}>
                               {listaFinal[1].EQUIPO2}
                             </Text>

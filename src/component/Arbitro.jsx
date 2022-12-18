@@ -4,8 +4,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import {url, urlImage} from "../services/const"
+import { url, urlImage } from "../services/const";
 import {
+  Boton,
   BotonAnotar,
   Botones,
   BoxCampo,
@@ -55,8 +56,8 @@ export default function Arbitro() {
   const [idPartido, setIdPartido] = useState("");
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
-  const [anotaciones1, setAnotaciones1] = useState({ campo: "", valido: null });
-  const [anotaciones2, setAnotaciones2] = useState({ campo: "", valido: null });
+  const [anotaciones1, setAnotaciones1] = useState({ campo: "0", valido: null });
+  const [anotaciones2, setAnotaciones2] = useState({ campo: "0", valido: null });
   const [llenado, setLlenado] = useState(false);
 
   const obtenerCategoria = () => {
@@ -311,7 +312,7 @@ export default function Arbitro() {
                 setLugar("");
                 setAnotaciones1("");
                 setAnotaciones2("");
-                toast("Partido Registrado", {
+                toast("Partido Terminado", {
                   icon: "✅",
                   duration: 3000,
                   style: {
@@ -361,7 +362,6 @@ export default function Arbitro() {
       });
   };
 
-
   useEffect(function () {
     if (ventana0) {
       setCategoria("");
@@ -381,6 +381,28 @@ export default function Arbitro() {
     }
   });
 
+  const actualizar = () => {
+    var datos = {
+      ANOTACIONESEQ1: anotaciones1.campo,
+      ANOTACIONESEQ2: anotaciones2.campo,
+    };
+    axios
+      .put(url + "actualizarPartidoPuntos/" + idPartido, datos)
+      .then((response) => {
+        toast("Partido Actualizado", {
+          icon: "✅",
+          duration: 3000,
+          style: {
+            border: "2px solid #ff7c01",
+            padding: "10px",
+            color: "#fff",
+            background: "#000",
+            borderRadius: "4%",
+          },
+        });
+      });
+  };
+
   return (
     <>
       <ContenedorPrincipal>
@@ -394,7 +416,6 @@ export default function Arbitro() {
               setActivoCS("");
               setVentana0(true);
               setVentana1(false);
-              
             }}
           />
           <ContenedorBotones>
@@ -406,7 +427,6 @@ export default function Arbitro() {
                 setActivoCS("");
                 setVentana0(true);
                 setVentana1(false);
-                
               }}
             >
               PLANILLA DE JUEGO
@@ -558,7 +578,14 @@ export default function Arbitro() {
                   expresionRegular={""}
                   classe={"arbitro"}
                 />
-
+                <Boton
+                  actualizar
+                  disabled={inhabilitado}
+                  right
+                  onClick={actualizar}
+                >
+                  Actualizar
+                </Boton>
                 <ContenedorBotonesNav ultimo={"true"}>
                   <NavBoton1
                     disabled={inhabilitado}
@@ -570,9 +597,9 @@ export default function Arbitro() {
                   >
                     <FontAwesomeIcon icon={faChevronLeft} />
                   </NavBoton1>
-                  <NavBoton1 disabled={inhabilitado} right onClick={subirDatos}>
-                    <FontAwesomeIcon icon={faChevronRight} />
-                  </NavBoton1>
+                  <Boton disabled={inhabilitado} right onClick={subirDatos}>
+                    Terminar Partido
+                  </Boton>
                 </ContenedorBotonesNav>
               </Detalle>
             )}
