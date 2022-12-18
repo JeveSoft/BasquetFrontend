@@ -12,6 +12,7 @@ import Administrador from "./component/Administrador";
 import Delegado from "./component/Delegado";
 import Arbitro from "./component/Arbitro";
 import QrJugadores from "./component/QrJugadores";
+import Informaciones from "./component/Informaciones";
 
 export function App() {
     return (
@@ -27,6 +28,7 @@ export function App() {
                 <Route path='/delegado' component={Delegado}/>
                 <Route path='/arbitro' component={Arbitro}/>
                 <Route path='/qrJugadores' component={QrJugadores}/>
+                <Route path='/informacion' component={Informaciones}/>
             </Switch>
         </Router>
 
