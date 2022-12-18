@@ -262,7 +262,7 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                     disabled={inhabilitado}
                     onClick={recordar}
                   >
-                    {espera == "false" && "Recordar"}
+                    {espera == "false" && "Enviar Correo"}
                     {espera == "true" && (
                       <Img src={require("../Imagenes/Carga.gif")} />
                     )}
@@ -409,7 +409,7 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                     tipo={tipo}
                     onClick={recordarJugadores}
                   >
-                    {espera == "false" && "Recordar"}
+                    {espera == "false" && "Enviar Correo"}
                     {espera == "true" && (
                       <Img src={require("../Imagenes/Carga.gif")} />
                     )}

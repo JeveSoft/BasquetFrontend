@@ -461,10 +461,10 @@ export default function ModalRegistroArbitro({
             borderRadius: "4%",
           },
         });
+        limpiarCampo();
         setEspera("false");
         setInhabilitado(false);
         cambiarEstado(false);
-        limpiarCampo();
       });
     }
   };

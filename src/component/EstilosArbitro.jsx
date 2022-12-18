@@ -383,3 +383,25 @@ export const BotonAnotar = styled.button`
     color: black;
   }
 `;
+export const Boton = styled.button`
+  background: #ff7c01;
+  color: white;
+  font-weight: 1000;
+  border-radius: 5px;
+  border: 2px solid #000000;
+  position: absolute;
+  left: 75%;
+  margin-top: 15px;
+  &:hover {
+    border: 2px solid #ff7c01;
+    background: white;
+    color: black;
+  }
+  ${(props) =>
+    props.actualizar === true &&
+    css`
+      margin-top: 200px;
+      font-size: 20px;
+      left: 41.5%;
+    `}
+`;

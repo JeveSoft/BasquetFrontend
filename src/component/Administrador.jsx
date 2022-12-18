@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { url, urlImage} from "../services/const"
+import { url, urlImage } from "../services/const";
 import {
   Texto,
   NavBotonMenu,
@@ -191,8 +191,8 @@ export default function Administrador() {
   const [vhora3, setvHora3] = useState(null);
   const [vhora4, setvHora4] = useState(null);
   const [pagoMitad, setPagoMitad] = useState(null);
-  const [pagoCompleto, setPagoCompleto] = useState(null); 
-  const [informacion, setInformacion] = useState({}); 
+  const [pagoCompleto, setPagoCompleto] = useState(null);
+  const [informacion, setInformacion] = useState({});
 
   const validarFechaFinLiga = () => {
     if (fechaFinLiga !== "") {
@@ -287,7 +287,7 @@ export default function Administrador() {
       setValidarPreInicio(null);
     }
   };
-  const   subirPagos = () => {
+  const subirPagos = () => {
     setEspera("true");
     setInhabilitado(true);
     axios.get(url + "todosCampeonatos").then((response) => {
@@ -348,43 +348,43 @@ export default function Administrador() {
           });
         });
       }
-      if(pagoMitad !== null && pagoCompleto !== null){
+      if (pagoMitad !== null && pagoCompleto !== null) {
         subirComprobantes(response.data[0].IDCAMPEONATO);
         console.log("entreo");
         setEspera("false");
         setInhabilitado(false);
-            toast("Pagos Establecidas", {
-              icon: "✅",
-              duration: 3000,
-              style: {
-                border: "2px solid #ff7c01",
-                padding: "10px",
-                color: "#fff",
-                background: "#000",
-                borderRadius: "4%",
-              },
-            });
+        toast("Pagos Establecidas", {
+          icon: "✅",
+          duration: 3000,
+          style: {
+            border: "2px solid #ff7c01",
+            padding: "10px",
+            color: "#fff",
+            background: "#000",
+            borderRadius: "4%",
+          },
+        });
       }
     });
   };
 
-  const subirComprobantes = async (idCampeonato) =>{
+  const subirComprobantes = async (idCampeonato) => {
     const f = new FormData();
-    f.append("imagen",pagoMitad);
+    f.append("imagen", pagoMitad);
 
-    const response2 = await fetch(url + "pagoMedio/"+idCampeonato,{
+    const response2 = await fetch(url + "pagoMedio/" + idCampeonato, {
       method: "POST",
-      body: f
-    })
+      body: f,
+    });
 
     const f2 = new FormData();
-    f2.append("imagen",pagoCompleto);
+    f2.append("imagen", pagoCompleto);
 
-    const response = await fetch(url + "pagoCompleto/"+idCampeonato,{
+    const response = await fetch(url + "pagoCompleto/" + idCampeonato, {
       method: "POST",
-      body: f
-    })
-  }
+      body: f,
+    });
+  };
 
   const subirFechas = () => {
     setEspera("true");
@@ -509,9 +509,9 @@ export default function Administrador() {
       }
     }
   };
-  useEffect(function(){
+  useEffect(function () {
     obtenerCategoria();
-  },[])
+  }, []);
 
   useEffect(function () {
     if (
@@ -1217,15 +1217,33 @@ export default function Administrador() {
   const [vHoraSemifinal2, setvHoraSemifinal2] = useState(null);
   const [horaSemiFinal, setHoraSemiFinal] = useState("");
   const [vHoraSemifinal, setvHoraSemifinal] = useState(null);
+
   const obternetEquipoSemiFinal = () => {
+    setEspera("true");
+    setInhabilitado(true);
     axios.get(url + "semiFinalA/" + categoriaSemiFinal).then((response) => {
       setListaSemiFinalA(ordenar(response.data));
-
-      setObtuvoListaSemiFinalA(true);
+      if (listaSemiFinalA.length > 0) {
+        setObtuvoListaSemiFinalA(true);
+        setEspera("false");
+        setInhabilitado(false);
+      } else {
+        setEspera("false");
+        setInhabilitado(false);
+      }
     });
+    setEspera("true");
+    setInhabilitado(true);
     axios.get(url + "semiFinalB/" + categoriaSemiFinal).then((response) => {
       setListaSemiFinalB(ordenar(response.data));
-      setObtuvoListaSemiFinalB(true);
+      if (listaSemiFinalB.length > 0) {
+        setObtuvoListaSemiFinalB(true);
+        setEspera("false");
+        setInhabilitado(false);
+      } else {
+        setEspera("false");
+        setInhabilitado(false);
+      }
     });
   };
 
@@ -1464,7 +1482,7 @@ export default function Administrador() {
           partidosFinal.push(partido2);
           setFixtureF1(false);
           setFixtureF2(true);
-        }else{
+        } else {
           toast("Fixture Ya Generado", {
             icon: "⚠️",
             duration: 3000,
@@ -1478,7 +1496,7 @@ export default function Administrador() {
           });
         }
       });
-    }else{
+    } else {
       toast("Generar Fixture", {
         icon: "⚠️",
         duration: 3000,
@@ -1567,7 +1585,8 @@ export default function Administrador() {
     <ContenedorPrincipal>
       <ContenedorOpciones>
         <Titulo>{titulo}</Titulo>
-        <ImagenLogo admin = {"true"}
+        <ImagenLogo
+          admin={"true"}
           src={require("../Imagenes/LogoBlanco.png")}
           onClick={() => {
             setTitulo("ADMINISTRADOR");
@@ -1583,7 +1602,7 @@ export default function Administrador() {
             listaGrupos.splice(0, listaGrupos.length);
           }}
         />
-        <ContenedorBotones admin = {"true"}>
+        <ContenedorBotones admin={"true"}>
           <Botones
             opcion={activoCL}
             onClick={() => {
@@ -2149,14 +2168,26 @@ export default function Administrador() {
             <Detalle>
               <BoxCampo>
                 <TextBox>Pago Mitad</TextBox>
-                <input type="file" name="" id="mitad" accept="image/*" onChange={(e)=>setPagoMitad(e.target.files[0])}/>
+                <input
+                  type="file"
+                  name=""
+                  id="mitad"
+                  accept="image/*"
+                  onChange={(e) => setPagoMitad(e.target.files[0])}
+                />
                 {/* <LabelFile for="mitad" id="imagenMitad">
                   Seleccionar Archivo
                 </LabelFile> */}
               </BoxCampo>
               <BoxCampo>
                 <TextBox>Pago Completo</TextBox>
-                <input type="file" name="" id="completo" accept="image/*" onChange={(e)=>setPagoCompleto(e.target.files[0])}/>
+                <input
+                  type="file"
+                  name=""
+                  id="completo"
+                  accept="image/*"
+                  onChange={(e) => setPagoCompleto(e.target.files[0])}
+                />
                 {/* <LabelFile for="completo" id="imagenCompleto">
                   Seleccionar Archivo
                 </LabelFile> */}
@@ -2276,7 +2307,33 @@ export default function Administrador() {
                                 </BotonVer>
                               </TableCell>
                               <TableCell align="right">
-                                <BotonVer>
+                                <BotonVer
+                                  onClick={() => {
+                                    setEspera("true");
+                                    setInhabilitado(true);
+                                    axios
+                                      .put(
+                                        url +
+                                          "eliminarEquipo/" +
+                                          datos.NOMBREEQUIPO
+                                      )
+                                      .then((response) => {
+                                        setEspera("false");
+                                        setInhabilitado(false);
+                                        toast("Equipo Eliminado", {
+                                          icon: "✅",
+                                          duration: 3000,
+                                          style: {
+                                            border: "2px solid #ff7c01",
+                                            padding: "10px",
+                                            color: "#fff",
+                                            background: "#000",
+                                            borderRadius: "4%",
+                                          },
+                                        });
+                                      });
+                                  }}
+                                >
                                   <FontAwesomeIcon icon={faTrashCan} />
                                 </BotonVer>
                               </TableCell>
@@ -2341,7 +2398,33 @@ export default function Administrador() {
                                 </BotonVer>
                               </TableCell>
                               <TableCell align="right">
-                                <BotonVer>
+                                <BotonVer
+                                  onClick={() => {
+                                    setEspera("true");
+                                    setInhabilitado(true);
+                                    axios
+                                      .put(
+                                        url +
+                                          "eliminarEquipo/" +
+                                          datos.NOMBREEQUIPO
+                                      )
+                                      .then((response) => {
+                                        setEspera("false");
+                                        setInhabilitado(false);
+                                        toast("Equipo Eliminado", {
+                                          icon: "✅",
+                                          duration: 3000,
+                                          style: {
+                                            border: "2px solid #ff7c01",
+                                            padding: "10px",
+                                            color: "#fff",
+                                            background: "#000",
+                                            borderRadius: "4%",
+                                          },
+                                        });
+                                      });
+                                  }}
+                                >
                                   <FontAwesomeIcon icon={faTrashCan} />
                                 </BotonVer>
                               </TableCell>
@@ -2406,7 +2489,33 @@ export default function Administrador() {
                                 </BotonVer>
                               </TableCell>
                               <TableCell align="right">
-                                <BotonVer>
+                                <BotonVer
+                                  onClick={() => {
+                                    setEspera("true");
+                                    setInhabilitado(true);
+                                    axios
+                                      .put(
+                                        url +
+                                          "eliminarEquipo/" +
+                                          datos.NOMBREEQUIPO
+                                      )
+                                      .then((response) => {
+                                        setEspera("false");
+                                        setInhabilitado(false);
+                                        toast("Equipo Eliminado", {
+                                          icon: "✅",
+                                          duration: 3000,
+                                          style: {
+                                            border: "2px solid #ff7c01",
+                                            padding: "10px",
+                                            color: "#fff",
+                                            background: "#000",
+                                            borderRadius: "4%",
+                                          },
+                                        });
+                                      });
+                                  }}
+                                >
                                   <FontAwesomeIcon icon={faTrashCan} />
                                 </BotonVer>
                               </TableCell>
@@ -2471,7 +2580,33 @@ export default function Administrador() {
                                 </BotonVer>
                               </TableCell>
                               <TableCell align="right">
-                                <BotonVer>
+                                <BotonVer
+                                  onClick={() => {
+                                    setEspera("true");
+                                    setInhabilitado(true);
+                                    axios
+                                      .put(
+                                        url +
+                                          "eliminarEquipo/" +
+                                          datos.NOMBREEQUIPO
+                                      )
+                                      .then((response) => {
+                                        setEspera("false");
+                                        setInhabilitado(false);
+                                        toast("Equipo Eliminado", {
+                                          icon: "✅",
+                                          duration: 3000,
+                                          style: {
+                                            border: "2px solid #ff7c01",
+                                            padding: "10px",
+                                            color: "#fff",
+                                            background: "#000",
+                                            borderRadius: "4%",
+                                          },
+                                        });
+                                      });
+                                  }}
+                                >
                                   <FontAwesomeIcon icon={faTrashCan} />
                                 </BotonVer>
                               </TableCell>
@@ -2590,11 +2725,11 @@ export default function Administrador() {
                           </LetraCuerpo>
                         </TableCell>
                         <TableCell align="right">
-                          <BotonVer 
-                            onClick={() => 
-                              {setModalVerFoto(!modalVerFoto)
-                               setInformacion(datos)
-                              }}
+                          <BotonVer
+                            onClick={() => {
+                              setModalVerFoto(!modalVerFoto);
+                              setInformacion(datos);
+                            }}
                           >
                             <FontAwesomeIcon icon={faImage} />
                           </BotonVer>
@@ -2990,12 +3125,6 @@ export default function Administrador() {
                     </BoxCampo>
                   </>
                 )}
-                {(!obtuvoListaSemifinalA || !obtuvoListaSemifinalB) && (
-                  <ImgCarga
-                    grupo={"true"}
-                    src={require("../Imagenes/Carga.gif")}
-                  />
-                )}
               </Detalle>
               {obtuvoListaSemifinalA && obtuvoListaSemifinalB && (
                 <BotonAñadir
@@ -3162,13 +3291,6 @@ export default function Administrador() {
                     </BoxCampo>
                   </>
                 )}
-
-                {!obtuvoListaFinal && (
-                  <ImgCarga
-                    grupo={"true"}
-                    src={require("../Imagenes/Carga.gif")}
-                  />
-                )}
               </Detalle>
               {obtuvoListaFinal && (
                 <BotonAñadir
@@ -3258,7 +3380,6 @@ export default function Administrador() {
                     }
                     valido={vHoraSemifinal2}
                   />
-                  
                 </BoxCampo>
               </Detalle>
               <BotonAñadir disabled={inhabilitado} onClick={subirDatosFinal}>
@@ -3314,10 +3435,11 @@ export default function Administrador() {
         mensaje={"¿Seguro de eliminar Arbitro?"}
         datos={datos}
       />
-      <ModalFoto 
+      <ModalFoto
         estado={modalVerFoto}
         cambiarEstado={setModalVerFoto}
-        informacion={informacion} />
+        informacion={informacion}
+      />
       <ModalArbitro
         estado={modalVerArbitro}
         cambiarEstado={setModalVerArbitro}
