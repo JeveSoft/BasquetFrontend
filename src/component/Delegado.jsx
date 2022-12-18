@@ -21,6 +21,7 @@ import {
   ContenedorPrincipal,
   ContenedorOpciones,
   ImagenLogo,
+  ContenedorInscripcion,
 } from "./EstilosAdministrador";
 import { faCoffee } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -251,7 +252,8 @@ let location = useLocation();
         })
     const data = await response.json();
     obtenerInfoInscripcion();
- }
+    mensajeDeRespuesta("Comprobante Enviado")
+}
 
  function generarIdJugador() {
   var codigo = (
@@ -698,16 +700,17 @@ let location = useLocation();
            {
             
             pagoMedio == "Medio" ? 
-                  <>
+                  <ContenedorInscripcion>
                     <h4 style={{margin:"20px 0px"}}>Complete el pago porfavor</h4>
                     <ImagenPago style={{width:"200px", height:"200px"}} src={urlImage+"storage/"+campeonato.PAGOMITAD} alt="foto carnet" />
                     <br/>
                     <label>Inserte comprobante de pago</label>
                     <br/>
-                    <InputFile style={{margin:"15px 0"}} type="file" name="files" onChange={(e)=>guardarPagoMedio(e)}/>
+                    <input style={{margin:"15px 0"}} type="file" name="files" 
+accept="image/*" onChange={(e)=>guardarPagoMedio(e)}/>
                     <br/>
                     <Boton onClick={()=>enviarPagoMedio()}>Enviar Comprobante</Boton>
-                  </>
+                  </ContenedorInscripcion>
                 :
                 
                 <h5 style={{margin:"20px 0px"}}>Su comprobante fue enviado con exito &#9989;</h5>

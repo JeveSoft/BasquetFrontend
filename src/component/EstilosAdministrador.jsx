@@ -507,3 +507,9 @@ export const SelectNacionalidad = styled.select`
     box-shadow: 3px 0px 30px rgba(163, 163, 163, 0.4);
   }
 `;
+export const ContenedorInscripcion = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`

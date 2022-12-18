@@ -118,8 +118,8 @@ export default function Registro() {
     nombre: /^[a-zA-ZÀ-ÿ\s]{3,40}$/, // Letras y espacios, pueden llevar acentos.
     correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
     telefono: /^\d{7,14}$/, // 7 a 14 numeros.
-    carnet: /^[a-zA-Z0-9-]{6,15}/,
-    sigla: /^[a-zA-Z0-9-]{1,4}/,
+    carnet: /^[a-zA-Z0-9-]{6,15}$/,
+    sigla: /^[a-zA-Z0-9-]{1,4}$/,
   };
   const cambioPago = (e) => {
     setPago(e.target.value);
@@ -1137,13 +1137,13 @@ export default function Registro() {
               />
               <BoxCampo>
                 <TextBox>Logo Equipo</TextBox>
-                <input type="file" name="" id="logo" hidden onChange={(e)=> 
+                <input type="file" /* name="" */ /* id="logo" */ accept="image/*" /* hidden */ onChange={(e)=> 
                   {setLogoEquipo(e.target.files[0])
                   }} 
                   />
-                <LabelFile for="logo" id="imagenLogo">
+              {/*   <LabelFile for="logo" id="imagenLogo">
                   Seleccionar Archivo
-                </LabelFile>
+                </LabelFile> */}
               </BoxCampo>
               <BoxCampo>
                 <TextBox>Cantidad de Jugadores</TextBox>
@@ -1292,10 +1292,11 @@ export default function Registro() {
           <ContenedorRegistro>
             <Titulo>COMPROBANTE DE PAGO</Titulo>
             <CategoryPago>
-              <input type="file" name="" id="logo" hidden onChange={(e)=>setComprobantePago(e.target.files[0])}/>
-              <LabelFile for="logo" id="comprobantePago">
+              <input type="file" /* name="" id="logo" */ /* hidden */ 
+accept="image/*" onChange={(e)=>setComprobantePago(e.target.files[0])}/>
+              {/* <LabelFile for="logo" id="comprobantePago">
                 Seleccionar Archivo
-              </LabelFile>
+              </LabelFile> */}
             </CategoryPago>
             <ContenedorBotones>
               <NavBoton
