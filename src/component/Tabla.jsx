@@ -101,6 +101,9 @@ export default function Tabla() {
           <NavLink to="/tabla" activeStyle>
             TABLA DE POSICIONES
           </NavLink>
+          <NavLink to="/informacion" activeStyle>
+            INFORMACIÓN
+          </NavLink>
         </NavMenu>
         <NavBtn>
           <NavBtnLink
