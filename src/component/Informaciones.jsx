@@ -291,12 +291,18 @@ export default function Informaciones() {
               })}
             </CategoriaWrap>
           </CategoriasDiv>
+          {campeonato.DESCRIPCION != null ?
           <BotonDescargaReglamento
-            href={require("../Imagenes/ReglamentoFBB.pdf")}
-            download="reglamento.pdf"
-          >
-            Descargar Reglamento
-          </BotonDescargaReglamento>
+          href={urlImage+"storage/"+campeonato.DESCRIPCION}
+          download="reglamento.pdf"
+          target="_blank"
+        >
+          Descargar Reglamento
+        </BotonDescargaReglamento>
+          :
+          ""
+          }
+          
         </ContenedorInformacion>
       </ContenedorGlobal>
     </>

@@ -32,20 +32,25 @@ export const ContenedorMain = styled.div`
 `
 
 export const Equipos = styled.div`
-    display: grid;
+    /* display: grid;
     grid-template-columns: repeat(3,1fr);
-    place-items: center;
+    place-items: center; */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+    /* align-items: center; */
     color:white;
     text-align:center
 `
 export const EquipoModal = styled.div`
-   
+   position: relative;
 `
 export const ImgEquipo = styled.img`
-    max-width: 400px;
-    height: 400px;
+    max-width: 300px;
+    height: 300px;
     border-radius: 10px;
-    cursor: pointer;
+    
 `
 export const PopUpContainer = styled.div`
    background: white;
@@ -53,8 +58,8 @@ export const PopUpContainer = styled.div`
    top: 50%;
    left: 50%;
    transform: translate(-50%, -50%);
-   width: 500px;
-   height: 500px;
+   width: auto;
+   height: auto;
    padding: 15px;
    color: #555;
    border-radius: 10px;
@@ -64,13 +69,14 @@ export const PopUpContainer = styled.div`
 `
 
 export const BotonPopup = styled.button `
+    
     border: none;
     background: red;
     border-radius: 2px;
     color: white;
-    font-size: 30px;
     margin-bottom: 5px;
-    padding: 0px 12px;
+    /* font-size: 30px;
+    padding: 0px 12px; */
 `
 
 export const SelectJugador = styled.select `
@@ -154,3 +160,12 @@ border: 1px solid black;
   background: black;
   color: #ff7c01;
 }`;
+
+export const BotonMasInfo = styled.button`
+    top:10;
+    left:0;
+    position: absolute;
+    color: black;
+    text-decoration: none;
+    border: none;
+`

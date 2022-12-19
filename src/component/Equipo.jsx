@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {url, urlImage} from "../services/const"
 import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink, ImagenLogo } from './Nav'
 import IniciarSesion from './IniciarSesion';
-import {Button, Contenedor,ContenedorMain, Equipos, EquipoModal, ImgEquipo, Select} from "./EstiloEquipos"
+import {Button, Contenedor,ContenedorMain, Equipos, EquipoModal, ImgEquipo, Select, BotonMasInfo} from "./EstiloEquipos"
 import { useEffect } from 'react';
 import { PopUpEquipo } from './PopUpEquipo';
 
@@ -98,13 +98,17 @@ export default function Equipo() {
               equipos.map(equipo => {  
                 return (
                   
-                    <EquipoModal key={equipo.IDEQUIPO} onClick={()=>cambiarEstadoPopUp(equipo)}>
+                    <EquipoModal key={equipo.IDEQUIPO}>
                       <h2>{equipo.NOMBRE}</h2>
                       {
                         equipo.LOGO == "LOGO.JPG" ?
                         <ImgEquipo src={ require("../Imagenes/equipoDefault.png") }/>
                         :
+                        <>
                         <ImgEquipo src={ urlImage+ "storage/"+  equipo.LOGO }/>
+                          <BotonMasInfo onClick={()=>cambiarEstadoPopUp(equipo)}>Mas info</BotonMasInfo>                        
+                        </>
+
                       }
                     </EquipoModal>
                     

@@ -181,7 +181,7 @@ export default function ModalAñadirInformacion({
 }) {
   const [categoria, setCategoria] = useState({ campo: "", valido: null });
   const [tituloFoto, setTituloFoto] = useState("");
-  const [tituloValido, setTituloValido] = useState(null);
+  const [reglamento, setReglamento] = useState(null);
   const [edadMin, setEdadMin] = useState({ campo: "", valido: null });
   const [edadMax, setEdadMax] = useState({ campo: "", valido: null });
   const [nombreFoto, setNombreFoto] = useState("foto.jpg");
@@ -296,6 +296,7 @@ export default function ModalAñadirInformacion({
                 cambiarEstado(false);
                 console.log("se subio");
               });
+              mensajeRespuesta("Categoria Agregada!","✅");
             } else {
               setEspera("false");
               setInhabilitado(false);
@@ -346,7 +347,26 @@ export default function ModalAñadirInformacion({
     setEdadMax({ campo: "", valido: null });
     cambiarEstado(false);
   };
-
+  const enviarReglamento = async () =>{
+    if(reglamento != null){
+      const campeo = await fetch(url+"todosCampeonatos");
+      const campoData = await campeo.json();
+      if(campoData.length > 0){
+        const f = new FormData();
+        f.append("reglamento", reglamento);
+        const response = await fetch(url+"agregarReglamento/"+campoData[0].IDCAMPEONATO,{
+          method: "POST",
+          body: f
+        }) 
+        mensajeRespuesta("Reglamento Enviado!","✅")
+        setReglamento(null);
+      }else{
+        mensajeRespuesta("Ingrese Fechas de Liga","⚠️")
+      }
+    }else{
+      mensajeRespuesta("Ingrese Reglamento","⚠️")
+    }
+  }
   return (
     <>
       {estado && (
@@ -362,7 +382,7 @@ export default function ModalAñadirInformacion({
               <DetalleUsuario>
                 <BoxCampo>
                   <TextBox>REGLAMENTO</TextBox>
-                  <input type="file" name="" id="foto" hidden />
+                  <input type="file" name="" id="foto" accept="application/pdf" onChange={(e)=>setReglamento(e.target.files[0])}/>
                   {/* <LabelFile for="foto" id="imagenLogo">
                     Seleccionar Archivo
                   </LabelFile> */}
@@ -370,6 +390,7 @@ export default function ModalAñadirInformacion({
                 <Boton
                   onClick={() => {
                     cambiarEstado(false);
+                    enviarReglamento();
                   }}
                 >
                   Guardar
