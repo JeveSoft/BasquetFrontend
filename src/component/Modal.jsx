@@ -119,7 +119,7 @@ export const Texto = styled.div`
   margin-bottom: 20px;
   text-align: center;
 `;
-export default function Modal({ estado, cambiarEstado, mensaje, tipo, datos }) {
+export default function Modal({ estado, cambiarEstado, mensaje, tipo, datos, obtenerInformacion }) {
   const historial = useHistory();
  
   const [espera, setEspera] = useState("false");
@@ -144,6 +144,7 @@ export default function Modal({ estado, cambiarEstado, mensaje, tipo, datos }) {
         setEspera("false");
         setInhabilitado(false);
         cambiarEstado(false);
+        obtenerInformacion()
       });
     } else {
       if (tipo == "eliminarArbitro") {

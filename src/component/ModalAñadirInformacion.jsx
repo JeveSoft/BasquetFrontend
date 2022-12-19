@@ -178,6 +178,9 @@ export default function ModalAñadirInformacion({
   cambiarEstado,
   tipo,
   titulo,
+  obtenerCategoria,
+  obtenerInformacion,
+  listaInformacion,
 }) {
   const [categoria, setCategoria] = useState({ campo: "", valido: null });
   const [tituloFoto, setTituloFoto] = useState("");
@@ -240,6 +243,7 @@ export default function ModalAñadirInformacion({
             body: f,
           });
           mensajeRespuesta("Informacion Agregada Correctamente!","✅")
+          obtenerInformacion();
         }else{
           mensajeRespuesta("Ingrese Foto Información","⚠️")
         }
@@ -257,10 +261,9 @@ export default function ModalAñadirInformacion({
 
   const validarTitulo = () =>{
     var response = false;
-    console.log(informaciones);
-    console.log(tituloFoto)
+
     const divTitulo = document.getElementById("tituloImagen");
-    var valido = informaciones.some((info)=>{
+    var valido = listaInformacion.some((info)=>{
         return info.TITULO === tituloFoto
     })
     if(valido && divTitulo != null){
@@ -296,7 +299,7 @@ export default function ModalAñadirInformacion({
                 setEdadMin({ campo: "", valido: null });
                 setEdadMax({ campo: "", valido: null });
                 cambiarEstado(false);
-                console.log("se subio");
+                obtenerCategoria(); 
               });
               mensajeRespuesta("Categoria Agregada!","✅");
             } else {

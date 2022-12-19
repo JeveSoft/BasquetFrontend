@@ -2121,6 +2121,7 @@ export default function Administrador() {
                                               },
                                             }
                                           );
+                                          obtenerCategoria();
                                         });
                                     }}
                                   >
@@ -3408,6 +3409,8 @@ export default function Administrador() {
         cambiarEstado={setModalAñadirInfo}
         tipo={"informacion"}
         titulo={"Añadir Informacion"}
+        obtenerInformacion = {obtenerInformacion}
+        listaInformacion = {listaInformacion}
       />
       <ModalAñadirInformacion
         estado={modalAñadirReglamento}
@@ -3420,6 +3423,8 @@ export default function Administrador() {
         cambiarEstado={setModalAñadirCategoria}
         tipo={"categoria"}
         titulo={"Añadir Categoria"}
+        obtenerCategoria={obtenerCategoria}
+        listaCategorias={listaCategorias}
       />
       <Modal
         estado={eliminarFoto}
@@ -3427,6 +3432,7 @@ export default function Administrador() {
         tipo={"eliminarFoto"}
         mensaje={"¿Seguro de eliminar foto?"}
         datos={datos}
+        obtenerInformacion = {obtenerInformacion}
       />
       <Modal
         estado={eliminarArbitro}
