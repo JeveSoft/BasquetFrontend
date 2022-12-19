@@ -265,9 +265,11 @@ export default function ModalAñadirInformacion({
     })
     if(valido && divTitulo != null){
       divTitulo.style.border = "3px solid red";
-    }else if(divTitulo != null){
+    }else if(divTitulo != null && tituloFoto.length > 3){
       divTitulo.style.border = "3px solid green"
       response = true;
+    }else if(divTitulo != null){
+      divTitulo.style.border = "3px solid red";
     }
     console.log(valido);
     return response;
