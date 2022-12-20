@@ -712,13 +712,36 @@ accept="image/*" onChange={(e)=>guardarPagoMedio(e)}/>
                     <Boton onClick={()=>enviarPagoMedio()}>Enviar Comprobante</Boton>
                   </ContenedorInscripcion>
                 :
-                
-                <h5 style={{margin:"20px 0px"}}>Su comprobante fue enviado con exito &#9989;</h5>
+                <>
+                {
+                  infoInscripcion[0].PAGOMEDIO == "Completo" && infoInscripcion[0].HABILITADO == "SinJugador" ?
+                  <>
+                    <h5 style={{margin:"20px 0px"}}>Su comprobante fue revisado exitosamente &#9989;</h5>
+                    <h5 style={{margin:"20px 0px"}}>Complete la fase de inscripción agregando los jugadores de su equipo</h5>
+                  </>
+                  :
+                  <>
+                    {
+                      infoInscripcion[0].PAGOMEDIO == "Completo" && infoInscripcion[0].HABILITADO == "habilitado" ?
+                      <>
+                       <h5 style={{margin:"20px 0px"}}>Felicidades su inscripcion al equipo {infoInscripcion[0].NOMBRE} fue completada con exito, le deseamos suerte en el campeoanto &#127936;</h5>
+                      </>
+                      :
+                      <>
+                      <h5 style={{margin:"20px 0px"}}>Su comprobante fue enviado con exito &#9989;</h5>
+                    <h5 style={{margin:"20px 0px"}}>Usted podra agregar jugadores una su comprobante haya sido verificado!</h5>
+                      </>
+                    }
+                    
+                  </>
+
+                }
+                </>
            }
           
         </ContenedorConfiguracion>
       )}
-      {titulo === "AGREGAR JUGADORES" && (
+      {titulo === "AGREGAR JUGADORES" && (infoInscripcion[0].HABILITADO === "SinJugador" || infoInscripcion[0].HABILITADO === "habilitado") && (
         <ContenedorConfiguracion>
           <Titulo2>Jugador</Titulo2>
           

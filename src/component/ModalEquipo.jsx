@@ -322,7 +322,7 @@ export default function ModalEquipo({
                   <SubTitulo>INFORMACION DELEGADO</SubTitulo>
                   <TextBox>Nombre Delegado = {datos.NOMBREDELEGADO}</TextBox>
                   <TextBox>CI Delegado = {datos.CI}</TextBox>
-                  <TextBox>Email Delegado = {datos.EMAIL}</TextBox>
+                  {/* <TextBox>Email Delegado = {datos.EMAIL}</TextBox> */}
                   <TextBox>Celular Delegado = {datos.CELULAR}</TextBox>
                   <TextBox>
                     Fecha Nacimiento Delegado = {datos.FECHANACIMIENTO}
@@ -541,24 +541,26 @@ export default function ModalEquipo({
                   <Titulo2>JUGADORES</Titulo2>
                 </ContenedorJugadores>
                 <ContenedorBox>
-                  <Text>ID</Text>
+                  {/* <Text>ID</Text> */}
                   <Text>Nombre Jugador</Text>
                   <Text>CI</Text>
                   <Text>Fecha Nacimiento</Text>
-                  <Text>Email</Text>
+                  {/* <Text>Email</Text> */}
                   <Text>Celular</Text>
                   <Text>Rol</Text>
+                  <Text>FotoCarnet</Text>
                 </ContenedorBox>
                 {jugadores.map((jugador) => {
                   return (
                     <ContenedorBox>
-                      <Text>{jugador.IDJUGADOR}</Text>
+                      {/* <Text>{jugador.IDJUGADOR}</Text> */}
                       <Text>{jugador.NOMBREJUGADOR}</Text>
                       <Text>{jugador.CIJUGADOR}</Text>
                       <Text>{jugador.FECHANACIMIENTO}</Text>
-                      <Text>{jugador.EMAIL}</Text>
+                      {/* <Text>{jugador.EMAIL}</Text> */}
                       <Text>{jugador.CELULAR}</Text>
                       <Text>{jugador.ROL}</Text>
+                      <a target="_blank" href={urlImage+"storage/"+jugador.FOTOCIJUGADOR}>Ver foto Ci</a>
                     </ContenedorBox>
                   );
                 })}
