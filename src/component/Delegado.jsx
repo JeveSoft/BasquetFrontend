@@ -722,14 +722,25 @@ accept="image/*" onChange={(e)=>guardarPagoMedio(e)}/>
                   :
                   <>
                     {
-                      infoInscripcion[0].PAGOMEDIO == "Completo" && infoInscripcion[0].HABILITADO == "habilitado" ?
+                      infoInscripcion[0].PAGOMEDIO == "Completo" && infoInscripcion[0].HABILITADO == "HabilitadoCompleto" ?
                       <>
                        <h5 style={{margin:"20px 0px"}}>Felicidades su inscripcion al equipo {infoInscripcion[0].NOMBRE} fue completada con exito, le deseamos suerte en el campeoanto &#127936;</h5>
                       </>
                       :
                       <>
-                      <h5 style={{margin:"20px 0px"}}>Su comprobante fue enviado con exito &#9989;</h5>
-                    <h5 style={{margin:"20px 0px"}}>Usted podra agregar jugadores una su comprobante haya sido verificado!</h5>
+                      {
+                        infoInscripcion[0].PAGOMEDIO == "Completo" && infoInscripcion[0].HABILITADO == "Habilitado"?
+                        <>
+                          <h5 style={{margin:"20px 0px"}}>Su comprobante fue enviado con exito &#9989;</h5>
+                          <h5 style={{margin:"20px 0px"}}>Los jugadores seran revisados por el Administrador de campeonato ⚠️</h5>
+                        </>
+                        :
+                        <>
+                        <h5 style={{margin:"20px 0px"}}>Su comprobante fue enviado con exito &#9989;</h5>
+                         <h5 style={{margin:"20px 0px"}}>Usted podra agregar jugadores una su comprobante haya sido verificado!</h5>
+                        </>
+                      }
+                      
                       </>
                     }
                     
@@ -741,7 +752,7 @@ accept="image/*" onChange={(e)=>guardarPagoMedio(e)}/>
           
         </ContenedorConfiguracion>
       )}
-      {titulo === "AGREGAR JUGADORES" && (infoInscripcion[0].HABILITADO === "SinJugador" || infoInscripcion[0].HABILITADO === "habilitado") && (
+      {titulo === "AGREGAR JUGADORES" && (infoInscripcion[0].HABILITADO === "SinJugador" || infoInscripcion[0].HABILITADO === "Habilitado") && (
         <ContenedorConfiguracion>
           <Titulo2>Jugador</Titulo2>
           
