@@ -6,7 +6,7 @@ import { toast, Toaster } from "react-hot-toast";
 import styled, { css } from "styled-components";
 import { Img } from "./EstilosAdministrador";
 import emailjs from "@emailjs/browser";
-import {url, urlImage} from "../services/const"
+import { url, urlImage } from "../services/const";
 const Overlay = styled.div`
   width: 100vw;
   height: 100vh;
@@ -27,6 +27,7 @@ const ContenedorModal = styled.div`
   box-shadow: rgba(100, 100, 111, 0.2) 8px 7px 29px 8px;
   padding: 20px;
   height: 290px;
+  overflow-y: auto;
 `;
 const EncabezadoModal = styled.div`
   display: flex;
@@ -47,6 +48,22 @@ export const Titulo = styled.div`
     background: linear-gradient(135deg, #000000, #ff7c01);
   }
 `;
+
+export const Titulo2 = styled.div`
+  font-size: 25px;
+  font-weight: 1000;
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 102%;
+    background: linear-gradient(135deg, #000000, #ff7c01);
+  }
+`;
+
 const BotonCerrar = styled.button`
   position: absolute;
   top: 20px;
@@ -79,11 +96,21 @@ export const BoxCampo = styled.div`
   position: relative;
   z-index: 90;
 `;
+
+export const ContenedorJugadores = styled.div`
+  width: 100%;
+`;
+
 export const TextBox = styled.span`
   display: block;
   font-weight: 500;
   margin-bottom: 5px;
 `;
+export const Text = styled.span`
+  font-weight: 500;
+  width: 200px;
+`;
+
 const ImgLogo = styled.img`
   width: 60px;
   height: 60px;
@@ -94,7 +121,14 @@ const ImgComprobante = styled.img`
 `;
 const ContenedorBoton = styled.div`
   width: 100%;
+  margin-top: 15px;
   position: relative;
+`;
+const ContenedorBox = styled.div`
+  margin: 10px 10px 0px 10px;
+  display: flex;
+  overflow-y:auto;
+  border-bottom: 3px solid black;
 `;
 const BotonAñadir = styled.button`
   height: 40px;
@@ -140,8 +174,13 @@ const BotonAñadir = styled.button`
       margin: 0px 35px 0px 45px;
     `}
 `;
-export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
- 
+export default function ModalEquipo({
+  estado,
+  cambiarEstado,
+  datos,
+  jugadores,
+  tipo,
+}) {
   const [espera, setEspera] = useState("false");
   const [inhabilitado, setInhabilitado] = useState(false);
 
@@ -248,12 +287,19 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                   </TextBox>
                   <TextBox>Categoria Equipo= {datos.CATEGORIA}</TextBox>
                   <TextBox>
-                    Logo Equipo= <ImgLogo src={urlImage+"storage/"+datos.LOGO} alt="foto"></ImgLogo>
+                    Logo Equipo={" "}
+                    <ImgLogo
+                      src={urlImage + "storage/" + datos.LOGO}
+                      alt="foto"
+                    ></ImgLogo>
                   </TextBox>
                 </BoxCampo>
                 <BoxCampo>
                   <TextBox>
-                    Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTE[0]}></ImgComprobante>
+                    Comprobante ={" "}
+                    <ImgComprobante
+                      src={urlImage + "storage/" + datos.COMPROBANTE[0]}
+                    ></ImgComprobante>
                   </TextBox>
                 </BoxCampo>
                 <ContenedorBoton>
@@ -262,7 +308,7 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                     disabled={inhabilitado}
                     onClick={recordar}
                   >
-                    {espera == "false" && "Enviar Correo"}
+                    {espera == "false" && "Recordar Pago Pendiente"}
                     {espera == "true" && (
                       <Img src={require("../Imagenes/Carga.gif")} />
                     )}
@@ -296,19 +342,31 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                   </TextBox>
                   <TextBox>Categoria Equipo= {datos.CATEGORIA}</TextBox>
                   <TextBox>
-                    Logo Equipo= <ImgLogo src={urlImage+"storage/"+datos.LOGO} alt="foto"></ImgLogo>
+                    Logo Equipo={" "}
+                    <ImgLogo
+                      src={urlImage + "storage/" + datos.LOGO}
+                      alt="foto"
+                    ></ImgLogo>
                   </TextBox>
                 </BoxCampo>
                 <BoxCampo>
                   <TextBox>
-                    Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTE[0]}  ></ImgComprobante>
+                    Comprobante ={" "}
+                    <ImgComprobante
+                      src={urlImage + "storage/" + datos.COMPROBANTE[0]}
+                    ></ImgComprobante>
                   </TextBox>
                 </BoxCampo>
                 {datos.COMPROBANTECOMPLETO[0] != "vacio" && (
                   <>
                     <BoxCampo>
                       <TextBox>
-                        Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTECOMPLETO[0]}></ImgComprobante>
+                        Comprobante ={" "}
+                        <ImgComprobante
+                          src={
+                            urlImage + "storage/" + datos.COMPROBANTECOMPLETO[0]
+                          }
+                        ></ImgComprobante>
                       </TextBox>
                     </BoxCampo>
                   </>
@@ -386,19 +444,28 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                   </TextBox>
                   <TextBox>Categoria Equipo= {datos.CATEGORIA}</TextBox>
                   <TextBox>
-                    Logo Equipo= <ImgLogo src={urlImage+"storage/"+datos.LOGO}></ImgLogo>
+                    Logo Equipo={" "}
+                    <ImgLogo src={urlImage + "storage/" + datos.LOGO}></ImgLogo>
                   </TextBox>
                 </BoxCampo>
                 <BoxCampo>
                   <TextBox>
-                    Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTE[0]}></ImgComprobante>
+                    Comprobante ={" "}
+                    <ImgComprobante
+                      src={urlImage + "storage/" + datos.COMPROBANTE[0]}
+                    ></ImgComprobante>
                   </TextBox>
                 </BoxCampo>
                 {datos.COMPROBANTECOMPLETO[0] != "vacio" && (
                   <>
                     <BoxCampo>
                       <TextBox>
-                        Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTECOMPLETO[0]}></ImgComprobante>
+                        Comprobante ={" "}
+                        <ImgComprobante
+                          src={
+                            urlImage + "storage/" + datos.COMPROBANTECOMPLETO[0]
+                          }
+                        ></ImgComprobante>
                       </TextBox>
                     </BoxCampo>
                   </>
@@ -409,7 +476,7 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
                     tipo={tipo}
                     onClick={recordarJugadores}
                   >
-                    {espera == "false" && "Enviar Correo"}
+                    {espera == "false" && "Recordar Añadir Jugadores"}
                     {espera == "true" && (
                       <Img src={require("../Imagenes/Carga.gif")} />
                     )}
@@ -419,93 +486,129 @@ export default function ModalEquipo({ estado, cambiarEstado, datos, tipo }) {
             )}
             {tipo == "habilitado" && (
               <DetalleUsuario>
-              <BoxCampo>
-                <SubTitulo>INFORMACION DELEGADO</SubTitulo>
-                <TextBox>Nombre Delegado = {datos.NOMBREDELEGADO}</TextBox>
-                <TextBox>CI Delegado = {datos.CI}</TextBox>
-                <TextBox>Email Delegado = {datos.EMAIL}</TextBox>
-                <TextBox>Celular Delegado = {datos.CELULAR}</TextBox>
-                <TextBox>
-                  Fecha Nacimiento Delegado = {datos.FECHANACIMIENTO}
-                </TextBox>
-                <TextBox>
-                  Nacionalidad Delegado = {datos.NACIONALIDAD}
-                </TextBox>
-                <TextBox>Genero Delegado = {datos.GENERO}</TextBox>
-              </BoxCampo>
-              <BoxCampo>
-                <SubTitulo>INFORMACION EQUIPO</SubTitulo>
-                <TextBox>Nombre Equipo = {datos.NOMBREEQUIPO}</TextBox>
-                <TextBox>Siglas Equipo = {datos.SIGLAS}</TextBox>
-                <TextBox>Cantidad Jugadores = {datos.CANTIDAD}</TextBox>
-                <TextBox>
-                  Fecha Creacion Equipo= {datos.FECHACREACION}
-                </TextBox>
-                <TextBox>Categoria Equipo= {datos.CATEGORIA}</TextBox>
-                <TextBox>
-                  Logo Equipo= <ImgLogo src={urlImage+"storage/"+datos.LOGO}></ImgLogo>
-                </TextBox>
-              </BoxCampo>
-              <BoxCampo>
-                <TextBox>
-                  Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTE[0]}></ImgComprobante>
-                </TextBox>
-              </BoxCampo>
-              {datos.COMPROBANTECOMPLETO[0] != "vacio" && (
-                <>
-                  <BoxCampo>
-                    <TextBox>
-                      Comprobante = <ImgComprobante src={urlImage+"storage/"+datos.COMPROBANTECOMPLETO[0]}></ImgComprobante>
-                    </TextBox>
-                  </BoxCampo>
-                </>
-              )}
-              <ContenedorBoton>
-                <BotonAñadir
-                  disabled={inhabilitado}
-                  tipo={tipo}
-                  onClick={() => {
-                    setEspera("true");
-                    setInhabilitado(true);
-                    axios
-                      .put(
-                        url + "habilitarSinJugador/" + datos.IDINSCRIPCION,
-                        { HABILITADO: "HabilitadoCompleto" }
-                      )
-                      .then((response) => {
-                        setEspera("false");
-                        setInhabilitado(false);
-                        toast("Equipo Habilitado Con Exito", {
-                          icon: "✅",
-                          duration: 3000,
-                          style: {
-                            border: "2px solid #ff7c01",
-                            padding: "10px",
-                            color: "#fff",
-                            background: "#000",
-                            borderRadius: "4%",
-                          },
+                <BoxCampo>
+                  <SubTitulo>INFORMACION DELEGADO</SubTitulo>
+                  <TextBox>Nombre Delegado = {datos.NOMBREDELEGADO}</TextBox>
+                  <TextBox>CI Delegado = {datos.CI}</TextBox>
+                  <TextBox>Email Delegado = {datos.EMAIL}</TextBox>
+                  <TextBox>Celular Delegado = {datos.CELULAR}</TextBox>
+                  <TextBox>
+                    Fecha Nacimiento Delegado = {datos.FECHANACIMIENTO}
+                  </TextBox>
+                  <TextBox>
+                    Nacionalidad Delegado = {datos.NACIONALIDAD}
+                  </TextBox>
+                  <TextBox>Genero Delegado = {datos.GENERO}</TextBox>
+                </BoxCampo>
+                <BoxCampo>
+                  <SubTitulo>INFORMACION EQUIPO</SubTitulo>
+                  <TextBox>Nombre Equipo = {datos.NOMBREEQUIPO}</TextBox>
+                  <TextBox>Siglas Equipo = {datos.SIGLAS}</TextBox>
+                  <TextBox>Cantidad Jugadores = {datos.CANTIDAD}</TextBox>
+                  <TextBox>
+                    Fecha Creacion Equipo= {datos.FECHACREACION}
+                  </TextBox>
+                  <TextBox>Categoria Equipo= {datos.CATEGORIA}</TextBox>
+                  <TextBox>
+                    Logo Equipo={" "}
+                    <ImgLogo src={urlImage + "storage/" + datos.LOGO}></ImgLogo>
+                  </TextBox>
+                </BoxCampo>
+                <BoxCampo>
+                  <TextBox>
+                    Comprobante ={" "}
+                    <ImgComprobante
+                      src={urlImage + "storage/" + datos.COMPROBANTE[0]}
+                    ></ImgComprobante>
+                  </TextBox>
+                </BoxCampo>
+
+                {datos.COMPROBANTECOMPLETO[0] != "vacio" && (
+                  <>
+                    <BoxCampo>
+                      <TextBox>
+                        Comprobante ={" "}
+                        <ImgComprobante
+                          src={
+                            urlImage + "storage/" + datos.COMPROBANTECOMPLETO[0]
+                          }
+                        ></ImgComprobante>
+                      </TextBox>
+                    </BoxCampo>
+                  </>
+                )}
+                <ContenedorJugadores>
+                  <Titulo2>JUGADORES</Titulo2>
+                </ContenedorJugadores>
+                <ContenedorBox>
+                  <Text>ID</Text>
+                  <Text>Nombre Jugador</Text>
+                  <Text>CI</Text>
+                  <Text>Fecha Nacimiento</Text>
+                  <Text>Email</Text>
+                  <Text>Celular</Text>
+                  <Text>Rol</Text>
+                </ContenedorBox>
+                {jugadores.map((jugador) => {
+                  return (
+                    <ContenedorBox>
+                      <Text>{jugador.IDJUGADOR}</Text>
+                      <Text>{jugador.NOMBREJUGADOR}</Text>
+                      <Text>{jugador.CIJUGADOR}</Text>
+                      <Text>{jugador.FECHANACIMIENTO}</Text>
+                      <Text>{jugador.EMAIL}</Text>
+                      <Text>{jugador.CELULAR}</Text>
+                      <Text>{jugador.ROL}</Text>
+                    </ContenedorBox>
+                  );
+                })}
+
+                <ContenedorBoton>
+                  <BotonAñadir
+                    disabled={inhabilitado}
+                    tipo={tipo}
+                    onClick={() => {
+                      setEspera("true");
+                      setInhabilitado(true);
+                      axios
+                        .put(
+                          url + "habilitarSinJugador/" + datos.IDINSCRIPCION,
+                          { HABILITADO: "HabilitadoCompleto" }
+                        )
+                        .then((response) => {
+                          setEspera("false");
+                          setInhabilitado(false);
+                          toast("Equipo Habilitado Con Exito", {
+                            icon: "✅",
+                            duration: 3000,
+                            style: {
+                              border: "2px solid #ff7c01",
+                              padding: "10px",
+                              color: "#fff",
+                              background: "#000",
+                              borderRadius: "4%",
+                            },
+                          });
+                          cambiarEstado(false);
                         });
-                        cambiarEstado(false);
-                      });
-                  }}
-                >
-                  {espera == "false" && "Habilitar"}
-                  {espera == "true" && (
-                    <Img src={require("../Imagenes/Carga.gif")} />
-                  )}
-                </BotonAñadir>
-                <BotonAñadir
-                  tipo={tipo}
-                  disabled={inhabilitado}
-                  onClick={() => {
-                    cambiarEstado(false);
-                  }}
-                >
-                  Cancelar
-                </BotonAñadir>
-              </ContenedorBoton>
-            </DetalleUsuario>
+                    }}
+                  >
+                    {espera == "false" && "Habilitar"}
+                    {espera == "true" && (
+                      <Img src={require("../Imagenes/Carga.gif")} />
+                    )}
+                  </BotonAñadir>
+                  <BotonAñadir
+                    tipo={tipo}
+                    disabled={inhabilitado}
+                    onClick={() => {
+                      cambiarEstado(false);
+                    }}
+                  >
+                    Cancelar
+                  </BotonAñadir>
+                </ContenedorBoton>
+              </DetalleUsuario>
             )}
           </ContenedorModal>
         </Overlay>

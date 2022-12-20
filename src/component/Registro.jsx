@@ -115,11 +115,11 @@ export default function Registro() {
     });
   };
   const expresiones = {
-    nombre: /^[a-zA-ZÀ-ÿ\s]{3,40}$/, // Letras y espacios, pueden llevar acentos.
+    nombre: /^[a-zA-ZÀ-ÿ\s- ]{3,40}$/, // Letras y espacios, pueden llevar acentos.
     correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
     telefono: /^\d{7,14}$/, // 7 a 14 numeros.
     carnet: /^[a-zA-Z0-9-]{6,15}$/,
-    sigla: /^[a-zA-Z0-9-]{1,4}$/,
+    sigla: /^[a-zA-Z0-9-]{3,3}$/,
   };
   const cambioPago = (e) => {
     setPago(e.target.value);
@@ -376,7 +376,7 @@ export default function Registro() {
           },
         });
       }
-      if (equipo.campo.length < 3 || equipo.campo.length > 30) {
+      if (equipo.campo.length < 3 || equipo.campo.length > 40) {
         valido = false;
         toast("Nombre Equipo Invalido", {
           icon: "⚠️",
@@ -1124,7 +1124,7 @@ export default function Registro() {
                 label="Nombre Equipo"
                 placeholder="Nombre Equipo"
                 name="nombreEquipo"
-                expresionRegular={expresiones.carnet}
+                expresionRegular={expresiones.nombre}
               />
               <InputValidar
                 estado={siglas}

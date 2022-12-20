@@ -75,15 +75,6 @@ export default function Equipo() {
             INFORMACIÓN
           </NavLink>
         </NavMenu>
-        <NavBtn>
-          <NavBtnLink
-            onClick={() => {
-              setModal(!modal);
-            }}
-          >
-            <img src={require("../Imagenes/menu.png")} />
-          </NavBtnLink>
-        </NavBtn>
       </Nav>
       {/*Content*/}
       <Contenedor>

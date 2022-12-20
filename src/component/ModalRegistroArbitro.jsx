@@ -329,7 +329,7 @@ export default function ModalRegistroArbitro({
     } else {
       if (celular.length < 3 || celular.length > 30) {
         valido = false;
-        toast("Nombre Completo Invalido", {
+        toast("Celular Invalido", {
           icon: "⚠️",
           duration: 3000,
           style: {
@@ -342,7 +342,7 @@ export default function ModalRegistroArbitro({
         });
       }
       if (!isValidPhoneNumber(celular)) {
-        toast("Numero Invalido", {
+        toast("Celular Invalido", {
           icon: "⚠️",
           duration: 3000,
           style: {

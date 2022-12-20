@@ -105,15 +105,6 @@ export default function Tabla() {
             INFORMACIÓN
           </NavLink>
         </NavMenu>
-        <NavBtn>
-          <NavBtnLink
-            onClick={() => {
-              setModal(!modal);
-            }}
-          >
-            <img src={require("../Imagenes/menu.png")} />
-          </NavBtnLink>
-        </NavBtn>
       </Nav>
 
       <ContenedorGlobal>
