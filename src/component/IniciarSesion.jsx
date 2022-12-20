@@ -164,7 +164,7 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
                 });
                 document.title = response.data[0].NOMBREADMINISTRADOR;
                 setEspera("false");
-                historial.push("/administrador");
+                historial.push("/administrador/" + id);
               } else {
                 setInhabilitado(false);
                 setEspera("false");
@@ -217,7 +217,7 @@ export default function IniciarSesion({ estado, cambiarEstado }) {
                     borderRadius: "4%",
                   },
                 });
-                historial.push("/arbitro");
+                historial.push("/arbitro/" + id);
               } else {
                 setInhabilitado(false);
                 setEspera("false");

@@ -247,11 +247,8 @@ export default function Fixture() {
                                     <Text derecha={"medio"}>
                                       {equipos.ANOTACIONESEQ2}
                                     </Text>
-                                    <Text derecha={"false"}>
-                                      {equipos.EQUIPO2}
-                                    </Text>
                                     <Text derecha={"true"}>
-                                      Ver JUgadores
+                                      {equipos.EQUIPO2}
                                     </Text>
                                   </ContenedorBox>
                                 </>

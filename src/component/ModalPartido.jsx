@@ -22,7 +22,8 @@ export const Text = styled.span`
   width: 200px;
 `;
 const ContenedorModal = styled.div`
-  width: 400px;
+  width: 420px;
+  height: 340px;
   min-height: 100px;
   background: #fff;
   position: relative;
@@ -30,6 +31,7 @@ const ContenedorModal = styled.div`
   box-shadow: rgba(100, 100, 111, 0.2) 8px 7px 29px 8px;
   padding: 20px;
   top: 25px;
+  overflow-y: auto;
 `;
 const EncabezadoModal = styled.div`
   display: flex;
