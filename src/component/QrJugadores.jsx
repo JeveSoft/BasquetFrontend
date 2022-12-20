@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
-import { BotonDescarga } from "./EstiloEquipos";
+import { BotonDescarga, ImgJugador } from "./EstiloEquipos";
 import {url, urlImage} from "../services/const"
 export default function QrJugadores (){
 
@@ -43,6 +43,7 @@ export default function QrJugadores (){
                    return (
                     <VentanaQr key={jugador.IDJUGADOR}>
                               <h5>{jugador.NOMBREJUGADOR}</h5>
+                              <ImgJugador src={urlImage+"storage/"+jugador.FOTOJUGADOR} />
                               <img src={urlImage+"qrJugadores/"+jugador.FOTOQR} />
                     </VentanaQr>
                     )

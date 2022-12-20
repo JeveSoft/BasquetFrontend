@@ -2,15 +2,17 @@ import React, { useState } from 'react'
 import {url, urlImage} from "../services/const"
 import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink, ImagenLogo } from './Nav'
 import IniciarSesion from './IniciarSesion';
-import {Button, Contenedor,ContenedorMain, Equipos, EquipoModal, ImgEquipo, Select, BotonMasInfo} from "./EstiloEquipos"
+import {Button, Contenedor,ContenedorMain, Equipos, EquipoModal, ImgEquipo, Select, BotonMasInfo, BotonJugadores,PopUpJugadoresS} from "./EstiloEquipos"
 import { useEffect } from 'react';
 import { PopUpEquipo } from './PopUpEquipo';
+import { PopUpJugadores } from './PopUpJugadores';
 
 export default function Equipo() {
   const [modal, setModal] = useState(false)
   const [equipos, setEquipos] = useState([]);
   const [equipo, setEquipo] = useState({});
   const [popUp, setpopUp] = useState(false);
+  const [popUpJugadores, setPopUpJugadores] = useState(false);
   const [categorias, setCategorias] = useState([]);
   
   useEffect(()=>{
@@ -35,15 +37,22 @@ export default function Equipo() {
   }
 
   function cambiarEstadoPopUp(equipo){
-   
     setEquipo(equipo);
     cerrarPopup(true);
   }
 
+  function cambiarEstadoPopUpJ(equipo){
+    console.log("click")
+    setEquipo(equipo);
+    setPopUpJugadores(true);
+  }
   function cerrarPopup(e){
     setpopUp(e);
   }
 
+  function cerrarPopupJugadores(e){
+    setPopUpJugadores(e);
+  }
   document.title = "Equipo";
   return (
     <>
@@ -107,6 +116,7 @@ export default function Equipo() {
                         <>
                         <ImgEquipo src={ urlImage+ "storage/"+  equipo.LOGO }/>
                           <BotonMasInfo onClick={()=>cambiarEstadoPopUp(equipo)}>Mas info</BotonMasInfo>                        
+                          <BotonJugadores onClick={()=>cambiarEstadoPopUpJ(equipo)}>Ver Plantel</BotonJugadores>                        
                         </>
 
                       }
@@ -120,6 +130,7 @@ export default function Equipo() {
         </ContenedorMain>
       </Contenedor >
       <b>{popUp ? <PopUpEquipo equipo={equipo} cerrarPopup={cerrarPopup}/> : ''}</b>
+      <b>{popUpJugadores ? <PopUpJugadores equipo={equipo} cerrarPopupJugadores={cerrarPopupJugadores}/> : ''}</b>
       
     </>
   );

@@ -63,20 +63,22 @@ export const PopUpContainer = styled.div`
    padding: 15px;
    color: #555;
    border-radius: 10px;
-   box-shadow: 2px 3px 7px -1px rgba(0,0,0,0.76);
--webkit-box-shadow: 2px 3px 7px -1px rgba(0,0,0,0.76);
--moz-box-shadow: 2px 3px 7px -1px rgba(0,0,0,0.76);
+   box-shadow: rgba(100, 100, 111, 0.2) 8px 7px 29px 8px;
+   z-index: 3;
 `
 
 export const BotonPopup = styled.button `
-    
     border: none;
-    background: red;
+    background: none;
     border-radius: 2px;
-    color: white;
-    margin-bottom: 5px;
+    color: black;
     /* font-size: 30px;
     padding: 0px 12px; */
+`
+export const LineaPopUp = styled.div`
+    height: 3px;
+    margin: 5px 0px;
+    background: linear-gradient(135deg, #000000, #ff7c01);
 `
 
 export const SelectJugador = styled.select `
@@ -162,10 +164,27 @@ border: 1px solid black;
 }`;
 
 export const BotonMasInfo = styled.button`
+    position: absolute;
     top:10;
     left:0;
-    position: absolute;
     color: black;
     text-decoration: none;
     border: none;
+    z-index: 1;
+`
+export const BotonJugadores = styled.button`
+    position: absolute;
+    top:10;
+    right:0px;
+    color: black;
+    text-decoration: none;
+    border: none;
+    z-index: 2;
+`
+export const PopUpJugadoresS = styled.div`
+    background-color: white;
+`
+export const TablaJugadores = styled.table`
+    text-align: left;
+    
 `
