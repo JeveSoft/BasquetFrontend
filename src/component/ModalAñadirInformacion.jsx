@@ -204,7 +204,7 @@ export default function ModalAñadirInformacion({
   }
   const validarEdad = () => {
     var valido = false;
-    if (edadMin.campo < edadMax.campo) {
+    if (parseInt(edadMin.campo) < parseInt(edadMax.campo)) {
       valido = true;
     }
     return valido;

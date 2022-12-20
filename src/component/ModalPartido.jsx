@@ -1,7 +1,10 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 import React from "react";
+import { useState } from "react";
 import styled, { css } from "styled-components";
+import { url } from "../services/const";
 
 const Overlay = styled.div`
   width: 100vw;
@@ -13,6 +16,10 @@ const Overlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+export const Text = styled.span`
+  font-weight: 500;
+  width: 200px;
 `;
 const ContenedorModal = styled.div`
   width: 400px;
@@ -29,7 +36,6 @@ const EncabezadoModal = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-  
 `;
 export const Titulo = styled.div`
   font-size: 25px;
@@ -61,6 +67,12 @@ const BotonCerrar = styled.button`
     background: #c9c9c9;
   }
 `;
+export const ContenedorBox = styled.div`
+  margin: 10px 10px 0px 10px;
+  display: flex;
+  overflow-y: auto;
+  border-bottom: 3px solid black;
+`;
 export const DetalleUsuario = styled.div`
   justify-content: center;
   align-content: center;
@@ -73,29 +85,83 @@ export const Texto = styled.div`
   text-align: center;
 `;
 export default function ModalPartido({ estado, cambiarEstado, datos }) {
+  const [titulo, setTitulo] = useState("PARTIDO");
+  const [verJugadores, setVerJugadores] = useState(false);
+  const [listaJugadores, setListaJugadores] = useState([]);
+
+  const jugadores1 = () => {
+    axios.get(url + "obtenerEquipo/" + datos.equipo1).then((response) => {
+      axios
+        .get(url + "obtenerJugadores/" + response.data[0].IDEQUIPO)
+        .then((jugadores) => {
+          setListaJugadores(jugadores.data);
+          setVerJugadores(true);
+          setTitulo(datos.equipo1);
+        });
+    });
+  };
+
+  const jugadores2 = () => {
+    axios.get(url + "obtenerEquipo/" + datos.equipo2).then((response) => {
+      axios
+        .get(url + "obtenerJugadores/" + response.data[0].IDEQUIPO)
+        .then((jugadores) => {
+          setListaJugadores(jugadores.data);
+          setVerJugadores(true);
+          setTitulo(datos.equipo2);
+        });
+    });
+  };
   return (
     <>
       {estado && (
         <Overlay>
           <ContenedorModal>
             <EncabezadoModal>
-              <Titulo>PARTIDO</Titulo>
+              <Titulo>{titulo}</Titulo>
             </EncabezadoModal>
             <BotonCerrar
               onClick={() => {
-                cambiarEstado(false);
+                if (titulo === "PARTIDO") {
+                  cambiarEstado(false);
+                } else {
+                  setListaJugadores([]);
+                  setTitulo("PARTIDO");
+                  setVerJugadores(false);
+                }
               }}
             >
               <FontAwesomeIcon icon={faXmark} />
             </BotonCerrar>
             <DetalleUsuario>
-                  <Texto>{datos.equipo1}</Texto> 
+              {!verJugadores && (
+                <>
+                  <Texto onClick={jugadores1}>{datos.equipo1}</Texto>
                   <Texto> VS </Texto>
-               <Texto>{datos.equipo2}</Texto> 
-              <Texto>Fecha: {datos.dia}</Texto>
-              <Texto>Hora: {datos.hora}</Texto>
-              <Texto>Lugar: {datos.lugar}</Texto>
-
+                  <Texto onClick={jugadores2}>{datos.equipo2}</Texto>
+                  <Texto>Fecha: {datos.dia}</Texto>
+                  <Texto>Hora: {datos.hora}</Texto>
+                  <Texto>Lugar: {datos.lugar}</Texto>
+                </>
+              )}
+              {verJugadores && (
+                <>
+                  <ContenedorBox>
+                    <Text>Nombre Jugador</Text>
+                    <Text>Fecha Nacimiento</Text>
+                    <Text>Rol</Text>
+                  </ContenedorBox>
+                  {listaJugadores.map((jugador) => {
+                    return (
+                      <ContenedorBox>
+                        <Text>{jugador.NOMBREJUGADOR}</Text>
+                        <Text>{jugador.FECHANACIMIENTO}</Text>
+                        <Text>{jugador.ROL}</Text>
+                      </ContenedorBox>
+                    );
+                  })}
+                </>
+              )}
             </DetalleUsuario>
           </ContenedorModal>
         </Overlay>

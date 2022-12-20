@@ -1581,6 +1581,8 @@ export default function Administrador() {
     }
   };
 
+  const [jugadores,setJugadores] = useState([])
+
   return (
     <ContenedorPrincipal>
       <ContenedorOpciones>
@@ -2572,9 +2574,13 @@ export default function Administrador() {
                               <TableCell align="right">
                                 <BotonVer
                                   onClick={() => {
-                                    setModalEquipo(!modalEquipo);
-                                    setElEquipo(datos);
-                                    settipoEquipo("habilitado");
+                                    axios.get(url + "obtenerJugadores/"+datos.IDEQUIPO).then(response => {
+                                      setModalEquipo(!modalEquipo);
+                                      setElEquipo(datos);
+                                      setJugadores(response.data)
+                                      settipoEquipo("habilitado");
+                                    })
+                                    
                                   }}
                                 >
                                   <FontAwesomeIcon icon={faCheckCircle} />
@@ -3451,10 +3457,12 @@ export default function Administrador() {
         cambiarEstado={setModalVerArbitro}
         datos={datos}
       />
+
       <ModalEquipo
         estado={modalEquipo}
         cambiarEstado={setModalEquipo}
         datos={elEquipo}
+        jugadores={jugadores}
         tipo={tipoEquipo}
       />
     </ContenedorPrincipal>

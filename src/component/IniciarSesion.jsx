@@ -17,8 +17,10 @@ const Overlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 2s ease-in-out;
 `;
 const ContenedorModal = styled.div`
+  transition: all 2s ease-in-out;
   width: 350px;
   min-height: 100px;
   background: #fff;

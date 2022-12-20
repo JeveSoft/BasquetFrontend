@@ -91,6 +91,7 @@ export default function Fixture() {
       if (activoF) {
         if (!modalPartido) {
           if (document.getElementById("categoriaFinal").value != null) {
+            final()
             document.getElementById("categoriaFinal").value = categoriaFinal;
           }
         }
@@ -100,6 +101,7 @@ export default function Fixture() {
       if (activoSF) {
         if (!modalPartido) {
           if (document.getElementById("categoriaSemiFinal").value != null) {
+            semiFinal()
             document.getElementById("categoriaSemiFinal").value =
               categoriaSemiFinal;
           }
@@ -110,6 +112,7 @@ export default function Fixture() {
       if (activoPF) {
         if (!modalPartido) {
           if (document.getElementById("categoria").value != null) {
+            obtenerPartido()
             document.getElementById("categoria").value = categoria;
           }
         }
@@ -136,15 +139,6 @@ export default function Fixture() {
             INFORMACIÓN
           </NavLink>
         </NavMenu>
-        <NavBtn>
-          <NavBtnLink
-            onClick={() => {
-              setModal(!modal);
-            }}
-          >
-            <img src={require("../Imagenes/menu.png")} />
-          </NavBtnLink>
-        </NavBtn>
       </Nav>
 
       {!modalPartido && (
@@ -253,8 +247,11 @@ export default function Fixture() {
                                     <Text derecha={"medio"}>
                                       {equipos.ANOTACIONESEQ2}
                                     </Text>
-                                    <Text derecha={"true"}>
+                                    <Text derecha={"false"}>
                                       {equipos.EQUIPO2}
+                                    </Text>
+                                    <Text derecha={"true"}>
+                                      Ver JUgadores
                                     </Text>
                                   </ContenedorBox>
                                 </>

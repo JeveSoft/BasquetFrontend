@@ -61,12 +61,18 @@ export const NavBtn = styled.nav`
 export const NavBtnLink = styled.button`
   border-radius: 4px;
   padding: 10px 22px;
-  border: none;
+  border: 2px solid black;
   outline: none;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
-  background: none;
+  background: #fc4415;
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background: #000000;
+    color: #fc4415;
+    border: 2px solid #fc4415;
+  }
 `;
 export const ImagenLogo = styled.img`
   position: relative;
@@ -144,7 +150,7 @@ export default function Inicio() {
               setModal(!modal);
             }}
           >
-            <img src={require("../Imagenes/menu.png")} />
+            INICIAR SESION
           </NavBtnLink>
         </NavBtn>
       </Nav>
