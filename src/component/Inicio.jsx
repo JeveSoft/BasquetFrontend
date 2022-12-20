@@ -183,7 +183,7 @@ export default function Inicio() {
                   </NavBoton>
                   <DotContainer>
                     {informaciones.map((dot, index) => (
-                      <Dot key={dot} active={index === imageIndex} />
+                      <Dot key={index} active={index === imageIndex} />
                     ))}
                   </DotContainer>
                   <IniciarSesion estado={modal} cambiarEstado={setModal} />
